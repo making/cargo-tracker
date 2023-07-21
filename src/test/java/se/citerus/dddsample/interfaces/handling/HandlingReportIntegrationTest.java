@@ -52,7 +52,7 @@ class HandlingReportIntegrationTest {
                 "type", HandlingEvent.Type.CUSTOMS.name(),
                 "unLocode", SampleLocations.DALLAS.unlocode
         ));
-        URI uri = new UriTemplate("http://localhost:{port}/dddsample/handlingReport").expand(port);
+        URI uri = new UriTemplate("http://localhost:{port}/handlingReport").expand(port);
         RequestEntity<String> request = RequestEntity
                 .post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +82,7 @@ class HandlingReportIntegrationTest {
                 "voyageNumber", "0101"
         ));
 
-        URI uri = new UriTemplate("http://localhost:{port}/dddsample/handlingReport").expand(port);
+        URI uri = new UriTemplate("http://localhost:{port}/handlingReport").expand(port);
         RequestEntity<String> request = RequestEntity
                 .post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
