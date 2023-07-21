@@ -17,16 +17,12 @@ import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.BookingService;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
-import se.citerus.dddsample.domain.model.handling.HandlingEventRepository;
 import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 import se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade;
 import se.citerus.dddsample.interfaces.booking.facade.internal.BookingServiceFacadeImpl;
-import se.citerus.dddsample.interfaces.booking.web.CargoAdminController;
 import se.citerus.dddsample.interfaces.handling.file.UploadDirectoryScanner;
-import se.citerus.dddsample.interfaces.tracking.CargoTrackingController;
 import se.citerus.dddsample.interfaces.tracking.TrackCommandValidator;
-import se.citerus.dddsample.interfaces.tracking.ws.CargoTrackingRestService;
 
 import javax.persistence.EntityManager;
 import java.io.File;
@@ -61,23 +57,8 @@ public class InterfacesApplicationContext implements WebMvcConfigurer {
     }
 
     @Bean
-    public CargoTrackingController cargoTrackingController(MessageSource messageSource, CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository) {
-        return new CargoTrackingController(cargoRepository, handlingEventRepository, messageSource);
-    }
-
-    @Bean
-    public CargoTrackingRestService cargoTrackingRestService(CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository, MessageSource messageSource) {
-        return new CargoTrackingRestService(cargoRepository, handlingEventRepository, messageSource);
-    }
-
-    @Bean
     public TrackCommandValidator trackCommandValidator() {
         return new TrackCommandValidator();
-    }
-
-    @Bean
-    public CargoAdminController cargoAdminController(BookingServiceFacade bookingServiceFacade) {
-        return new CargoAdminController(bookingServiceFacade);
     }
 
     @Bean
@@ -105,11 +86,9 @@ public class InterfacesApplicationContext implements WebMvcConfigurer {
             log.info("No UploadDirectoryScannerBean found, skipping creation of scheduler.");
             return null;
         }
-        ThreadPoolTaskScheduler threadPoolTaskScheduler
-                = new ThreadPoolTaskScheduler();
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
         threadPoolTaskScheduler.setPoolSize(10);
-        threadPoolTaskScheduler.setThreadNamePrefix(
-                "ThreadPoolTaskScheduler");
+        threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
         threadPoolTaskScheduler.initialize();
         threadPoolTaskScheduler.scheduleAtFixedRate(scanner, 5000);
         return threadPoolTaskScheduler;

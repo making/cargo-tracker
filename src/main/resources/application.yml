@@ -21,7 +21,6 @@ brokerUrl: "vm://localhost?broker.persistent=false&broker.useJmx=false"
 
 spring:
   main:
-    allow-bean-definition-overriding: true
     allow-circular-references: true
   dataSource:
     url: jdbc:hsqldb:mem:dddsample
