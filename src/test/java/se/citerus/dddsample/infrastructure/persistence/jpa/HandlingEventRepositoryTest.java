@@ -23,51 +23,55 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(TestConfig.class)
 class HandlingEventRepositoryTest {
 
-    @Autowired
-    HandlingEventRepository handlingEventRepository;
+	@Autowired
+	HandlingEventRepository handlingEventRepository;
 
-    @Autowired
-    CargoRepository cargoRepository;
+	@Autowired
+	CargoRepository cargoRepository;
 
-    @Autowired
-    LocationRepository locationRepository;
+	@Autowired
+	LocationRepository locationRepository;
 
-    @Autowired
-    EntityManager entityManager;
+	@Autowired
+	EntityManager entityManager;
 
-    @Test
-    void testSave() {
-        Location location = locationRepository.find(new UnLocode("SESTO"));
+	@Test
+	void testSave() {
+		Location location = locationRepository.find(new UnLocode("SESTO"));
 
-        Cargo cargo = cargoRepository.find(new TrackingId("ABC123"));
-        Instant completionTime = Instant.ofEpochMilli(10);
-        Instant registrationTime = Instant.ofEpochMilli(20);
-        HandlingEvent event = new HandlingEvent(cargo, completionTime, registrationTime, HandlingEvent.Type.CLAIM, location);
+		Cargo cargo = cargoRepository.find(new TrackingId("ABC123"));
+		Instant completionTime = Instant.ofEpochMilli(10);
+		Instant registrationTime = Instant.ofEpochMilli(20);
+		HandlingEvent event = new HandlingEvent(cargo, completionTime, registrationTime, HandlingEvent.Type.CLAIM,
+				location);
 
-        handlingEventRepository.store(event);
+		handlingEventRepository.store(event);
 
-        flush();
+		flush();
 
-        HandlingEvent result = entityManager.createQuery("select he from HandlingEvent he where he.id = %d".formatted(event.id), HandlingEvent.class).getSingleResult();
+		HandlingEvent result = entityManager
+			.createQuery("select he from HandlingEvent he where he.id = %d".formatted(event.id), HandlingEvent.class)
+			.getSingleResult();
 
-        assertThat(result.cargo.id).isEqualTo(cargo.id);
-        Instant completionDate = result.completionTime;
-        assertThat(completionDate).isEqualTo(Instant.ofEpochMilli(10));
-        Instant registrationDate = result.registrationTime;
-        assertThat(registrationDate).isEqualTo(Instant.ofEpochMilli(20));
-        assertThat(result.type).isEqualTo(HandlingEvent.Type.CLAIM);
-        // TODO: the rest of the columns
-    }
+		assertThat(result.cargo.id).isEqualTo(cargo.id);
+		Instant completionDate = result.completionTime;
+		assertThat(completionDate).isEqualTo(Instant.ofEpochMilli(10));
+		Instant registrationDate = result.registrationTime;
+		assertThat(registrationDate).isEqualTo(Instant.ofEpochMilli(20));
+		assertThat(result.type).isEqualTo(HandlingEvent.Type.CLAIM);
+		// TODO: the rest of the columns
+	}
 
-    private void flush() {
-        entityManager.flush();
-    }
+	private void flush() {
+		entityManager.flush();
+	}
 
-    @Test
-    void testFindEventsForCargo() {
-        TrackingId trackingId = new TrackingId("ABC123");
-        List<HandlingEvent> handlingEvents = handlingEventRepository.lookupHandlingHistoryOfCargo(trackingId).distinctEventsByCompletionTime();
-        assertThat(handlingEvents).hasSize(3);
-    }
+	@Test
+	void testFindEventsForCargo() {
+		TrackingId trackingId = new TrackingId("ABC123");
+		List<HandlingEvent> handlingEvents = handlingEventRepository.lookupHandlingHistoryOfCargo(trackingId)
+			.distinctEventsByCompletionTime();
+		assertThat(handlingEvents).hasSize(3);
+	}
 
 }

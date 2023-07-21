@@ -6,40 +6,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ValueObjectSupportTest {
 
-  @Test
-  void testEquals() {
-        final AValueObject vo1 = new AValueObject("A");
-        final AValueObject vo2 = new AValueObject("A");
-        final BValueObject vo3 = new BValueObject("A", 1);
+	@Test
+	void testEquals() {
+		final AValueObject vo1 = new AValueObject("A");
+		final AValueObject vo2 = new AValueObject("A");
+		final BValueObject vo3 = new BValueObject("A", 1);
 
-        assertThat(vo2).isEqualTo(vo1);
-        assertThat(vo1).isEqualTo(vo2);
-        assertThat(vo2.equals(vo3)).isFalse();
-        assertThat(vo3.equals(vo2)).isFalse();
+		assertThat(vo2).isEqualTo(vo1);
+		assertThat(vo1).isEqualTo(vo2);
+		assertThat(vo2.equals(vo3)).isFalse();
+		assertThat(vo3.equals(vo2)).isFalse();
 
-        assertThat(vo1.sameValueAs(vo2)).isTrue();
-        assertThat(vo2.sameValueAs(vo3)).isFalse();
-    }
+		assertThat(vo1.sameValueAs(vo2)).isTrue();
+		assertThat(vo2.sameValueAs(vo3)).isFalse();
+	}
 
-    class AValueObject extends ValueObjectSupport<AValueObject> {
-        String s;
+	class AValueObject extends ValueObjectSupport<AValueObject> {
 
-        AValueObject(String s) {
-            this.s = s;
-        }
+		String s;
 
-        AValueObject() {
-        }
-    }
+		AValueObject(String s) {
+			this.s = s;
+		}
 
-    class BValueObject extends AValueObject {
-        int x;
+		AValueObject() {
+		}
 
-        BValueObject(String s, int x) {
-            super(s);
-            this.x = x;
-        }
+	}
 
-    }
+	class BValueObject extends AValueObject {
+
+		int x;
+
+		BValueObject(String s, int x) {
+			super(s);
+			this.x = x;
+		}
+
+	}
 
 }

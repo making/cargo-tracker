@@ -6,11 +6,14 @@ import static org.assertj.core.api.Assertions.fail;
 
 class LegTest {
 
-  @Test
-  void testConstructor() {
-    try {
-      new Leg(null,null,null,null,null);
-      fail("Should not accept null constructor arguments");
-    } catch (IllegalArgumentException expected) {}
-  }
+	@Test
+	void testConstructor() {
+		try {
+			new Leg(null, null, null, null, null);
+			fail("Should not accept null constructor arguments");
+		}
+		catch (IllegalArgumentException expected) {
+		}
+	}
+
 }

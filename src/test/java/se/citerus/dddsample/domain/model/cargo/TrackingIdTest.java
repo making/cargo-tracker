@@ -6,9 +6,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class TrackingIdTest {
 
-  @Test
-  void testConstructor() {
-    assertThatThrownBy(() -> new TrackingId(null)).isInstanceOf(NullPointerException.class);
-  }
+	@Test
+	void testConstructor() {
+		assertThatThrownBy(() -> new TrackingId(null)).isInstanceOf(NullPointerException.class);
+	}
 
 }

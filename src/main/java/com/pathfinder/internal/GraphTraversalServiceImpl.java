@@ -9,58 +9,61 @@ import java.util.*;
 
 public class GraphTraversalServiceImpl implements GraphTraversalService {
 
-  private GraphDAO dao;
-  private Random random;
-  private static final long ONE_MIN_MS = 1000 * 60;
-  private static final long ONE_DAY_MS = ONE_MIN_MS * 60 * 24;
+	private GraphDAO dao;
 
-  public GraphTraversalServiceImpl(GraphDAO dao) {
-    this.dao = dao;
-    this.random = new Random();
-  }
+	private Random random;
 
-  public List<TransitPath> findShortestPath(
-      final String originNode, final String destinationNode, final Properties limitations) {
-    List<String> allVertices = dao.listAllNodes();
-    allVertices.remove(originNode);
-    allVertices.remove(destinationNode);
+	private static final long ONE_MIN_MS = 1000 * 60;
 
-    int candidateCount = getRandomNumberOfCandidates();
-    List<TransitPath> candidates = new ArrayList<>(candidateCount);
+	private static final long ONE_DAY_MS = ONE_MIN_MS * 60 * 24;
 
-    for (int i = 0; i < candidateCount; i++) {
-      allVertices = getRandomChunkOfNodes(allVertices);
-      List<TransitEdge> transitEdges = new ArrayList<>(allVertices.size() - 1);
-      String fromNode = originNode;
-      Instant date = Instant.now();
+	public GraphTraversalServiceImpl(GraphDAO dao) {
+		this.dao = dao;
+		this.random = new Random();
+	}
 
-      for (int j = 0; j <= allVertices.size(); ++j) {
-        Instant fromDate = nextDate(date);
-        Instant toDate = nextDate(fromDate);
-        String toNode = (j >= allVertices.size() ? destinationNode : allVertices.get(j));
-        transitEdges.add(
-            new TransitEdge(
-                dao.getTransitEdge(fromNode, toNode), fromNode, toNode, fromDate, toDate));
-        fromNode = toNode;
-        date = nextDate(toDate);
-      }
-      candidates.add(new TransitPath(transitEdges));
-    }
-    return candidates;
-  }
+	public List<TransitPath> findShortestPath(final String originNode, final String destinationNode,
+			final Properties limitations) {
+		List<String> allVertices = dao.listAllNodes();
+		allVertices.remove(originNode);
+		allVertices.remove(destinationNode);
 
-  private Instant nextDate(Instant date) {
-    return date.plus(1, ChronoUnit.DAYS).plus((random.nextInt(1000) - 500), ChronoUnit.MINUTES);
-  }
+		int candidateCount = getRandomNumberOfCandidates();
+		List<TransitPath> candidates = new ArrayList<>(candidateCount);
 
-  private int getRandomNumberOfCandidates() {
-    return 3 + random.nextInt(3);
-  }
+		for (int i = 0; i < candidateCount; i++) {
+			allVertices = getRandomChunkOfNodes(allVertices);
+			List<TransitEdge> transitEdges = new ArrayList<>(allVertices.size() - 1);
+			String fromNode = originNode;
+			Instant date = Instant.now();
 
-  private List<String> getRandomChunkOfNodes(List<String> allNodes) {
-    Collections.shuffle(allNodes);
-    final int total = allNodes.size();
-    final int chunk = total > 4 ? 1 + random.nextInt(5) : total;
-    return allNodes.subList(0, chunk);
-  }
+			for (int j = 0; j <= allVertices.size(); ++j) {
+				Instant fromDate = nextDate(date);
+				Instant toDate = nextDate(fromDate);
+				String toNode = (j >= allVertices.size() ? destinationNode : allVertices.get(j));
+				transitEdges
+					.add(new TransitEdge(dao.getTransitEdge(fromNode, toNode), fromNode, toNode, fromDate, toDate));
+				fromNode = toNode;
+				date = nextDate(toDate);
+			}
+			candidates.add(new TransitPath(transitEdges));
+		}
+		return candidates;
+	}
+
+	private Instant nextDate(Instant date) {
+		return date.plus(1, ChronoUnit.DAYS).plus((random.nextInt(1000) - 500), ChronoUnit.MINUTES);
+	}
+
+	private int getRandomNumberOfCandidates() {
+		return 3 + random.nextInt(3);
+	}
+
+	private List<String> getRandomChunkOfNodes(List<String> allNodes) {
+		Collections.shuffle(allNodes);
+		final int total = allNodes.size();
+		final int chunk = total > 4 ? 1 + random.nextInt(5) : total;
+		return allNodes.subList(0, chunk);
+	}
+
 }

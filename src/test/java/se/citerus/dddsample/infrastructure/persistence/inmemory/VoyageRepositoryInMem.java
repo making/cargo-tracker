@@ -7,12 +7,13 @@ import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 
 public final class VoyageRepositoryInMem implements VoyageRepository {
 
-  public Voyage find(VoyageNumber voyageNumber) {
-    return SampleVoyages.lookup(voyageNumber);
-  }
+	public Voyage find(VoyageNumber voyageNumber) {
+		return SampleVoyages.lookup(voyageNumber);
+	}
 
-  @Override
-  public void store(Voyage voyage) {
-    // noop
-  }
+	@Override
+	public void store(Voyage voyage) {
+		// noop
+	}
+
 }

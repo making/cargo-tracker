@@ -25,35 +25,41 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 public class CargoTrackingRestService {
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final CargoRepository cargoRepository;
-    private final HandlingEventRepository handlingEventRepository;
-    private final MessageSource messageSource;
+	private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public CargoTrackingRestService(CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository, MessageSource messageSource) {
-        this.cargoRepository = cargoRepository;
-        this.handlingEventRepository = handlingEventRepository;
-        this.messageSource = messageSource;
-    }
+	private final CargoRepository cargoRepository;
 
-    @GetMapping(value = "/api/track/{trackingId}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CargoTrackingDTO> trackCargo(final HttpServletRequest request,
-      @PathVariable String trackingId) {
-        try {
-            Locale locale = RequestContextUtils.getLocale(request);
-            TrackingId trkId = new TrackingId(trackingId);
-            Cargo cargo = cargoRepository.find(trkId);
-            if (cargo == null) {
-                URI uri = new UriTemplate(request.getContextPath() + "/api/track/{trackingId}").expand(trackingId);
-                return ResponseEntity.notFound().location(uri).build();
-            }
-            final List<HandlingEvent> handlingEvents = handlingEventRepository.lookupHandlingHistoryOfCargo(trkId)
-                    .distinctEventsByCompletionTime();
-            return ResponseEntity.ok(CargoTrackingDTOConverter.convert(cargo, handlingEvents, messageSource, locale));
-        } catch (Exception e) {
-            log.error("Unexpected error in trackCargo endpoint", e);
-            return ResponseEntity.status(500).build();
-        }
-    }
+	private final HandlingEventRepository handlingEventRepository;
+
+	private final MessageSource messageSource;
+
+	public CargoTrackingRestService(CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository,
+			MessageSource messageSource) {
+		this.cargoRepository = cargoRepository;
+		this.handlingEventRepository = handlingEventRepository;
+		this.messageSource = messageSource;
+	}
+
+	@GetMapping(value = "/api/track/{trackingId}", produces = APPLICATION_JSON_VALUE)
+	public ResponseEntity<CargoTrackingDTO> trackCargo(final HttpServletRequest request,
+			@PathVariable String trackingId) {
+		try {
+			Locale locale = RequestContextUtils.getLocale(request);
+			TrackingId trkId = new TrackingId(trackingId);
+			Cargo cargo = cargoRepository.find(trkId);
+			if (cargo == null) {
+				URI uri = new UriTemplate(request.getContextPath() + "/api/track/{trackingId}").expand(trackingId);
+				return ResponseEntity.notFound().location(uri).build();
+			}
+			final List<HandlingEvent> handlingEvents = handlingEventRepository.lookupHandlingHistoryOfCargo(trkId)
+				.distinctEventsByCompletionTime();
+			return ResponseEntity.ok(CargoTrackingDTOConverter.convert(cargo, handlingEvents, messageSource, locale));
+		}
+		catch (Exception e) {
+			log.error("Unexpected error in trackCargo endpoint", e);
+			return ResponseEntity.status(500).build();
+		}
+	}
+
 }

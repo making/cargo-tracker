@@ -6,70 +6,78 @@ import java.util.List;
 
 public class RouteAssignmentCommand {
 
-  private String trackingId;
-  private List<LegCommand> legs = new ArrayList<>();
+	private String trackingId;
 
-  public String getTrackingId() {
-    return trackingId;
-  }
+	private List<LegCommand> legs = new ArrayList<>();
 
-  public void setTrackingId(String trackingId) {
-    this.trackingId = trackingId;
-  }
+	public String getTrackingId() {
+		return trackingId;
+	}
 
-  public List<LegCommand> getLegs() {
-    return legs;
-  }
+	public void setTrackingId(String trackingId) {
+		this.trackingId = trackingId;
+	}
 
-  public void setLegs(List<LegCommand> legs) {
-    this.legs = legs;
-  }
+	public List<LegCommand> getLegs() {
+		return legs;
+	}
 
-  public static final class LegCommand {
-    private String voyageNumber;
-    private String fromUnLocode;
-    private String toUnLocode;
-    private Instant fromDate;
-    private Instant toDate;
+	public void setLegs(List<LegCommand> legs) {
+		this.legs = legs;
+	}
 
-    public String getVoyageNumber() {
-      return voyageNumber;
-    }
+	public static final class LegCommand {
 
-    public void setVoyageNumber(final String voyageNumber) {
-      this.voyageNumber = voyageNumber;
-    }
+		private String voyageNumber;
 
-    public String getFromUnLocode() {
-      return fromUnLocode;
-    }
+		private String fromUnLocode;
 
-    public void setFromUnLocode(final String fromUnLocode) {
-      this.fromUnLocode = fromUnLocode;
-    }
+		private String toUnLocode;
 
-    public String getToUnLocode() {
-      return toUnLocode;
-    }
+		private Instant fromDate;
 
-    public void setToUnLocode(final String toUnLocode) {
-      this.toUnLocode = toUnLocode;
-    }
+		private Instant toDate;
 
-    public Instant getFromDate() {
-      return fromDate;
-    }
+		public String getVoyageNumber() {
+			return voyageNumber;
+		}
 
-    public void setFromDate(Instant fromDate) {
-      this.fromDate = fromDate;
-    }
+		public void setVoyageNumber(final String voyageNumber) {
+			this.voyageNumber = voyageNumber;
+		}
 
-    public Instant getToDate() {
-      return toDate;
-    }
+		public String getFromUnLocode() {
+			return fromUnLocode;
+		}
 
-    public void setToDate(Instant toDate) {
-      this.toDate = toDate;
-    }
-  }
+		public void setFromUnLocode(final String fromUnLocode) {
+			this.fromUnLocode = fromUnLocode;
+		}
+
+		public String getToUnLocode() {
+			return toUnLocode;
+		}
+
+		public void setToUnLocode(final String toUnLocode) {
+			this.toUnLocode = toUnLocode;
+		}
+
+		public Instant getFromDate() {
+			return fromDate;
+		}
+
+		public void setFromDate(Instant fromDate) {
+			this.fromDate = fromDate;
+		}
+
+		public Instant getToDate() {
+			return toDate;
+		}
+
+		public void setToDate(Instant toDate) {
+			this.toDate = toDate;
+		}
+
+	}
+
 }

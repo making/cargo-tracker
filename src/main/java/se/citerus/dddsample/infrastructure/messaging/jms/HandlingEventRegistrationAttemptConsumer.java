@@ -13,27 +13,31 @@ import jakarta.jms.ObjectMessage;
 import java.lang.invoke.MethodHandles;
 
 /**
- * Consumes handling event registration attempt messages and delegates to
- * proper registration.
+ * Consumes handling event registration attempt messages and delegates to proper
+ * registration.
  */
 @Component
 public class HandlingEventRegistrationAttemptConsumer {
 
-    private final HandlingEventService handlingEventService;
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	private final HandlingEventService handlingEventService;
 
-    public HandlingEventRegistrationAttemptConsumer(HandlingEventService handlingEventService) {
-        this.handlingEventService = handlingEventService;
-    }
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @JmsListener(destination = "handlingEventRegistrationAttemptQueue")
-    public void onMessage(final Message message) {
-        try {
-            final ObjectMessage om = (ObjectMessage) message;
-            HandlingEventRegistrationAttempt attempt = (HandlingEventRegistrationAttempt) om.getObject();
-            handlingEventService.registerHandlingEvent(attempt.getCompletionTime(), attempt.getTrackingId(), attempt.getVoyageNumber(), attempt.getUnLocode(), attempt.getType());
-        } catch (Exception e) {
-            logger.error("Error consuming HandlingEventRegistrationAttempt message", e);
-        }
-    }
+	public HandlingEventRegistrationAttemptConsumer(HandlingEventService handlingEventService) {
+		this.handlingEventService = handlingEventService;
+	}
+
+	@JmsListener(destination = "handlingEventRegistrationAttemptQueue")
+	public void onMessage(final Message message) {
+		try {
+			final ObjectMessage om = (ObjectMessage) message;
+			HandlingEventRegistrationAttempt attempt = (HandlingEventRegistrationAttempt) om.getObject();
+			handlingEventService.registerHandlingEvent(attempt.getCompletionTime(), attempt.getTrackingId(),
+					attempt.getVoyageNumber(), attempt.getUnLocode(), attempt.getType());
+		}
+		catch (Exception e) {
+			logger.error("Error consuming HandlingEventRegistrationAttempt message", e);
+		}
+	}
+
 }

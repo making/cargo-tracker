@@ -12,22 +12,22 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.STO
 
 class LocationDTOAssemblerTest {
 
-  @Test
-  void testToDTOList() {
-    final LocationDTOAssembler assembler = new LocationDTOAssembler();
-    final List<Location> locationList = List.of(STOCKHOLM, HAMBURG);
+	@Test
+	void testToDTOList() {
+		final LocationDTOAssembler assembler = new LocationDTOAssembler();
+		final List<Location> locationList = List.of(STOCKHOLM, HAMBURG);
 
-    final List<LocationDTO> dtos = assembler.toDTOList(locationList);
+		final List<LocationDTO> dtos = assembler.toDTOList(locationList);
 
-    assertThat(dtos).hasSize(2);
+		assertThat(dtos).hasSize(2);
 
-    LocationDTO dto = dtos.get(0);
-    assertThat(dto.getUnLocode()).isEqualTo("SESTO");
-    assertThat(dto.getName()).isEqualTo("Stockholm");
+		LocationDTO dto = dtos.get(0);
+		assertThat(dto.getUnLocode()).isEqualTo("SESTO");
+		assertThat(dto.getName()).isEqualTo("Stockholm");
 
-    dto = dtos.get(1);
-    assertThat(dto.getUnLocode()).isEqualTo("DEHAM");
-    assertThat(dto.getName()).isEqualTo("Hamburg");
-  }
+		dto = dtos.get(1);
+		assertThat(dto.getUnLocode()).isEqualTo("DEHAM");
+		assertThat(dto.getName()).isEqualTo("Hamburg");
+	}
 
 }

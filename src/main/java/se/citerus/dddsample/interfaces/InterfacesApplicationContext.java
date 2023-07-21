@@ -31,66 +31,69 @@ import java.util.Locale;
 
 @Configuration
 public class InterfacesApplicationContext implements WebMvcConfigurer {
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @Value("${uploadDirectory}")
-    public String uploadDirectory;
+	private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @Value("${parseFailureDirectory}")
-    public String parseFailureDirectory;
+	@Value("${uploadDirectory}")
+	public String uploadDirectory;
 
-    @Autowired
-    public EntityManager entityManager;
+	@Value("${parseFailureDirectory}")
+	public String parseFailureDirectory;
 
-    @Bean
-    public MessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("messages");
-        return messageSource;
-    }
+	@Autowired
+	public EntityManager entityManager;
 
-    @Bean
-    public FixedLocaleResolver localeResolver() {
-        FixedLocaleResolver fixedLocaleResolver = new FixedLocaleResolver();
-        fixedLocaleResolver.setDefaultLocale(Locale.ENGLISH);
-        return fixedLocaleResolver;
-    }
+	@Bean
+	public MessageSource messageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("messages");
+		return messageSource;
+	}
 
-    @Bean
-    public TrackCommandValidator trackCommandValidator() {
-        return new TrackCommandValidator();
-    }
+	@Bean
+	public FixedLocaleResolver localeResolver() {
+		FixedLocaleResolver fixedLocaleResolver = new FixedLocaleResolver();
+		fixedLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+		return fixedLocaleResolver;
+	}
 
-    @Bean
-    public BookingServiceFacade bookingServiceFacade(BookingService bookingService, LocationRepository locationRepository, CargoRepository cargoRepository, VoyageRepository voyageRepository) {
-        return new BookingServiceFacadeImpl(bookingService, locationRepository, cargoRepository, voyageRepository);
-    }
+	@Bean
+	public TrackCommandValidator trackCommandValidator() {
+		return new TrackCommandValidator();
+	}
 
-    @Bean
-    public UploadDirectoryScanner uploadDirectoryScanner(ApplicationEvents applicationEvents) {
-        File uploadDirectoryFile = new File(uploadDirectory);
-        File parseFailureDirectoryFile = new File(parseFailureDirectory);
-        return new UploadDirectoryScanner(uploadDirectoryFile, parseFailureDirectoryFile, applicationEvents);
-    }
+	@Bean
+	public BookingServiceFacade bookingServiceFacade(BookingService bookingService,
+			LocationRepository locationRepository, CargoRepository cargoRepository, VoyageRepository voyageRepository) {
+		return new BookingServiceFacadeImpl(bookingService, locationRepository, cargoRepository, voyageRepository);
+	}
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        OpenEntityManagerInViewInterceptor openSessionInViewInterceptor = new OpenEntityManagerInViewInterceptor();
-        openSessionInViewInterceptor.setEntityManagerFactory(entityManager.getEntityManagerFactory());
-        registry.addWebRequestInterceptor(openSessionInViewInterceptor);
-    }
+	@Bean
+	public UploadDirectoryScanner uploadDirectoryScanner(ApplicationEvents applicationEvents) {
+		File uploadDirectoryFile = new File(uploadDirectory);
+		File parseFailureDirectoryFile = new File(parseFailureDirectory);
+		return new UploadDirectoryScanner(uploadDirectoryFile, parseFailureDirectoryFile, applicationEvents);
+	}
 
-    @Bean
-    public ThreadPoolTaskScheduler myScheduler(@Nullable UploadDirectoryScanner scanner) {
-        if (scanner == null) {
-            log.info("No UploadDirectoryScannerBean found, skipping creation of scheduler.");
-            return null;
-        }
-        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(10);
-        threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
-        threadPoolTaskScheduler.initialize();
-        threadPoolTaskScheduler.scheduleAtFixedRate(scanner, 5000);
-        return threadPoolTaskScheduler;
-    }
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		OpenEntityManagerInViewInterceptor openSessionInViewInterceptor = new OpenEntityManagerInViewInterceptor();
+		openSessionInViewInterceptor.setEntityManagerFactory(entityManager.getEntityManagerFactory());
+		registry.addWebRequestInterceptor(openSessionInViewInterceptor);
+	}
+
+	@Bean
+	public ThreadPoolTaskScheduler myScheduler(@Nullable UploadDirectoryScanner scanner) {
+		if (scanner == null) {
+			log.info("No UploadDirectoryScannerBean found, skipping creation of scheduler.");
+			return null;
+		}
+		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+		threadPoolTaskScheduler.setPoolSize(10);
+		threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
+		threadPoolTaskScheduler.initialize();
+		threadPoolTaskScheduler.scheduleAtFixedRate(scanner, 5000);
+		return threadPoolTaskScheduler;
+	}
+
 }

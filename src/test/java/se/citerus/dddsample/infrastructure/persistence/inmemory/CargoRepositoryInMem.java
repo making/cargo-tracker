@@ -14,79 +14,77 @@ import java.time.Instant;
 import java.util.*;
 
 /**
- * CargoRepositoryInMem implement the CargoRepository interface but is a test
- * class not intended for usage in real application.
+ * CargoRepositoryInMem implement the CargoRepository interface but is a test class not
+ * intended for usage in real application.
  * <p>
- * It setup a simple local hash with a number of Cargo's with TrackingId as key
- * defined at compile time.
+ * It setup a simple local hash with a number of Cargo's with TrackingId as key defined at
+ * compile time.
  * <p>
  */
 public class CargoRepositoryInMem implements CargoRepository {
 
-    private final Map<String, Cargo> cargoDb;
-    private HandlingEventRepository handlingEventRepository;
+	private final Map<String, Cargo> cargoDb;
 
-    /**
-     * Constructor.
-     */
-    public CargoRepositoryInMem() {
-        cargoDb = new HashMap<>();
-    }
+	private HandlingEventRepository handlingEventRepository;
 
-    public Cargo find(final TrackingId trackingId) {
-        return cargoDb.get(trackingId.idString());
-    }
+	/**
+	 * Constructor.
+	 */
+	public CargoRepositoryInMem() {
+		cargoDb = new HashMap<>();
+	}
 
-    public void store(final Cargo cargo) {
-        cargoDb.put(cargo.trackingId().idString(), cargo);
-    }
+	public Cargo find(final TrackingId trackingId) {
+		return cargoDb.get(trackingId.idString());
+	}
 
-    public TrackingId nextTrackingId() {
-        String random = UUID.randomUUID().toString().toUpperCase();
-        return new TrackingId(
-                random.substring(0, random.indexOf("-"))
-        );
-    }
+	public void store(final Cargo cargo) {
+		cargoDb.put(cargo.trackingId().idString(), cargo);
+	}
 
-    public List<Cargo> getAll() {
-        return new ArrayList<>(cargoDb.values());
-    }
+	public TrackingId nextTrackingId() {
+		String random = UUID.randomUUID().toString().toUpperCase();
+		return new TrackingId(random.substring(0, random.indexOf("-")));
+	}
 
-    public void init() throws Exception {
-        final TrackingId xyz = new TrackingId("XYZ");
-        final Cargo cargoXYZ = createCargoWithDeliveryHistory(
-                xyz, STOCKHOLM, MELBOURNE, handlingEventRepository.lookupHandlingHistoryOfCargo(xyz));
-        cargoDb.put(xyz.idString(), cargoXYZ);
+	public List<Cargo> getAll() {
+		return new ArrayList<>(cargoDb.values());
+	}
 
-        final TrackingId zyx = new TrackingId("ZYX");
-        final Cargo cargoZYX = createCargoWithDeliveryHistory(
-                zyx, MELBOURNE, STOCKHOLM, handlingEventRepository.lookupHandlingHistoryOfCargo(zyx));
-        cargoDb.put(zyx.idString(), cargoZYX);
+	public void init() throws Exception {
+		final TrackingId xyz = new TrackingId("XYZ");
+		final Cargo cargoXYZ = createCargoWithDeliveryHistory(xyz, STOCKHOLM, MELBOURNE,
+				handlingEventRepository.lookupHandlingHistoryOfCargo(xyz));
+		cargoDb.put(xyz.idString(), cargoXYZ);
 
-        final TrackingId abc = new TrackingId("ABC");
-        final Cargo cargoABC = createCargoWithDeliveryHistory(
-                abc, STOCKHOLM, HELSINKI, handlingEventRepository.lookupHandlingHistoryOfCargo(abc));
-        cargoDb.put(abc.idString(), cargoABC);
+		final TrackingId zyx = new TrackingId("ZYX");
+		final Cargo cargoZYX = createCargoWithDeliveryHistory(zyx, MELBOURNE, STOCKHOLM,
+				handlingEventRepository.lookupHandlingHistoryOfCargo(zyx));
+		cargoDb.put(zyx.idString(), cargoZYX);
 
-        final TrackingId cba = new TrackingId("CBA");
-        final Cargo cargoCBA = createCargoWithDeliveryHistory(
-                cba, HELSINKI, STOCKHOLM, handlingEventRepository.lookupHandlingHistoryOfCargo(cba));
-        cargoDb.put(cba.idString(), cargoCBA);
-    }
+		final TrackingId abc = new TrackingId("ABC");
+		final Cargo cargoABC = createCargoWithDeliveryHistory(abc, STOCKHOLM, HELSINKI,
+				handlingEventRepository.lookupHandlingHistoryOfCargo(abc));
+		cargoDb.put(abc.idString(), cargoABC);
 
-    public void setHandlingEventRepository(final HandlingEventRepository handlingEventRepository) {
-        this.handlingEventRepository = handlingEventRepository;
-    }
+		final TrackingId cba = new TrackingId("CBA");
+		final Cargo cargoCBA = createCargoWithDeliveryHistory(cba, HELSINKI, STOCKHOLM,
+				handlingEventRepository.lookupHandlingHistoryOfCargo(cba));
+		cargoDb.put(cba.idString(), cargoCBA);
+	}
 
-    public static Cargo createCargoWithDeliveryHistory(TrackingId trackingId,
-                                                       Location origin,
-                                                       Location destination,
-                                                       HandlingHistory handlingHistory) {
+	public void setHandlingEventRepository(final HandlingEventRepository handlingEventRepository) {
+		this.handlingEventRepository = handlingEventRepository;
+	}
 
-        final RouteSpecification routeSpecification = new RouteSpecification(origin, destination, Instant.now());
-        final Cargo cargo = new Cargo(trackingId, routeSpecification);
-        cargo.deriveDeliveryProgress(handlingHistory);
+	public static Cargo createCargoWithDeliveryHistory(TrackingId trackingId, Location origin, Location destination,
+			HandlingHistory handlingHistory) {
 
-        return cargo;
-    }
+		final RouteSpecification routeSpecification = new RouteSpecification(origin, destination, Instant.now());
+		final Cargo cargo = new Cargo(trackingId, routeSpecification);
+		cargo.deriveDeliveryProgress(handlingHistory);
+
+		return cargo;
+	}
+
 }

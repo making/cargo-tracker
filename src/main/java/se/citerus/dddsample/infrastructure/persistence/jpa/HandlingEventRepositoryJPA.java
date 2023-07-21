@@ -15,15 +15,15 @@ import java.util.List;
  */
 public interface HandlingEventRepositoryJPA extends CrudRepository<HandlingEvent, Long>, HandlingEventRepository {
 
-  default void store(final HandlingEvent event) {
-    save(event);
-  }
+	default void store(final HandlingEvent event) {
+		save(event);
+	}
 
-  default HandlingHistory lookupHandlingHistoryOfCargo(final TrackingId trackingId) {
-    return new HandlingHistory(getHandlingHistoryOfCargo(trackingId.idString()));
-  }
+	default HandlingHistory lookupHandlingHistoryOfCargo(final TrackingId trackingId) {
+		return new HandlingHistory(getHandlingHistoryOfCargo(trackingId.idString()));
+	}
 
-  @Query("select he from HandlingEvent he where he.cargo.trackingId = :trackingId and he.location != NULL")
-  List<HandlingEvent> getHandlingHistoryOfCargo(String trackingId);
+	@Query("select he from HandlingEvent he where he.cargo.trackingId = :trackingId and he.location != NULL")
+	List<HandlingEvent> getHandlingHistoryOfCargo(String trackingId);
 
 }

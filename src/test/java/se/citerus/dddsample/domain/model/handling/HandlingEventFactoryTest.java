@@ -26,27 +26,32 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.CM001
 
 class HandlingEventFactoryTest {
 
-  private HandlingEventFactory factory;
-  private CargoRepository cargoRepository;
-  private VoyageRepository voyageRepository;
-  private LocationRepository locationRepository;
-  private TrackingId trackingId;
-  private Cargo cargo;
+	private HandlingEventFactory factory;
 
-  @BeforeEach
-  void setUp() {
+	private CargoRepository cargoRepository;
 
-    cargoRepository = mock(CargoRepository.class);
-    voyageRepository = new VoyageRepositoryInMem();
-    locationRepository = new LocationRepositoryInMem();
-    factory = new HandlingEventFactory(cargoRepository, voyageRepository, locationRepository);
+	private VoyageRepository voyageRepository;
 
-    trackingId = new TrackingId("ABC");
-    RouteSpecification routeSpecification = new RouteSpecification(TOKYO, HELSINKI, Instant.now());
-    cargo = new Cargo(trackingId, routeSpecification);
-  }
+	private LocationRepository locationRepository;
 
-  @Test
+	private TrackingId trackingId;
+
+	private Cargo cargo;
+
+	@BeforeEach
+	void setUp() {
+
+		cargoRepository = mock(CargoRepository.class);
+		voyageRepository = new VoyageRepositoryInMem();
+		locationRepository = new LocationRepositoryInMem();
+		factory = new HandlingEventFactory(cargoRepository, voyageRepository, locationRepository);
+
+		trackingId = new TrackingId("ABC");
+		RouteSpecification routeSpecification = new RouteSpecification(TOKYO, HELSINKI, Instant.now());
+		cargo = new Cargo(trackingId, routeSpecification);
+	}
+
+	@Test
   void testCreateHandlingEventWithCarrierMovement() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
@@ -64,7 +69,7 @@ class HandlingEventFactoryTest {
     assertThat(handlingEvent.registrationTime().isBefore(Instant.ofEpochMilli(System.currentTimeMillis() + 1))).isTrue();
   }
 
-  @Test
+	@Test
   void testCreateHandlingEventWithoutCarrierMovement() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
@@ -81,7 +86,7 @@ class HandlingEventFactoryTest {
     assertThat(handlingEvent.registrationTime().isBefore(Instant.ofEpochMilli(System.currentTimeMillis() + 1))).isTrue();
   }
 
-  @Test
+	@Test
   void testCreateHandlingEventUnknownLocation() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
@@ -94,7 +99,7 @@ class HandlingEventFactoryTest {
     } catch (UnknownLocationException expected) {}
   }
 
-  @Test
+	@Test
   void testCreateHandlingEventUnknownCarrierMovement() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
@@ -107,7 +112,7 @@ class HandlingEventFactoryTest {
     } catch (UnknownVoyageException expected) {}
   }
 
-  @Test
+	@Test
   void testCreateHandlingEventUnknownTrackingId() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(null);
 

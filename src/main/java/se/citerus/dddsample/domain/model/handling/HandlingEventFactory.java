@@ -12,79 +12,83 @@ import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 
 import java.time.Instant;
 
-
 /**
  * Creates handling events.
  */
 public class HandlingEventFactory {
 
-  private final CargoRepository cargoRepository;
-  private final VoyageRepository voyageRepository;
-  private final LocationRepository locationRepository;
+	private final CargoRepository cargoRepository;
 
-  public HandlingEventFactory(final CargoRepository cargoRepository,
-                              final VoyageRepository voyageRepository,
-                              final LocationRepository locationRepository) {
-    this.cargoRepository = cargoRepository;
-    this.voyageRepository = voyageRepository;
-    this.locationRepository = locationRepository;
-  }
+	private final VoyageRepository voyageRepository;
 
-  /**
-   * @param registrationTime  time when this event was received by the system
-   * @param completionTime    when the event was completed, for example finished loading
-   * @param trackingId        cargo tracking id
-   * @param voyageNumber      voyage number
-   * @param unlocode          United Nations Location Code for the location of the event
-   * @param type              type of event
-   * @throws UnknownVoyageException   if there's no voyage with this number
-   * @throws UnknownCargoException    if there's no cargo with this tracking id
-   * @throws UnknownLocationException if there's no location with this UN Locode
-   * @return A handling event.
-   */
-  public HandlingEvent createHandlingEvent(Instant registrationTime, Instant completionTime, TrackingId trackingId, VoyageNumber voyageNumber, UnLocode unlocode, HandlingEvent.Type type)
-    throws CannotCreateHandlingEventException {
-    final Cargo cargo = findCargo(trackingId);
-    final Voyage voyage = findVoyage(voyageNumber);
-    final Location location = findLocation(unlocode);
+	private final LocationRepository locationRepository;
 
-    try {
-      if (voyage == null) {
-        return new HandlingEvent(cargo, completionTime, registrationTime, type, location);
-      } else {
-        return new HandlingEvent(cargo, completionTime, registrationTime, type, location, voyage);
-      }
-    } catch (Exception e) {
-      throw new CannotCreateHandlingEventException(e);
-    }
-  }
+	public HandlingEventFactory(final CargoRepository cargoRepository, final VoyageRepository voyageRepository,
+			final LocationRepository locationRepository) {
+		this.cargoRepository = cargoRepository;
+		this.voyageRepository = voyageRepository;
+		this.locationRepository = locationRepository;
+	}
 
-  private Cargo findCargo(TrackingId trackingId) throws UnknownCargoException {
-    final Cargo cargo = cargoRepository.find(trackingId);
-    if (cargo == null) throw new UnknownCargoException(trackingId);
-    return cargo;
-  }
+	/**
+	 * @param registrationTime time when this event was received by the system
+	 * @param completionTime when the event was completed, for example finished loading
+	 * @param trackingId cargo tracking id
+	 * @param voyageNumber voyage number
+	 * @param unlocode United Nations Location Code for the location of the event
+	 * @param type type of event
+	 * @throws UnknownVoyageException if there's no voyage with this number
+	 * @throws UnknownCargoException if there's no cargo with this tracking id
+	 * @throws UnknownLocationException if there's no location with this UN Locode
+	 * @return A handling event.
+	 */
+	public HandlingEvent createHandlingEvent(Instant registrationTime, Instant completionTime, TrackingId trackingId,
+			VoyageNumber voyageNumber, UnLocode unlocode, HandlingEvent.Type type)
+			throws CannotCreateHandlingEventException {
+		final Cargo cargo = findCargo(trackingId);
+		final Voyage voyage = findVoyage(voyageNumber);
+		final Location location = findLocation(unlocode);
 
-  private Voyage findVoyage(VoyageNumber voyageNumber) throws UnknownVoyageException {
-    if (voyageNumber == null) {
-      return null;
-    }
+		try {
+			if (voyage == null) {
+				return new HandlingEvent(cargo, completionTime, registrationTime, type, location);
+			}
+			else {
+				return new HandlingEvent(cargo, completionTime, registrationTime, type, location, voyage);
+			}
+		}
+		catch (Exception e) {
+			throw new CannotCreateHandlingEventException(e);
+		}
+	}
 
-    final Voyage voyage = voyageRepository.find(voyageNumber);
-    if (voyage == null) {
-      throw new UnknownVoyageException(voyageNumber);
-    }
+	private Cargo findCargo(TrackingId trackingId) throws UnknownCargoException {
+		final Cargo cargo = cargoRepository.find(trackingId);
+		if (cargo == null)
+			throw new UnknownCargoException(trackingId);
+		return cargo;
+	}
 
-    return voyage;
-  }
-  
-  private Location findLocation(final UnLocode unlocode) throws UnknownLocationException {
-    final Location location = locationRepository.find(unlocode);
-    if (location == null) {
-      throw new UnknownLocationException(unlocode);
-    }
+	private Voyage findVoyage(VoyageNumber voyageNumber) throws UnknownVoyageException {
+		if (voyageNumber == null) {
+			return null;
+		}
 
-    return location;
-  }
+		final Voyage voyage = voyageRepository.find(voyageNumber);
+		if (voyage == null) {
+			throw new UnknownVoyageException(voyageNumber);
+		}
+
+		return voyage;
+	}
+
+	private Location findLocation(final UnLocode unlocode) throws UnknownLocationException {
+		final Location location = locationRepository.find(unlocode);
+		if (location == null) {
+			throw new UnknownLocationException(unlocode);
+		}
+
+		return location;
+	}
 
 }

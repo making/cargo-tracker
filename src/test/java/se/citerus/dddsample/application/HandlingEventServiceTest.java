@@ -13,7 +13,6 @@ import se.citerus.dddsample.domain.model.handling.HandlingEventRepository;
 import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 
-
 import java.time.Instant;
 
 import static org.mockito.ArgumentMatchers.isA;
@@ -22,28 +21,35 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.CM001;
 
 class HandlingEventServiceTest {
-  private HandlingEventServiceImpl service;
-  private ApplicationEvents applicationEvents;
-  private CargoRepository cargoRepository;
-  private VoyageRepository voyageRepository;
-  private HandlingEventRepository handlingEventRepository;
-  private LocationRepository locationRepository;
 
-  private final Cargo cargo = new Cargo(new TrackingId("ABC"), new RouteSpecification(HAMBURG, TOKYO, Instant.now()));
+	private HandlingEventServiceImpl service;
 
-  @BeforeEach
-  void setUp() {
-    cargoRepository = mock(CargoRepository.class);
-    voyageRepository = mock(VoyageRepository.class);
-    handlingEventRepository = mock(HandlingEventRepository.class);
-    locationRepository = mock(LocationRepository.class);
-    applicationEvents = mock(ApplicationEvents.class);
+	private ApplicationEvents applicationEvents;
 
-    HandlingEventFactory handlingEventFactory = new HandlingEventFactory(cargoRepository, voyageRepository, locationRepository);
-    service = new HandlingEventServiceImpl(handlingEventRepository, applicationEvents, handlingEventFactory);
-  }
+	private CargoRepository cargoRepository;
 
-  @Test
+	private VoyageRepository voyageRepository;
+
+	private HandlingEventRepository handlingEventRepository;
+
+	private LocationRepository locationRepository;
+
+	private final Cargo cargo = new Cargo(new TrackingId("ABC"), new RouteSpecification(HAMBURG, TOKYO, Instant.now()));
+
+	@BeforeEach
+	void setUp() {
+		cargoRepository = mock(CargoRepository.class);
+		voyageRepository = mock(VoyageRepository.class);
+		handlingEventRepository = mock(HandlingEventRepository.class);
+		locationRepository = mock(LocationRepository.class);
+		applicationEvents = mock(ApplicationEvents.class);
+
+		HandlingEventFactory handlingEventFactory = new HandlingEventFactory(cargoRepository, voyageRepository,
+				locationRepository);
+		service = new HandlingEventServiceImpl(handlingEventRepository, applicationEvents, handlingEventFactory);
+	}
+
+	@Test
   void testRegisterEvent() throws Exception {
     when(cargoRepository.find(cargo.trackingId())).thenReturn(cargo);
     when(voyageRepository.find(CM001.voyageNumber())).thenReturn(CM001);
@@ -53,4 +59,5 @@ class HandlingEventServiceTest {
     verify(handlingEventRepository, times(1)).store(isA(HandlingEvent.class));
     verify(applicationEvents, times(1)).cargoWasHandled(isA(HandlingEvent.class));
   }
+
 }

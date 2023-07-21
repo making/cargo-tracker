@@ -17,91 +17,92 @@ import java.time.Instant;
 @Table(name = "Leg")
 public class Leg implements ValueObject<Leg> {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  public long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public long id;
 
-  @ManyToOne
-  @JoinColumn(name="voyage_id")
-  public Voyage voyage;
+	@ManyToOne
+	@JoinColumn(name = "voyage_id")
+	public Voyage voyage;
 
-  @ManyToOne
-  @JoinColumn(name = "load_location_id")
-  public Location loadLocation;
+	@ManyToOne
+	@JoinColumn(name = "load_location_id")
+	public Location loadLocation;
 
-  @Column(name = "load_time")
-  public Instant loadTime;
+	@Column(name = "load_time")
+	public Instant loadTime;
 
-  @ManyToOne
-  @JoinColumn(name = "unload_location_id")
-  public Location unloadLocation;
+	@ManyToOne
+	@JoinColumn(name = "unload_location_id")
+	public Location unloadLocation;
 
-  @Column(name = "unload_time")
-  public Instant unloadTime;
+	@Column(name = "unload_time")
+	public Instant unloadTime;
 
-  public Leg(Voyage voyage, Location loadLocation, Location unloadLocation, Instant loadTime, Instant unloadTime) {
-    Validate.noNullElements(new Object[] {voyage, loadLocation, unloadLocation, loadTime, unloadTime});
-    
-    this.voyage = voyage;
-    this.loadLocation = loadLocation;
-    this.unloadLocation = unloadLocation;
-    this.loadTime = loadTime;
-    this.unloadTime = unloadTime;
-  }
+	public Leg(Voyage voyage, Location loadLocation, Location unloadLocation, Instant loadTime, Instant unloadTime) {
+		Validate.noNullElements(new Object[] { voyage, loadLocation, unloadLocation, loadTime, unloadTime });
 
-  public Voyage voyage() {
-    return voyage;
-  }
+		this.voyage = voyage;
+		this.loadLocation = loadLocation;
+		this.unloadLocation = unloadLocation;
+		this.loadTime = loadTime;
+		this.unloadTime = unloadTime;
+	}
 
-  public Location loadLocation() {
-    return loadLocation;
-  }
+	public Voyage voyage() {
+		return voyage;
+	}
 
-  public Location unloadLocation() {
-    return unloadLocation;
-  }
+	public Location loadLocation() {
+		return loadLocation;
+	}
 
-  public Instant loadTime() {
-    return loadTime;
-  }
+	public Location unloadLocation() {
+		return unloadLocation;
+	}
 
-  public Instant unloadTime() {
-    return unloadTime;
-  }
+	public Instant loadTime() {
+		return loadTime;
+	}
 
-  @Override
-  public boolean sameValueAs(final Leg other) {
-    return other != null && new EqualsBuilder().
-      append(this.voyage, other.voyage).
-      append(this.loadLocation, other.loadLocation).
-      append(this.unloadLocation, other.unloadLocation).
-      append(this.loadTime, other.loadTime).
-      append(this.unloadTime, other.unloadTime).
-      isEquals();
-  }
+	public Instant unloadTime() {
+		return unloadTime;
+	}
 
-  @Override
-  public boolean equals(final Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+	@Override
+	public boolean sameValueAs(final Leg other) {
+		return other != null && new EqualsBuilder().append(this.voyage, other.voyage)
+			.append(this.loadLocation, other.loadLocation)
+			.append(this.unloadLocation, other.unloadLocation)
+			.append(this.loadTime, other.loadTime)
+			.append(this.unloadTime, other.unloadTime)
+			.isEquals();
+	}
 
-    Leg leg = (Leg) o;
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
-    return sameValueAs(leg);
-  }
+		Leg leg = (Leg) o;
 
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder().
-      append(voyage).
-      append(loadLocation).
-      append(unloadLocation).
-      append(loadTime).
-      append(unloadTime).
-      toHashCode();
-  }
+		return sameValueAs(leg);
+	}
 
-  Leg() {
-    // Needed by Hibernate
-  }
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(voyage)
+			.append(loadLocation)
+			.append(unloadLocation)
+			.append(loadTime)
+			.append(unloadTime)
+			.toHashCode();
+	}
+
+	Leg() {
+		// Needed by Hibernate
+	}
+
 }

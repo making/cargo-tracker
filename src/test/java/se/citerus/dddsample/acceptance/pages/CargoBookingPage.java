@@ -12,37 +12,39 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CargoBookingPage {
 
-    private final WebDriver driver;
-    private final int port;
+	private final WebDriver driver;
 
-    public CargoBookingPage(WebDriver driver, int port) {
-        this.driver = driver;
-        this.port = port;
+	private final int port;
 
-        WebElement newCargoTableCaption = driver.findElement(By.cssSelector("table caption"));
+	public CargoBookingPage(WebDriver driver, int port) {
+		this.driver = driver;
+		this.port = port;
 
-        assertThat("Book new cargo").isEqualTo(newCargoTableCaption.getText());
-    }
+		WebElement newCargoTableCaption = driver.findElement(By.cssSelector("table caption"));
 
-    public void selectOrigin(String origin) {
-        Select select = new Select(driver.findElement(By.name("originUnlocode")));
-        select.selectByVisibleText(origin);
-    }
+		assertThat("Book new cargo").isEqualTo(newCargoTableCaption.getText());
+	}
 
-    public void selectDestination(String destination) {
-        Select select = new Select(driver.findElement(By.name("destinationUnlocode")));
-        select.selectByVisibleText(destination);
-    }
+	public void selectOrigin(String origin) {
+		Select select = new Select(driver.findElement(By.name("originUnlocode")));
+		select.selectByVisibleText(origin);
+	}
 
-    public CargoDetailsPage book() {
-        driver.findElement(By.name("originUnlocode")).submit();
+	public void selectDestination(String destination) {
+		Select select = new Select(driver.findElement(By.name("destinationUnlocode")));
+		select.selectByVisibleText(destination);
+	}
 
-        return new CargoDetailsPage(driver, port);
-    }
+	public CargoDetailsPage book() {
+		driver.findElement(By.name("originUnlocode")).submit();
 
-    public void selectArrivalDeadline(LocalDate arrivalDeadline) {
-        WebElement datePicker = driver.findElement(By.id("arrivalDeadline"));
-        datePicker.clear();
-        datePicker.sendKeys(arrivalDeadline.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    }
+		return new CargoDetailsPage(driver, port);
+	}
+
+	public void selectArrivalDeadline(LocalDate arrivalDeadline) {
+		WebElement datePicker = driver.findElement(By.id("arrivalDeadline"));
+		datePicker.clear();
+		datePicker.sendKeys(arrivalDeadline.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+	}
+
 }

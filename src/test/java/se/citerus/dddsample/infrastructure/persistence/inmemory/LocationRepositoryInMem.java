@@ -9,22 +9,22 @@ import java.util.List;
 
 public class LocationRepositoryInMem implements LocationRepository {
 
-  public Location find(UnLocode unLocode) {
-    for (Location location : SampleLocations.getAll()) {
-      if (location.unLocode().equals(unLocode)) {
-        return location;
-      }
-    }
-    return null;
-  }
+	public Location find(UnLocode unLocode) {
+		for (Location location : SampleLocations.getAll()) {
+			if (location.unLocode().equals(unLocode)) {
+				return location;
+			}
+		}
+		return null;
+	}
 
-  public List<Location> getAll() {
-    return SampleLocations.getAll();
-  }
+	public List<Location> getAll() {
+		return SampleLocations.getAll();
+	}
 
-  @Override
-  public Location store(Location location) {
-    return location;
-  }
+	@Override
+	public Location store(Location location) {
+		return location;
+	}
 
 }

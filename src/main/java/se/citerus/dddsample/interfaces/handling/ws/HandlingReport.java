@@ -6,65 +6,68 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class HandlingReport {
-    @JsonProperty(required = true)
-    public LocalDateTime completionTime;
 
-    @JsonProperty(required = true)
-    public List<String> trackingIds;
+	@JsonProperty(required = true)
+	public LocalDateTime completionTime;
 
-    @JsonProperty(required = true)
-    public String type;
+	@JsonProperty(required = true)
+	public List<String> trackingIds;
 
-    @JsonProperty(required = true)
-    public String unLocode;
+	@JsonProperty(required = true)
+	public String type;
 
-    public String voyageNumber;
+	@JsonProperty(required = true)
+	public String unLocode;
 
-    public HandlingReport(LocalDateTime completionTime, List<String> trackingIds, String type, String unLocode, String voyageNumber) {
-        this.completionTime = completionTime;
-        this.trackingIds = trackingIds;
-        this.type = type;
-        this.unLocode = unLocode;
-        this.voyageNumber = voyageNumber;
-    }
+	public String voyageNumber;
 
-    public LocalDateTime getCompletionTime() {
-        return completionTime;
-    }
+	public HandlingReport(LocalDateTime completionTime, List<String> trackingIds, String type, String unLocode,
+			String voyageNumber) {
+		this.completionTime = completionTime;
+		this.trackingIds = trackingIds;
+		this.type = type;
+		this.unLocode = unLocode;
+		this.voyageNumber = voyageNumber;
+	}
 
-    public void setCompletionTime(LocalDateTime completionTime) {
-        this.completionTime = completionTime;
-    }
+	public LocalDateTime getCompletionTime() {
+		return completionTime;
+	}
 
-    public List<String> getTrackingIds() {
-        return trackingIds;
-    }
+	public void setCompletionTime(LocalDateTime completionTime) {
+		this.completionTime = completionTime;
+	}
 
-    public void setTrackingIds(List<String> trackingIds) {
-        this.trackingIds = trackingIds;
-    }
+	public List<String> getTrackingIds() {
+		return trackingIds;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public void setTrackingIds(List<String> trackingIds) {
+		this.trackingIds = trackingIds;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getUnLocode() {
-        return unLocode;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public void setUnLocode(String unLocode) {
-        this.unLocode = unLocode;
-    }
+	public String getUnLocode() {
+		return unLocode;
+	}
 
-    public String getVoyageNumber() {
-        return voyageNumber;
-    }
+	public void setUnLocode(String unLocode) {
+		this.unLocode = unLocode;
+	}
 
-    public void setVoyageNumber(String voyageNumber) {
-        this.voyageNumber = voyageNumber;
-    }
+	public String getVoyageNumber() {
+		return voyageNumber;
+	}
+
+	public void setVoyageNumber(String voyageNumber) {
+		this.voyageNumber = voyageNumber;
+	}
+
 }

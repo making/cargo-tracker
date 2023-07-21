@@ -13,32 +13,35 @@ import jakarta.jms.TextMessage;
 import java.lang.invoke.MethodHandles;
 
 /**
- * Consumes JMS messages and delegates notification of misdirected
- * cargo to the tracking service.
+ * Consumes JMS messages and delegates notification of misdirected cargo to the tracking
+ * service.
  * <p>
- * This is a programmatic hook into the JMS infrastructure to
- * make cargo inspection message-driven.
+ * This is a programmatic hook into the JMS infrastructure to make cargo inspection
+ * message-driven.
  */
 
 @Component
 public class CargoHandledConsumer {
 
-    private final CargoInspectionService cargoInspectionService;
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	private final CargoInspectionService cargoInspectionService;
 
-    public CargoHandledConsumer(CargoInspectionService cargoInspectionService) {
-        this.cargoInspectionService = cargoInspectionService;
-    }
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @JmsListener(destination = "cargoHandledQueue")
-    public void onMessage(final Message message) {
-        try {
-            final TextMessage textMessage = (TextMessage) message;
-            final String trackingidString = textMessage.getText();
+	public CargoHandledConsumer(CargoInspectionService cargoInspectionService) {
+		this.cargoInspectionService = cargoInspectionService;
+	}
 
-            cargoInspectionService.inspectCargo(new TrackingId(trackingidString));
-        } catch (Exception e) {
-            logger.error("Error consuming CargoHandled message", e);
-        }
-    }
+	@JmsListener(destination = "cargoHandledQueue")
+	public void onMessage(final Message message) {
+		try {
+			final TextMessage textMessage = (TextMessage) message;
+			final String trackingidString = textMessage.getText();
+
+			cargoInspectionService.inspectCargo(new TrackingId(trackingidString));
+		}
+		catch (Exception e) {
+			logger.error("Error consuming CargoHandled message", e);
+		}
+	}
+
 }

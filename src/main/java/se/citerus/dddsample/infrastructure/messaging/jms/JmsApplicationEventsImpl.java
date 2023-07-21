@@ -16,46 +16,56 @@ import java.lang.invoke.MethodHandles;
  * JMS based implementation.
  */
 public final class JmsApplicationEventsImpl implements ApplicationEvents {
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final JmsOperations jmsOperations;
-    private final Destination cargoHandledQueue;
-    private final Destination misdirectedCargoQueue;
-    private final Destination deliveredCargoQueue;
-    private final Destination rejectedRegistrationAttemptsQueue; // TODO why is this unused?
-    private final Destination handlingEventQueue;
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public JmsApplicationEventsImpl(JmsOperations jmsOperations, Destination cargoHandledQueue, Destination misdirectedCargoQueue, Destination deliveredCargoQueue, Destination rejectedRegistrationAttemptsQueue, Destination handlingEventQueue) {
-        this.jmsOperations = jmsOperations;
-        this.cargoHandledQueue = cargoHandledQueue;
-        this.misdirectedCargoQueue = misdirectedCargoQueue;
-        this.deliveredCargoQueue = deliveredCargoQueue;
-        this.rejectedRegistrationAttemptsQueue = rejectedRegistrationAttemptsQueue;
-        this.handlingEventQueue = handlingEventQueue;
-    }
+	private final JmsOperations jmsOperations;
 
-    @Override
-    public void cargoWasHandled(final HandlingEvent event) {
-        final Cargo cargo = event.cargo();
-        logger.info("Cargo was handled {}", cargo);
-        jmsOperations.send(cargoHandledQueue, session -> session.createTextMessage(cargo.trackingId().idString()));
-    }
+	private final Destination cargoHandledQueue;
 
-    @Override
-    public void cargoWasMisdirected(final Cargo cargo) {
-        logger.info("Cargo was misdirected {}", cargo);
-        jmsOperations.send(misdirectedCargoQueue, session -> session.createTextMessage(cargo.trackingId().idString()));
-    }
+	private final Destination misdirectedCargoQueue;
 
-    @Override
-    public void cargoHasArrived(final Cargo cargo) {
-        logger.info("Cargo has arrived {}", cargo);
-        jmsOperations.send(deliveredCargoQueue, session -> session.createTextMessage(cargo.trackingId().idString()));
-    }
+	private final Destination deliveredCargoQueue;
 
-    @Override
-    public void receivedHandlingEventRegistrationAttempt(final HandlingEventRegistrationAttempt attempt) {
-        logger.info("Received handling event registration attempt {}", attempt);
-        jmsOperations.send(handlingEventQueue, session -> session.createObjectMessage(attempt));
-    }
+	private final Destination rejectedRegistrationAttemptsQueue; // TODO why is this
+																	// unused?
+
+	private final Destination handlingEventQueue;
+
+	public JmsApplicationEventsImpl(JmsOperations jmsOperations, Destination cargoHandledQueue,
+			Destination misdirectedCargoQueue, Destination deliveredCargoQueue,
+			Destination rejectedRegistrationAttemptsQueue, Destination handlingEventQueue) {
+		this.jmsOperations = jmsOperations;
+		this.cargoHandledQueue = cargoHandledQueue;
+		this.misdirectedCargoQueue = misdirectedCargoQueue;
+		this.deliveredCargoQueue = deliveredCargoQueue;
+		this.rejectedRegistrationAttemptsQueue = rejectedRegistrationAttemptsQueue;
+		this.handlingEventQueue = handlingEventQueue;
+	}
+
+	@Override
+	public void cargoWasHandled(final HandlingEvent event) {
+		final Cargo cargo = event.cargo();
+		logger.info("Cargo was handled {}", cargo);
+		jmsOperations.send(cargoHandledQueue, session -> session.createTextMessage(cargo.trackingId().idString()));
+	}
+
+	@Override
+	public void cargoWasMisdirected(final Cargo cargo) {
+		logger.info("Cargo was misdirected {}", cargo);
+		jmsOperations.send(misdirectedCargoQueue, session -> session.createTextMessage(cargo.trackingId().idString()));
+	}
+
+	@Override
+	public void cargoHasArrived(final Cargo cargo) {
+		logger.info("Cargo has arrived {}", cargo);
+		jmsOperations.send(deliveredCargoQueue, session -> session.createTextMessage(cargo.trackingId().idString()));
+	}
+
+	@Override
+	public void receivedHandlingEventRegistrationAttempt(final HandlingEventRegistrationAttempt attempt) {
+		logger.info("Received handling event registration attempt {}", attempt);
+		jmsOperations.send(handlingEventQueue, session -> session.createObjectMessage(attempt));
+	}
+
 }

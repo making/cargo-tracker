@@ -14,42 +14,41 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 class AdminAcceptanceTest extends AbstractAcceptanceTest {
 
-  @DirtiesContext
-  @Test
-  void adminSiteCargoListContainsCannedCargo() {
-        AdminPage page = new AdminPage(driver, port);
-        page.listAllCargo();
+	@DirtiesContext
+	@Test
+	void adminSiteCargoListContainsCannedCargo() {
+		AdminPage page = new AdminPage(driver, port);
+		page.listAllCargo();
 
-        assertThat(page.listedCargoContains("ABC123")).isTrue()
-                .withFailMessage("Cargo list doesn't contain ABC123");
-        assertThat(page.listedCargoContains("JKL567")).isTrue()
-                .withFailMessage("Cargo list doesn't contain JKL567");
-    }
+		assertThat(page.listedCargoContains("ABC123")).isTrue().withFailMessage("Cargo list doesn't contain ABC123");
+		assertThat(page.listedCargoContains("JKL567")).isTrue().withFailMessage("Cargo list doesn't contain JKL567");
+	}
 
-  @DirtiesContext
-  @Test
-  void adminSiteCanBookNewCargo() {
-        AdminPage adminPage = new AdminPage(driver, port);
+	@DirtiesContext
+	@Test
+	void adminSiteCanBookNewCargo() {
+		AdminPage adminPage = new AdminPage(driver, port);
 
-        CargoBookingPage cargoBookingPage = adminPage.bookNewCargo();
-        cargoBookingPage.selectOrigin("NLRTM");
-        cargoBookingPage.selectDestination("USDAL");
-        LocalDate arrivalDeadline = LocalDate.now().plus(3, ChronoUnit.WEEKS);
-        cargoBookingPage.selectArrivalDeadline(arrivalDeadline);
-        CargoDetailsPage cargoDetailsPage = cargoBookingPage.book();
+		CargoBookingPage cargoBookingPage = adminPage.bookNewCargo();
+		cargoBookingPage.selectOrigin("NLRTM");
+		cargoBookingPage.selectDestination("USDAL");
+		LocalDate arrivalDeadline = LocalDate.now().plus(3, ChronoUnit.WEEKS);
+		cargoBookingPage.selectArrivalDeadline(arrivalDeadline);
+		CargoDetailsPage cargoDetailsPage = cargoBookingPage.book();
 
-        String newCargoTrackingId = cargoDetailsPage.getTrackingId();
-        adminPage = cargoDetailsPage.listAllCargo();
-        assertThat(adminPage.listedCargoContains(newCargoTrackingId)).isTrue()
-                .withFailMessage("Cargo list doesn't contain %s", newCargoTrackingId);
+		String newCargoTrackingId = cargoDetailsPage.getTrackingId();
+		adminPage = cargoDetailsPage.listAllCargo();
+		assertThat(adminPage.listedCargoContains(newCargoTrackingId)).isTrue()
+			.withFailMessage("Cargo list doesn't contain %s", newCargoTrackingId);
 
-        cargoDetailsPage = adminPage.showDetailsFor(newCargoTrackingId);
-        cargoDetailsPage.expectOriginOf("NLRTM");
-        cargoDetailsPage.expectDestinationOf("USDAL");
+		cargoDetailsPage = adminPage.showDetailsFor(newCargoTrackingId);
+		cargoDetailsPage.expectOriginOf("NLRTM");
+		cargoDetailsPage.expectDestinationOf("USDAL");
 
-        CargoDestinationPage cargoDestinationPage = cargoDetailsPage.changeDestination();
-        cargoDetailsPage = cargoDestinationPage.selectDestinationTo("AUMEL");
-        cargoDetailsPage.expectDestinationOf("AUMEL");
-        cargoDetailsPage.expectArrivalDeadlineOf(arrivalDeadline);
-    }
+		CargoDestinationPage cargoDestinationPage = cargoDetailsPage.changeDestination();
+		cargoDetailsPage = cargoDestinationPage.selectDestinationTo("AUMEL");
+		cargoDetailsPage.expectDestinationOf("AUMEL");
+		cargoDetailsPage.expectArrivalDeadlineOf(arrivalDeadline);
+	}
+
 }

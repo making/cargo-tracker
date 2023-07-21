@@ -17,109 +17,116 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.*;
 
 class HandlingEventTest {
-  private Cargo cargo;
 
-  @BeforeEach
-  void setUp() {
-    TrackingId trackingId = new TrackingId("XYZ");
-    RouteSpecification routeSpecification = new RouteSpecification(HONGKONG, NEWYORK, Instant.now());
-    cargo = new Cargo(trackingId, routeSpecification);
-  }
+	private Cargo cargo;
 
-  @Test
-  void testNewWithCarrierMovement() {
+	@BeforeEach
+	void setUp() {
+		TrackingId trackingId = new TrackingId("XYZ");
+		RouteSpecification routeSpecification = new RouteSpecification(HONGKONG, NEWYORK, Instant.now());
+		cargo = new Cargo(trackingId, routeSpecification);
+	}
 
-    HandlingEvent e1 = new HandlingEvent(cargo, Instant.now(), Instant.now(), LOAD, HONGKONG, CM003);
-    assertThat(e1.location()).isEqualTo(HONGKONG);
+	@Test
+	void testNewWithCarrierMovement() {
 
-    HandlingEvent e2 = new HandlingEvent(cargo, Instant.now(), Instant.now(), UNLOAD, NEWYORK, CM003);
-    assertThat(e2.location()).isEqualTo(NEWYORK);
+		HandlingEvent e1 = new HandlingEvent(cargo, Instant.now(), Instant.now(), LOAD, HONGKONG, CM003);
+		assertThat(e1.location()).isEqualTo(HONGKONG);
 
-      // These event types prohibit a carrier movement association
-    for (HandlingEvent.Type type : List.of(CLAIM, RECEIVE, CUSTOMS)) {
-      try {
-        new HandlingEvent(cargo, Instant.now(), Instant.now(), type, HONGKONG, CM003);
-        fail("Handling event type " + type + " prohibits carrier movement");
-      } catch (IllegalArgumentException expected) {}
-    }
+		HandlingEvent e2 = new HandlingEvent(cargo, Instant.now(), Instant.now(), UNLOAD, NEWYORK, CM003);
+		assertThat(e2.location()).isEqualTo(NEWYORK);
 
-      // These event types requires a carrier movement association
-    for (HandlingEvent.Type type : List.of(LOAD, UNLOAD)) {
-        try {
-          new HandlingEvent(cargo, Instant.now(), Instant.now(), type, HONGKONG, null);
-            fail("Handling event type " + type + " requires carrier movement");
-        } catch (NullPointerException expected) {}
-    }
-  }
+		// These event types prohibit a carrier movement association
+		for (HandlingEvent.Type type : List.of(CLAIM, RECEIVE, CUSTOMS)) {
+			try {
+				new HandlingEvent(cargo, Instant.now(), Instant.now(), type, HONGKONG, CM003);
+				fail("Handling event type " + type + " prohibits carrier movement");
+			}
+			catch (IllegalArgumentException expected) {
+			}
+		}
 
-  @Test
-  void testNewWithLocation() {
-    HandlingEvent e1 = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, HELSINKI);
-    assertThat(e1.location()).isEqualTo(HELSINKI);
-  }
+		// These event types requires a carrier movement association
+		for (HandlingEvent.Type type : List.of(LOAD, UNLOAD)) {
+			try {
+				new HandlingEvent(cargo, Instant.now(), Instant.now(), type, HONGKONG, null);
+				fail("Handling event type " + type + " requires carrier movement");
+			}
+			catch (NullPointerException expected) {
+			}
+		}
+	}
 
-  @Test
-  void testCurrentLocationLoadEvent() {
+	@Test
+	void testNewWithLocation() {
+		HandlingEvent e1 = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, HELSINKI);
+		assertThat(e1.location()).isEqualTo(HELSINKI);
+	}
 
-    HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), LOAD, CHICAGO, CM004);
-    
-    assertThat(ev.location()).isEqualTo(CHICAGO);
-  }
+	@Test
+	void testCurrentLocationLoadEvent() {
 
-  @Test
-  void testCurrentLocationUnloadEvent() {
-    HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), UNLOAD, HAMBURG, CM004);
-    
-    assertThat(ev.location()).isEqualTo(HAMBURG);
-  }
+		HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), LOAD, CHICAGO, CM004);
 
-  @Test
-  void testCurrentLocationReceivedEvent() {
-    HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), RECEIVE, CHICAGO);
+		assertThat(ev.location()).isEqualTo(CHICAGO);
+	}
 
-    assertThat(ev.location()).isEqualTo(CHICAGO);
-  }
+	@Test
+	void testCurrentLocationUnloadEvent() {
+		HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), UNLOAD, HAMBURG, CM004);
 
-  @Test
-  void testCurrentLocationClaimedEvent() {
-    HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), CLAIM, CHICAGO);
+		assertThat(ev.location()).isEqualTo(HAMBURG);
+	}
 
-    assertThat(ev.location()).isEqualTo(CHICAGO);
-  }
+	@Test
+	void testCurrentLocationReceivedEvent() {
+		HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), RECEIVE, CHICAGO);
 
-  @Test
-  void testParseType() {
-    assertThat(valueOf("CLAIM")).isEqualTo(CLAIM);
-    assertThat(valueOf("LOAD")).isEqualTo(LOAD);
-    assertThat(valueOf("UNLOAD")).isEqualTo(UNLOAD);
-    assertThat(valueOf("RECEIVE")).isEqualTo(RECEIVE);
-  }
+		assertThat(ev.location()).isEqualTo(CHICAGO);
+	}
 
-  @Test
-  void testParseTypeIllegal() {
-    try {
-      valueOf("NOT_A_HANDLING_EVENT_TYPE");
-      fail("Expected IllegalArgumentException to be thrown");
-    } catch (IllegalArgumentException e) {
-      // All's well
-    }
-  }
+	@Test
+	void testCurrentLocationClaimedEvent() {
+		HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), CLAIM, CHICAGO);
 
-  @Test
-  void testEqualsAndSameAs() {
-    Instant timeOccured = Instant.now();
-    Instant timeRegistered = Instant.now();
+		assertThat(ev.location()).isEqualTo(CHICAGO);
+	}
 
-    HandlingEvent ev1 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO, CM005);
-    HandlingEvent ev2 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO, CM005);
+	@Test
+	void testParseType() {
+		assertThat(valueOf("CLAIM")).isEqualTo(CLAIM);
+		assertThat(valueOf("LOAD")).isEqualTo(LOAD);
+		assertThat(valueOf("UNLOAD")).isEqualTo(UNLOAD);
+		assertThat(valueOf("RECEIVE")).isEqualTo(RECEIVE);
+	}
 
-    // Two handling events are not equal() even if all non-uuid fields are identical
-    assertThat(ev1.equals(ev2)).isTrue();
-    assertThat(ev2.equals(ev1)).isTrue();
+	@Test
+	void testParseTypeIllegal() {
+		try {
+			valueOf("NOT_A_HANDLING_EVENT_TYPE");
+			fail("Expected IllegalArgumentException to be thrown");
+		}
+		catch (IllegalArgumentException e) {
+			// All's well
+		}
+	}
 
-    assertThat(ev1.equals(ev1)).isTrue();
+	@Test
+	void testEqualsAndSameAs() {
+		Instant timeOccured = Instant.now();
+		Instant timeRegistered = Instant.now();
 
-    assertThat(ev2.equals(null)).isFalse();
-    assertThat(ev2.equals(new Object())).isFalse();
-  }
+		HandlingEvent ev1 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO, CM005);
+		HandlingEvent ev2 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO, CM005);
+
+		// Two handling events are not equal() even if all non-uuid fields are identical
+		assertThat(ev1.equals(ev2)).isTrue();
+		assertThat(ev2.equals(ev1)).isTrue();
+
+		assertThat(ev1.equals(ev1)).isTrue();
+
+		assertThat(ev2.equals(null)).isFalse();
+		assertThat(ev2.equals(new Object())).isFalse();
+	}
+
 }

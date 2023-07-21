@@ -23,76 +23,75 @@ import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 
 /**
- * Our end of the routing service. This is basically a data model
- * translation layer between our domain model and the API put forward
- * by the routing team, which operates in a different context from us.
+ * Our end of the routing service. This is basically a data model translation layer
+ * between our domain model and the API put forward by the routing team, which operates in
+ * a different context from us.
  *
  */
 public class ExternalRoutingService implements RoutingService {
-  private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-  private final GraphTraversalService graphTraversalService;
-  private final LocationRepository locationRepository;
-  private final VoyageRepository voyageRepository;
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-  public ExternalRoutingService(GraphTraversalService graphTraversalService, LocationRepository locationRepository, VoyageRepository voyageRepository) {
-    this.graphTraversalService = graphTraversalService;
-    this.locationRepository = locationRepository;
-    this.voyageRepository = voyageRepository;
-  }
+	private final GraphTraversalService graphTraversalService;
 
-  public List<Itinerary> fetchRoutesForSpecification(RouteSpecification routeSpecification) {
-    /*
-      The RouteSpecification is picked apart and adapted to the external API.
-     */
-    final Location origin = routeSpecification.origin();
-    final Location destination = routeSpecification.destination();
+	private final LocationRepository locationRepository;
 
-    final Properties limitations = new Properties();
-    limitations.setProperty("DEADLINE", routeSpecification.arrivalDeadline().toString());
+	private final VoyageRepository voyageRepository;
 
-    final List<TransitPath> transitPaths;
-    transitPaths = graphTraversalService.findShortestPath(
-      origin.unLocode().idString(),
-      destination.unLocode().idString(),
-      limitations
-    );
+	public ExternalRoutingService(GraphTraversalService graphTraversalService, LocationRepository locationRepository,
+			VoyageRepository voyageRepository) {
+		this.graphTraversalService = graphTraversalService;
+		this.locationRepository = locationRepository;
+		this.voyageRepository = voyageRepository;
+	}
 
-    /*
-     The returned result is then translated back into our domain model.
-    */
-    final List<Itinerary> itineraries = transitPaths.stream()
-            .map(this::toItinerary)
-            .filter(itinerary -> isSatisfyingRouteSpec(itinerary, routeSpecification))
-            .collect(Collectors.toList());
+	public List<Itinerary> fetchRoutesForSpecification(RouteSpecification routeSpecification) {
+		/*
+		 * The RouteSpecification is picked apart and adapted to the external API.
+		 */
+		final Location origin = routeSpecification.origin();
+		final Location destination = routeSpecification.destination();
 
-    return itineraries;
-  }
+		final Properties limitations = new Properties();
+		limitations.setProperty("DEADLINE", routeSpecification.arrivalDeadline().toString());
 
-  private static boolean isSatisfyingRouteSpec(Itinerary itinerary, RouteSpecification routeSpecification) {
-    if (routeSpecification.isSatisfiedBy(itinerary)) {
-      return true;
-    } else {
-      logger.warn("Received itinerary that did not satisfy the route specification");
-      return false;
-    }
-  }
+		final List<TransitPath> transitPaths;
+		transitPaths = graphTraversalService.findShortestPath(origin.unLocode().idString(),
+				destination.unLocode().idString(), limitations);
 
-  private Itinerary toItinerary(TransitPath transitPath) {
-    List<Leg> legs = new ArrayList<>(transitPath.getTransitEdges().size());
-    for (TransitEdge edge : transitPath.getTransitEdges()) {
-      legs.add(toLeg(edge));
-    }
-    return new Itinerary(legs);
-  }
+		/*
+		 * The returned result is then translated back into our domain model.
+		 */
+		final List<Itinerary> itineraries = transitPaths.stream()
+			.map(this::toItinerary)
+			.filter(itinerary -> isSatisfyingRouteSpec(itinerary, routeSpecification))
+			.collect(Collectors.toList());
 
-  private Leg toLeg(TransitEdge edge) {
-    return new Leg(
-            voyageRepository.find(new VoyageNumber(edge.getEdge())),
-            locationRepository.find(new UnLocode(edge.getFromNode())),
-            locationRepository.find(new UnLocode(edge.getToNode())),
-            edge.getFromDate(),
-            edge.getToDate()
-    );
-  }
+		return itineraries;
+	}
+
+	private static boolean isSatisfyingRouteSpec(Itinerary itinerary, RouteSpecification routeSpecification) {
+		if (routeSpecification.isSatisfiedBy(itinerary)) {
+			return true;
+		}
+		else {
+			logger.warn("Received itinerary that did not satisfy the route specification");
+			return false;
+		}
+	}
+
+	private Itinerary toItinerary(TransitPath transitPath) {
+		List<Leg> legs = new ArrayList<>(transitPath.getTransitEdges().size());
+		for (TransitEdge edge : transitPath.getTransitEdges()) {
+			legs.add(toLeg(edge));
+		}
+		return new Itinerary(legs);
+	}
+
+	private Leg toLeg(TransitEdge edge) {
+		return new Leg(voyageRepository.find(new VoyageNumber(edge.getEdge())),
+				locationRepository.find(new UnLocode(edge.getFromNode())),
+				locationRepository.find(new UnLocode(edge.getToNode())), edge.getFromDate(), edge.getToDate());
+	}
+
 }

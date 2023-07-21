@@ -7,30 +7,32 @@ import static org.assertj.core.api.Assertions.fail;
 
 class LocationTest {
 
-  @Test
-  void testEquals() {
-    // Same UN locode - equal
-    assertThat(new Location(new UnLocode("ATEST"),"test-name").
-        equals(new Location(new UnLocode("ATEST"),"test-name"))).isTrue();
+	@Test
+	void testEquals() {
+		// Same UN locode - equal
+		assertThat(new Location(new UnLocode("ATEST"), "test-name")
+			.equals(new Location(new UnLocode("ATEST"), "test-name"))).isTrue();
 
-    // Different UN locodes - not equal
-    assertThat(new Location(new UnLocode("ATEST"),"test-name").
-         equals(new Location(new UnLocode("TESTB"), "test-name"))).isFalse();
+		// Different UN locodes - not equal
+		assertThat(new Location(new UnLocode("ATEST"), "test-name")
+			.equals(new Location(new UnLocode("TESTB"), "test-name"))).isFalse();
 
-    // Always equal to itself
-    Location location = new Location(new UnLocode("ATEST"),"test-name");
-    assertThat(location.equals(location)).isTrue();
+		// Always equal to itself
+		Location location = new Location(new UnLocode("ATEST"), "test-name");
+		assertThat(location.equals(location)).isTrue();
 
-    // Never equal to null
-    assertThat(location.equals(null)).isFalse();
+		// Never equal to null
+		assertThat(location.equals(null)).isFalse();
 
-    // Special UNKNOWN location is equal to itself
-    assertThat(Location.UNKNOWN.equals(Location.UNKNOWN)).isTrue();
+		// Special UNKNOWN location is equal to itself
+		assertThat(Location.UNKNOWN.equals(Location.UNKNOWN)).isTrue();
 
-    try {
-      new Location((UnLocode) null, null);
-      fail("Should not allow any null constructor arguments");
-    } catch (NullPointerException expected) {}
-  }
+		try {
+			new Location((UnLocode) null, null);
+			fail("Should not allow any null constructor arguments");
+		}
+		catch (NullPointerException expected) {
+		}
+	}
 
 }

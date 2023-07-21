@@ -6,32 +6,33 @@ import org.springframework.test.annotation.DirtiesContext;
 import se.citerus.dddsample.acceptance.pages.CustomerPage;
 
 class CustomerAcceptanceTest extends AbstractAcceptanceTest {
-    private CustomerPage customerPage;
 
-  @BeforeEach
-  void goToCustomerPage() {
-        customerPage = new CustomerPage(driver, port);
-    }
+	private CustomerPage customerPage;
 
-  @DirtiesContext
-  @Test
-  void customerSiteCanTrackValidCargo() {
-        customerPage.trackCargoWithIdOf("ABC123");
-        customerPage.expectCargoLocation("New York");
-    }
+	@BeforeEach
+	void goToCustomerPage() {
+		customerPage = new CustomerPage(driver, port);
+	}
 
-  @DirtiesContext
-  @Test
-  void customerSiteErrorsOnInvalidCargo() {
-        customerPage.trackCargoWithIdOf("XXX999");
-        customerPage.expectErrorFor("Unknown tracking id");
-    }
+	@DirtiesContext
+	@Test
+	void customerSiteCanTrackValidCargo() {
+		customerPage.trackCargoWithIdOf("ABC123");
+		customerPage.expectCargoLocation("New York");
+	}
 
-  @DirtiesContext
-  @Test
-  void customerSiteNotifiesOnMisdirectedCargo() {
-        customerPage.trackCargoWithIdOf("JKL567");
-        customerPage.expectNotificationOf("Cargo is misdirected");
-    }
+	@DirtiesContext
+	@Test
+	void customerSiteErrorsOnInvalidCargo() {
+		customerPage.trackCargoWithIdOf("XXX999");
+		customerPage.expectErrorFor("Unknown tracking id");
+	}
+
+	@DirtiesContext
+	@Test
+	void customerSiteNotifiesOnMisdirectedCargo() {
+		customerPage.trackCargoWithIdOf("JKL567");
+		customerPage.expectNotificationOf("Cargo is misdirected");
+	}
 
 }

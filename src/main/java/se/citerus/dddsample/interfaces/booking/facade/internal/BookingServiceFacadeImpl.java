@@ -23,83 +23,86 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This implementation has additional support from the infrastructure, for exposing as an RMI
- * service and for keeping the OR-mapper unit-of-work open during DTO assembly,
+ * This implementation has additional support from the infrastructure, for exposing as an
+ * RMI service and for keeping the OR-mapper unit-of-work open during DTO assembly,
  * analogous to the view rendering for web interfaces.
  *
  */
 public class BookingServiceFacadeImpl implements BookingServiceFacade {
 
-  private BookingService bookingService;
-  private LocationRepository locationRepository;
-  private CargoRepository cargoRepository;
-  private VoyageRepository voyageRepository;
+	private BookingService bookingService;
 
-  public BookingServiceFacadeImpl(BookingService bookingService, LocationRepository locationRepository, CargoRepository cargoRepository, VoyageRepository voyageRepository) {
-    this.bookingService = bookingService;
-    this.locationRepository = locationRepository;
-    this.cargoRepository = cargoRepository;
-    this.voyageRepository = voyageRepository;
-  }
+	private LocationRepository locationRepository;
 
-  @Override
-  public List<LocationDTO> listShippingLocations() {
-    final List<Location> allLocations = locationRepository.getAll();
-    final LocationDTOAssembler assembler = new LocationDTOAssembler();
-    return assembler.toDTOList(allLocations);
-  }
+	private CargoRepository cargoRepository;
 
-  @Override
-  public String bookNewCargo(String origin, String destination, Instant arrivalDeadline) {
-    TrackingId trackingId = bookingService.bookNewCargo(
-      new UnLocode(origin), 
-      new UnLocode(destination),
-      arrivalDeadline
-    );
-    return trackingId.idString();
-  }
+	private VoyageRepository voyageRepository;
 
-  @Override
-  public CargoRoutingDTO loadCargoForRouting(String trackingId) {
-    final Cargo cargo = cargoRepository.find(new TrackingId(trackingId));
-    final CargoRoutingDTOAssembler assembler = new CargoRoutingDTOAssembler();
-    return assembler.toDTO(cargo);
-  }
+	public BookingServiceFacadeImpl(BookingService bookingService, LocationRepository locationRepository,
+			CargoRepository cargoRepository, VoyageRepository voyageRepository) {
+		this.bookingService = bookingService;
+		this.locationRepository = locationRepository;
+		this.cargoRepository = cargoRepository;
+		this.voyageRepository = voyageRepository;
+	}
 
-  @Override
-  public void assignCargoToRoute(String trackingIdStr, RouteCandidateDTO routeCandidateDTO) {
-    final Itinerary itinerary = new ItineraryCandidateDTOAssembler().fromDTO(routeCandidateDTO, voyageRepository, locationRepository);
-    final TrackingId trackingId = new TrackingId(trackingIdStr);
+	@Override
+	public List<LocationDTO> listShippingLocations() {
+		final List<Location> allLocations = locationRepository.getAll();
+		final LocationDTOAssembler assembler = new LocationDTOAssembler();
+		return assembler.toDTOList(allLocations);
+	}
 
-    bookingService.assignCargoToRoute(itinerary, trackingId);
-  }
+	@Override
+	public String bookNewCargo(String origin, String destination, Instant arrivalDeadline) {
+		TrackingId trackingId = bookingService.bookNewCargo(new UnLocode(origin), new UnLocode(destination),
+				arrivalDeadline);
+		return trackingId.idString();
+	}
 
-  @Override
-  public void changeDestination(String trackingId, String destinationUnLocode) throws RemoteException {
-    bookingService.changeDestination(new TrackingId(trackingId), new UnLocode(destinationUnLocode));
-  }
+	@Override
+	public CargoRoutingDTO loadCargoForRouting(String trackingId) {
+		final Cargo cargo = cargoRepository.find(new TrackingId(trackingId));
+		final CargoRoutingDTOAssembler assembler = new CargoRoutingDTOAssembler();
+		return assembler.toDTO(cargo);
+	}
 
-  @Override
-  public List<CargoRoutingDTO> listAllCargos() {
-    final List<Cargo> cargoList = cargoRepository.getAll();
-    final List<CargoRoutingDTO> dtoList = new ArrayList<CargoRoutingDTO>(cargoList.size());
-    final CargoRoutingDTOAssembler assembler = new CargoRoutingDTOAssembler();
-    for (Cargo cargo : cargoList) {
-      dtoList.add(assembler.toDTO(cargo));
-    }
-    return dtoList;
-  }
+	@Override
+	public void assignCargoToRoute(String trackingIdStr, RouteCandidateDTO routeCandidateDTO) {
+		final Itinerary itinerary = new ItineraryCandidateDTOAssembler().fromDTO(routeCandidateDTO, voyageRepository,
+				locationRepository);
+		final TrackingId trackingId = new TrackingId(trackingIdStr);
 
-  @Override
-  public List<RouteCandidateDTO> requestPossibleRoutesForCargo(String trackingId) throws RemoteException {
-    final List<Itinerary> itineraries = bookingService.requestPossibleRoutesForCargo(new TrackingId(trackingId));
+		bookingService.assignCargoToRoute(itinerary, trackingId);
+	}
 
-    final List<RouteCandidateDTO> routeCandidates = new ArrayList<RouteCandidateDTO>(itineraries.size());
-    final ItineraryCandidateDTOAssembler dtoAssembler = new ItineraryCandidateDTOAssembler();
-    for (Itinerary itinerary : itineraries) {
-      routeCandidates.add(dtoAssembler.toDTO(itinerary));
-    }
+	@Override
+	public void changeDestination(String trackingId, String destinationUnLocode) throws RemoteException {
+		bookingService.changeDestination(new TrackingId(trackingId), new UnLocode(destinationUnLocode));
+	}
 
-    return routeCandidates;
-  }
+	@Override
+	public List<CargoRoutingDTO> listAllCargos() {
+		final List<Cargo> cargoList = cargoRepository.getAll();
+		final List<CargoRoutingDTO> dtoList = new ArrayList<CargoRoutingDTO>(cargoList.size());
+		final CargoRoutingDTOAssembler assembler = new CargoRoutingDTOAssembler();
+		for (Cargo cargo : cargoList) {
+			dtoList.add(assembler.toDTO(cargo));
+		}
+		return dtoList;
+	}
+
+	@Override
+	public List<RouteCandidateDTO> requestPossibleRoutesForCargo(String trackingId) throws RemoteException {
+		final List<Itinerary> itineraries = bookingService.requestPossibleRoutesForCargo(new TrackingId(trackingId));
+
+		final List<RouteCandidateDTO> routeCandidates = new ArrayList<RouteCandidateDTO>(itineraries.size());
+		final ItineraryCandidateDTOAssembler dtoAssembler = new ItineraryCandidateDTOAssembler();
+		for (Itinerary itinerary : itineraries) {
+			routeCandidates.add(dtoAssembler.toDTO(itinerary));
+		}
+
+		return routeCandidates;
+	}
+
 }

@@ -7,8 +7,10 @@ import org.springframework.jms.core.JmsOperations;
 
 @TestConfiguration
 public class TestConfig {
-    @Bean
-    public JmsOperations jmsTemplate() {
-        return Mockito.mock(JmsOperations.class);
-    }
+
+	@Bean
+	public JmsOperations jmsTemplate() {
+		return Mockito.mock(JmsOperations.class);
+	}
+
 }

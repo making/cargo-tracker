@@ -14,33 +14,40 @@ import jakarta.jms.*;
 @Configuration
 public class InfrastructureMessagingJmsConfig {
 
-    @Bean
-    public Queue cargoHandledQueue() {
-        return new ActiveMQQueue("CargoHandledQueue");
-    }
+	@Bean
+	public Queue cargoHandledQueue() {
+		return new ActiveMQQueue("CargoHandledQueue");
+	}
 
-    @Bean
-    public Queue misdirectedCargoQueue() {
-        return new ActiveMQQueue("MisdirectedCargoQueue");
-    }
+	@Bean
+	public Queue misdirectedCargoQueue() {
+		return new ActiveMQQueue("MisdirectedCargoQueue");
+	}
 
-    @Bean
-    public Queue deliveredCargoQueue() {
-        return new ActiveMQQueue("DeliveredCargoQueue");
-    }
+	@Bean
+	public Queue deliveredCargoQueue() {
+		return new ActiveMQQueue("DeliveredCargoQueue");
+	}
 
-    @Bean
-    public Queue handlingEventRegistrationAttemptQueue() {
-        return new ActiveMQQueue("HandlingEventRegistrationAttemptQueue");
-    }
+	@Bean
+	public Queue handlingEventRegistrationAttemptQueue() {
+		return new ActiveMQQueue("HandlingEventRegistrationAttemptQueue");
+	}
 
-    @Bean
-    public Queue rejectedRegistrationAttemptsQueue() throws Exception {
-        return new ActiveMQQueue("RejectedRegistrationAttemptsQueue");
-    }
+	@Bean
+	public Queue rejectedRegistrationAttemptsQueue() throws Exception {
+		return new ActiveMQQueue("RejectedRegistrationAttemptsQueue");
+	}
 
-    @Bean
-    public ApplicationEvents applicationEvents(JmsOperations jmsOperations, @Qualifier("cargoHandledQueue") Destination cargoHandledQueue, @Qualifier("misdirectedCargoQueue") Destination misdirectedCargoQueue, @Qualifier("deliveredCargoQueue") Destination deliveredCargoQueue, @Qualifier("rejectedRegistrationAttemptsQueue") Destination rejectedRegistrationAttemptsQueue, @Qualifier("handlingEventRegistrationAttemptQueue") Destination handlingEventRegistrationAttemptQueue) {
-        return new JmsApplicationEventsImpl(jmsOperations, cargoHandledQueue, misdirectedCargoQueue, deliveredCargoQueue, rejectedRegistrationAttemptsQueue, handlingEventRegistrationAttemptQueue);
-    }
+	@Bean
+	public ApplicationEvents applicationEvents(JmsOperations jmsOperations,
+			@Qualifier("cargoHandledQueue") Destination cargoHandledQueue,
+			@Qualifier("misdirectedCargoQueue") Destination misdirectedCargoQueue,
+			@Qualifier("deliveredCargoQueue") Destination deliveredCargoQueue,
+			@Qualifier("rejectedRegistrationAttemptsQueue") Destination rejectedRegistrationAttemptsQueue,
+			@Qualifier("handlingEventRegistrationAttemptQueue") Destination handlingEventRegistrationAttemptQueue) {
+		return new JmsApplicationEventsImpl(jmsOperations, cargoHandledQueue, misdirectedCargoQueue,
+				deliveredCargoQueue, rejectedRegistrationAttemptsQueue, handlingEventRegistrationAttemptQueue);
+	}
+
 }

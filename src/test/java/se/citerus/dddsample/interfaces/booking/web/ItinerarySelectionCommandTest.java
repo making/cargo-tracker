@@ -11,30 +11,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ItinerarySelectionCommandTest {
 
-    RouteAssignmentCommand command;
-    MockHttpServletRequest request;
+	RouteAssignmentCommand command;
 
-  @Test
-  void testBind() {
-        command = new RouteAssignmentCommand();
-        request = new MockHttpServletRequest();
+	MockHttpServletRequest request;
 
-        request.addParameter("legs[0].voyageNumber", "CM01");
-        request.addParameter("legs[0].fromUnLocode", "AAAAA");
-        request.addParameter("legs[0].toUnLocode", "BBBBB");
+	@Test
+	void testBind() {
+		command = new RouteAssignmentCommand();
+		request = new MockHttpServletRequest();
 
-        request.addParameter("legs[1].voyageNumber", "CM02");
-        request.addParameter("legs[1].fromUnLocode", "CCCCC");
-        request.addParameter("legs[1].toUnLocode", "DDDDD");
+		request.addParameter("legs[0].voyageNumber", "CM01");
+		request.addParameter("legs[0].fromUnLocode", "AAAAA");
+		request.addParameter("legs[0].toUnLocode", "BBBBB");
 
-        request.addParameter("trackingId", "XYZ");
+		request.addParameter("legs[1].voyageNumber", "CM02");
+		request.addParameter("legs[1].fromUnLocode", "CCCCC");
+		request.addParameter("legs[1].toUnLocode", "DDDDD");
 
-        ServletRequestDataBinder binder = new ServletRequestDataBinder(command);
-        binder.bind(request);
+		request.addParameter("trackingId", "XYZ");
 
-        assertThat(command.getLegs()).hasSize(2).extracting("voyageNumber", "fromUnLocode", "toUnLocode")
-                .containsAll(List.of(Tuple.tuple("CM01", "AAAAA", "BBBBB"), Tuple.tuple("CM02", "CCCCC", "DDDDD")));
+		ServletRequestDataBinder binder = new ServletRequestDataBinder(command);
+		binder.bind(request);
 
-        assertThat(command.getTrackingId()).isEqualTo("XYZ");
-    }
+		assertThat(command.getLegs()).hasSize(2)
+			.extracting("voyageNumber", "fromUnLocode", "toUnLocode")
+			.containsAll(List.of(Tuple.tuple("CM01", "AAAAA", "BBBBB"), Tuple.tuple("CM02", "CCCCC", "DDDDD")));
+
+		assertThat(command.getTrackingId()).isEqualTo("XYZ");
+	}
+
 }

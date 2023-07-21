@@ -22,65 +22,74 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-
 @WebAppConfiguration
 @SpringJUnitConfig(classes = CargoTrackingControllerTest.TestConfiguration.class)
 class CargoTrackingControllerTest {
-    public static class TestConfiguration {
 
-    }
+	public static class TestConfiguration {
 
-    private MockMvc mockMvc;
+	}
 
-  @BeforeEach
-  void setup() throws Exception {
-        CargoRepositoryInMem cargoRepository = new CargoRepositoryInMem();
-        cargoRepository.setHandlingEventRepository(new HandlingEventRepositoryInMem());
-        cargoRepository.init();
+	private MockMvc mockMvc;
 
-        CargoTrackingController controller = new CargoTrackingController(cargoRepository,
-                new HandlingEventRepositoryInMem(),
-                new FakeMessageSource());
+	@BeforeEach
+	void setup() throws Exception {
+		CargoRepositoryInMem cargoRepository = new CargoRepositoryInMem();
+		cargoRepository.setHandlingEventRepository(new HandlingEventRepositoryInMem());
+		cargoRepository.init();
 
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/jsp/");
-        resolver.setSuffix(".jsp");
-        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).setViewResolvers(resolver).build();
-    }
+		CargoTrackingController controller = new CargoTrackingController(cargoRepository,
+				new HandlingEventRepositoryInMem(), new FakeMessageSource());
 
-  @Test
-  void canGetCargo() throws Exception {
-        String trackingId = "ABC";
-        Map<String, Object> model = mockMvc.perform(post("/track").param("trackingId", trackingId)).andReturn().getModelAndView().getModel();
-        CargoTrackingViewAdapter cargoTrackingViewAdapter = (CargoTrackingViewAdapter) model.get("cargo");
-        assertThat(cargoTrackingViewAdapter.getTrackingId()).isEqualTo(trackingId);
-    }
+		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+		resolver.setPrefix("/jsp/");
+		resolver.setSuffix(".jsp");
+		this.mockMvc = MockMvcBuilders.standaloneSetup(controller).setViewResolvers(resolver).build();
+	}
 
-  @Test
-  void cannotGetUnknownCargo() throws Exception {
-        String trackingId = "UNKNOWN";
-        Map<String, Object> model = mockMvc.perform(post("/track").param("trackingId", trackingId)).andReturn().getModelAndView().getModel();
-        Errors errors = (Errors) model.get(BindingResult.MODEL_KEY_PREFIX + "trackCommand");
-        FieldError fe = errors.getFieldError("trackingId");
-        assertThat(fe.getCode()).isEqualTo("cargo.unknown_id");
-        assertThat(fe.getArguments().length).isEqualTo(1);
-        assertThat(fe.getArguments()[0]).isEqualTo(trackingId);
-    }
+	@Test
+	void canGetCargo() throws Exception {
+		String trackingId = "ABC";
+		Map<String, Object> model = mockMvc.perform(post("/track").param("trackingId", trackingId))
+			.andReturn()
+			.getModelAndView()
+			.getModel();
+		CargoTrackingViewAdapter cargoTrackingViewAdapter = (CargoTrackingViewAdapter) model.get("cargo");
+		assertThat(cargoTrackingViewAdapter.getTrackingId()).isEqualTo(trackingId);
+	}
 
-    private static class FakeMessageSource implements MessageSource {
-        @Override
-        public String getMessage(String s, Object[] objects, String s1, Locale locale) {
-            return "test";
-        }
+	@Test
+	void cannotGetUnknownCargo() throws Exception {
+		String trackingId = "UNKNOWN";
+		Map<String, Object> model = mockMvc.perform(post("/track").param("trackingId", trackingId))
+			.andReturn()
+			.getModelAndView()
+			.getModel();
+		Errors errors = (Errors) model.get(BindingResult.MODEL_KEY_PREFIX + "trackCommand");
+		FieldError fe = errors.getFieldError("trackingId");
+		assertThat(fe.getCode()).isEqualTo("cargo.unknown_id");
+		assertThat(fe.getArguments().length).isEqualTo(1);
+		assertThat(fe.getArguments()[0]).isEqualTo(trackingId);
+	}
 
-        @Override
-        public String getMessage(String s, Object[] objects, Locale locale) throws NoSuchMessageException {
-            return "test";
-        }
+	private static class FakeMessageSource implements MessageSource {
 
-        @Override
-        public String getMessage(MessageSourceResolvable messageSourceResolvable, Locale locale) throws NoSuchMessageException {
-            return "test";
-        }
-    }
+		@Override
+		public String getMessage(String s, Object[] objects, String s1, Locale locale) {
+			return "test";
+		}
+
+		@Override
+		public String getMessage(String s, Object[] objects, Locale locale) throws NoSuchMessageException {
+			return "test";
+		}
+
+		@Override
+		public String getMessage(MessageSourceResolvable messageSourceResolvable, Locale locale)
+				throws NoSuchMessageException {
+			return "test";
+		}
+
+	}
+
 }

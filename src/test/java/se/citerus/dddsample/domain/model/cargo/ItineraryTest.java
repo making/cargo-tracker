@@ -16,93 +16,95 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 
 class ItineraryTest {
-  private final CarrierMovement abc = new CarrierMovement(SHANGHAI, ROTTERDAM, Instant.now(), Instant.now());
-  private final CarrierMovement def = new CarrierMovement(ROTTERDAM, GOTHENBURG, Instant.now(), Instant.now());
-  private final CarrierMovement ghi = new CarrierMovement(ROTTERDAM, NEWYORK, Instant.now(), Instant.now());
-  private final CarrierMovement jkl = new CarrierMovement(SHANGHAI, HELSINKI, Instant.now(), Instant.now());
 
-  Voyage voyage, wrongVoyage;
+	private final CarrierMovement abc = new CarrierMovement(SHANGHAI, ROTTERDAM, Instant.now(), Instant.now());
 
-  @BeforeEach
-  void setUp() {
-    voyage = new Voyage.Builder(new VoyageNumber("0123"), SHANGHAI).
-      addMovement(ROTTERDAM, Instant.now(), Instant.now()).
-      addMovement(GOTHENBURG, Instant.now(), Instant.now()).
-      build();
+	private final CarrierMovement def = new CarrierMovement(ROTTERDAM, GOTHENBURG, Instant.now(), Instant.now());
 
-    wrongVoyage = new Voyage.Builder(new VoyageNumber("666"), NEWYORK).
-      addMovement(STOCKHOLM, Instant.now(), Instant.now()).
-      addMovement(HELSINKI, Instant.now(), Instant.now()).
-      build();
-  }
+	private final CarrierMovement ghi = new CarrierMovement(ROTTERDAM, NEWYORK, Instant.now(), Instant.now());
 
-  @Test
-  void testCargoOnTrack() {
+	private final CarrierMovement jkl = new CarrierMovement(SHANGHAI, HELSINKI, Instant.now(), Instant.now());
 
-    TrackingId trackingId = new TrackingId("CARGO1");
-    RouteSpecification routeSpecification = new RouteSpecification(SHANGHAI, GOTHENBURG, Instant.now());
-    Cargo cargo = new Cargo(trackingId, routeSpecification);
+	Voyage voyage, wrongVoyage;
 
-    Itinerary itinerary = new Itinerary(
-      List.of(
-        new Leg(voyage, SHANGHAI, ROTTERDAM, Instant.now(), Instant.now()),
-        new Leg(voyage, ROTTERDAM, GOTHENBURG, Instant.now(), Instant.now())
-      )
-    );
+	@BeforeEach
+	void setUp() {
+		voyage = new Voyage.Builder(new VoyageNumber("0123"), SHANGHAI)
+			.addMovement(ROTTERDAM, Instant.now(), Instant.now())
+			.addMovement(GOTHENBURG, Instant.now(), Instant.now())
+			.build();
 
-    //Happy path
-    HandlingEvent event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, SHANGHAI);
-    assertThat(itinerary.isExpected(event)).isTrue();
+		wrongVoyage = new Voyage.Builder(new VoyageNumber("666"), NEWYORK)
+			.addMovement(STOCKHOLM, Instant.now(), Instant.now())
+			.addMovement(HELSINKI, Instant.now(), Instant.now())
+			.build();
+	}
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
-    assertThat(itinerary.isExpected(event)).isTrue();
+	@Test
+	void testCargoOnTrack() {
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage);
-    assertThat(itinerary.isExpected(event)).isTrue();
+		TrackingId trackingId = new TrackingId("CARGO1");
+		RouteSpecification routeSpecification = new RouteSpecification(SHANGHAI, GOTHENBURG, Instant.now());
+		Cargo cargo = new Cargo(trackingId, routeSpecification);
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, ROTTERDAM, voyage);
-    assertThat(itinerary.isExpected(event)).isTrue();
+		Itinerary itinerary = new Itinerary(List.of(new Leg(voyage, SHANGHAI, ROTTERDAM, Instant.now(), Instant.now()),
+				new Leg(voyage, ROTTERDAM, GOTHENBURG, Instant.now(), Instant.now())));
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, GOTHENBURG, voyage);
-    assertThat(itinerary.isExpected(event)).isTrue();
+		// Happy path
+		HandlingEvent event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE,
+				SHANGHAI);
+		assertThat(itinerary.isExpected(event)).isTrue();
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, GOTHENBURG);
-    assertThat(itinerary.isExpected(event)).isTrue();
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
+		assertThat(itinerary.isExpected(event)).isTrue();
 
-    //Customs event changes nothing
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CUSTOMS, GOTHENBURG);
-    assertThat(itinerary.isExpected(event)).isTrue();
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage);
+		assertThat(itinerary.isExpected(event)).isTrue();
 
-    //Received at the wrong location
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, HANGZHOU);
-    assertThat(itinerary.isExpected(event)).isFalse();
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, ROTTERDAM, voyage);
+		assertThat(itinerary.isExpected(event)).isTrue();
 
-    //Loaded to onto the wrong ship, correct location
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, ROTTERDAM, wrongVoyage);
-    assertThat(itinerary.isExpected(event)).isFalse();
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, GOTHENBURG, voyage);
+		assertThat(itinerary.isExpected(event)).isTrue();
 
-    //Unloaded from the wrong ship in the wrong location
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, HELSINKI, wrongVoyage);
-    assertThat(itinerary.isExpected(event)).isFalse();
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, GOTHENBURG);
+		assertThat(itinerary.isExpected(event)).isTrue();
 
-    event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, ROTTERDAM);
-    assertThat(itinerary.isExpected(event)).isFalse();
+		// Customs event changes nothing
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CUSTOMS, GOTHENBURG);
+		assertThat(itinerary.isExpected(event)).isTrue();
 
-  }
+		// Received at the wrong location
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, HANGZHOU);
+		assertThat(itinerary.isExpected(event)).isFalse();
 
-  @Test
-  void testNextExpectedEvent() {
+		// Loaded to onto the wrong ship, correct location
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.LOAD, ROTTERDAM, wrongVoyage);
+		assertThat(itinerary.isExpected(event)).isFalse();
 
-  }
+		// Unloaded from the wrong ship in the wrong location
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.UNLOAD, HELSINKI,
+				wrongVoyage);
+		assertThat(itinerary.isExpected(event)).isFalse();
 
-  @Test
-  void shouldNotAllowItineraryWithEmptyListOfLegs() {
-    assertThatThrownBy(() -> new Itinerary(List.of())).isInstanceOf(IllegalArgumentException.class);
-  }
+		event = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, ROTTERDAM);
+		assertThat(itinerary.isExpected(event)).isFalse();
 
-  @Test
-  void shouldNotAllowItineraryWithNullListOfLegs() {
-    assertThatThrownBy(() -> new Itinerary(null)).isInstanceOf(NullPointerException.class);
-  }
+	}
+
+	@Test
+	void testNextExpectedEvent() {
+
+	}
+
+	@Test
+	void shouldNotAllowItineraryWithEmptyListOfLegs() {
+		assertThatThrownBy(() -> new Itinerary(List.of())).isInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	void shouldNotAllowItineraryWithNullListOfLegs() {
+		assertThatThrownBy(() -> new Itinerary(null)).isInstanceOf(NullPointerException.class);
+	}
 
 }

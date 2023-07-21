@@ -11,7 +11,6 @@ import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.service.RoutingService;
 
-
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,34 +22,39 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.STO
 
 class BookingServiceTest {
 
-  BookingServiceImpl bookingService;
-  CargoRepository cargoRepository;
-  LocationRepository locationRepository;
-  RoutingService routingService;
-  CargoFactory cargoFactory;
+	BookingServiceImpl bookingService;
 
-  @BeforeEach
-  void setUp() {
-    cargoRepository = mock(CargoRepository.class);
-    locationRepository = mock(LocationRepository.class);
-    routingService = mock(RoutingService.class);
-    cargoFactory = new CargoFactory(locationRepository, cargoRepository);
-    bookingService = new BookingServiceImpl(cargoRepository, locationRepository, routingService, cargoFactory);
-  }
+	CargoRepository cargoRepository;
 
-  @Test
-  void testRegisterNew() {
-    TrackingId expectedTrackingId = new TrackingId("TRK1");
-    UnLocode fromUnlocode = new UnLocode("USCHI");
-    UnLocode toUnlocode = new UnLocode("SESTO");
+	LocationRepository locationRepository;
 
-    when(cargoRepository.nextTrackingId()).thenReturn(expectedTrackingId);
-    when(locationRepository.find(fromUnlocode)).thenReturn(CHICAGO);
-    when(locationRepository.find(toUnlocode)).thenReturn(STOCKHOLM);
+	RoutingService routingService;
 
-    TrackingId trackingId = bookingService.bookNewCargo(fromUnlocode, toUnlocode, Instant.now());
-    assertThat(trackingId).isEqualTo(expectedTrackingId);
-    verify(cargoRepository, times(1)).store(isA(Cargo.class));
-    verify(locationRepository, times(2)).find(any(UnLocode.class));
-  }
+	CargoFactory cargoFactory;
+
+	@BeforeEach
+	void setUp() {
+		cargoRepository = mock(CargoRepository.class);
+		locationRepository = mock(LocationRepository.class);
+		routingService = mock(RoutingService.class);
+		cargoFactory = new CargoFactory(locationRepository, cargoRepository);
+		bookingService = new BookingServiceImpl(cargoRepository, locationRepository, routingService, cargoFactory);
+	}
+
+	@Test
+	void testRegisterNew() {
+		TrackingId expectedTrackingId = new TrackingId("TRK1");
+		UnLocode fromUnlocode = new UnLocode("USCHI");
+		UnLocode toUnlocode = new UnLocode("SESTO");
+
+		when(cargoRepository.nextTrackingId()).thenReturn(expectedTrackingId);
+		when(locationRepository.find(fromUnlocode)).thenReturn(CHICAGO);
+		when(locationRepository.find(toUnlocode)).thenReturn(STOCKHOLM);
+
+		TrackingId trackingId = bookingService.bookNewCargo(fromUnlocode, toUnlocode, Instant.now());
+		assertThat(trackingId).isEqualTo(expectedTrackingId);
+		verify(cargoRepository, times(1)).store(isA(Cargo.class));
+		verify(locationRepository, times(2)).find(any(UnLocode.class));
+	}
+
 }

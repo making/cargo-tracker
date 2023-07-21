@@ -4,6 +4,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface HandlingReportService {
 
-    ResponseEntity<?> submitReport(HandlingReport handlingReport);
+	ResponseEntity<?> submitReport(HandlingReport handlingReport);
 
 }

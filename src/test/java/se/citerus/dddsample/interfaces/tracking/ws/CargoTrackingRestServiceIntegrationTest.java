@@ -21,35 +21,38 @@ import static org.assertj.core.api.Assertions.fail;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CargoTrackingRestServiceIntegrationTest {
 
-    @LocalServerPort
-    private int port;
+	@LocalServerPort
+	private int port;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+	private final RestTemplate restTemplate = new RestTemplate();
 
-    @Transactional
-    @Test
-    void shouldReturn200ResponseAndJsonWhenRequestingCargoWithIdABC123() throws Exception {
-        URI uri = new UriTemplate("http://localhost:{port}/api/track/ABC123").expand(port);
-        RequestEntity<Void> request = RequestEntity.get(uri).build();
+	@Transactional
+	@Test
+	void shouldReturn200ResponseAndJsonWhenRequestingCargoWithIdABC123() throws Exception {
+		URI uri = new UriTemplate("http://localhost:{port}/api/track/ABC123").expand(port);
+		RequestEntity<Void> request = RequestEntity.get(uri).build();
 
-        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+		ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        String expected = StreamUtils.copyToString(getClass().getResourceAsStream("/sampleCargoTrackingResponse.json"), StandardCharsets.UTF_8);
-        assertThat(response.getHeaders().get("Content-Type")).containsExactly("application/json");
-        assertThat(response.getBody()).isEqualTo(expected);
-    }
+		assertThat(response.getStatusCodeValue()).isEqualTo(200);
+		String expected = StreamUtils.copyToString(getClass().getResourceAsStream("/sampleCargoTrackingResponse.json"),
+				StandardCharsets.UTF_8);
+		assertThat(response.getHeaders().get("Content-Type")).containsExactly("application/json");
+		assertThat(response.getBody()).isEqualTo(expected);
+	}
 
-    @Test
-    void shouldReturnValidationErrorResponseWhenInvalidHandlingReportIsSubmitted() throws Exception {
-        URI uri = new UriTemplate("http://localhost:{port}/api/track/MISSING").expand(port);
-        RequestEntity<Void> request = RequestEntity.get(uri).build();
+	@Test
+	void shouldReturnValidationErrorResponseWhenInvalidHandlingReportIsSubmitted() throws Exception {
+		URI uri = new UriTemplate("http://localhost:{port}/api/track/MISSING").expand(port);
+		RequestEntity<Void> request = RequestEntity.get(uri).build();
 
-        try {
-            restTemplate.exchange(request, String.class);
-            fail("Did not throw HttpClientErrorException");
-        } catch (HttpClientErrorException e) {
-            assertThat(e.getResponseHeaders().getLocation()).isEqualTo(new URI("/api/track/MISSING"));
-        }
-    }
+		try {
+			restTemplate.exchange(request, String.class);
+			fail("Did not throw HttpClientErrorException");
+		}
+		catch (HttpClientErrorException e) {
+			assertThat(e.getResponseHeaders().getLocation()).isEqualTo(new URI("/api/track/MISSING"));
+		}
+	}
+
 }

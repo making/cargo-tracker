@@ -33,67 +33,57 @@ import static org.assertj.core.api.Assertions.fail;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class HandlingReportIntegrationTest {
 
-    @LocalServerPort
-    private int port;
+	@LocalServerPort
+	private int port;
 
-    @Autowired
-    private HandlingEventRepository repo;
+	@Autowired
+	private HandlingEventRepository repo;
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper mapper = new ObjectMapper();
+	private final RestTemplate restTemplate = new RestTemplate();
 
-    @Disabled //TODO investigate failure when not run in isolation
-    @Transactional
-    @Test
-    void shouldReturn201ResponseWhenHandlingReportIsSubmitted() throws Exception {
-        String body = mapper.writeValueAsString(ImmutableMap.of(
-                "completionTime", "2022-10-30T13:37:00",
-                "trackingIds", List.of("ABC123"),
-                "type", HandlingEvent.Type.CUSTOMS.name(),
-                "unLocode", SampleLocations.DALLAS.unlocode
-        ));
-        URI uri = new UriTemplate("http://localhost:{port}/handlingReport").expand(port);
-        RequestEntity<String> request = RequestEntity
-                .post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(body);
+	private final ObjectMapper mapper = new ObjectMapper();
 
-        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
-        assertThat(response.getStatusCodeValue()).isEqualTo(201);
+	@Disabled // TODO investigate failure when not run in isolation
+	@Transactional
+	@Test
+	void shouldReturn201ResponseWhenHandlingReportIsSubmitted() throws Exception {
+		String body = mapper.writeValueAsString(
+				ImmutableMap.of("completionTime", "2022-10-30T13:37:00", "trackingIds", List.of("ABC123"), "type",
+						HandlingEvent.Type.CUSTOMS.name(), "unLocode", SampleLocations.DALLAS.unlocode));
+		URI uri = new UriTemplate("http://localhost:{port}/handlingReport").expand(port);
+		RequestEntity<String> request = RequestEntity.post(uri).contentType(MediaType.APPLICATION_JSON).body(body);
 
-        Thread.sleep(1000); // TODO replace with Awaitility
+		ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+		assertThat(response.getStatusCodeValue()).isEqualTo(201);
 
-        HandlingHistory handlingHistory = repo.lookupHandlingHistoryOfCargo(new TrackingId("ABC123"));
-        HandlingEvent handlingEvent = handlingHistory.mostRecentlyCompletedEvent();
-        assertThat(handlingEvent.cargo().trackingId().idString()).isEqualTo("ABC123");
-        assertThat(handlingEvent)
-                .extracting("type", "location.unlocode")
-                .containsExactly(HandlingEvent.Type.CUSTOMS, "USDAL");
-    }
+		Thread.sleep(1000); // TODO replace with Awaitility
 
-    @SuppressWarnings("unchecked")
-    @Test
-    void shouldReturnValidationErrorResponseWhenInvalidHandlingReportIsSubmitted() throws Exception {
-        String body = mapper.writeValueAsString(ImmutableMap.of(
-                "completionTime", "invalid date",
-                "trackingIds", List.of("ABC123"),
-                "type", HandlingEvent.Type.CUSTOMS.name(),
-                "unLocode", SampleLocations.STOCKHOLM.unlocode,
-                "voyageNumber", "0101"
-        ));
+		HandlingHistory handlingHistory = repo.lookupHandlingHistoryOfCargo(new TrackingId("ABC123"));
+		HandlingEvent handlingEvent = handlingHistory.mostRecentlyCompletedEvent();
+		assertThat(handlingEvent.cargo().trackingId().idString()).isEqualTo("ABC123");
+		assertThat(handlingEvent).extracting("type", "location.unlocode")
+			.containsExactly(HandlingEvent.Type.CUSTOMS, "USDAL");
+	}
 
-        URI uri = new UriTemplate("http://localhost:{port}/handlingReport").expand(port);
-        RequestEntity<String> request = RequestEntity
-                .post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(body);
-        try {
-            restTemplate.exchange(request, String.class);
-            fail("Did not throw HttpClientErrorException");
-        } catch (HttpClientErrorException e) {
-            Map<String, String> map = mapper.readValue(e.getResponseBodyAsString(), Map.class);
-            assertThat(map.get("message")).contains("JSON parse error: Cannot deserialize value of type `java.time.LocalDateTime` from String \"invalid date\"");
-            assertThat(map.get("message")).contains("Text 'invalid date' could not be parsed at index 0");
-        }
-    }
+	@SuppressWarnings("unchecked")
+	@Test
+	void shouldReturnValidationErrorResponseWhenInvalidHandlingReportIsSubmitted() throws Exception {
+		String body = mapper.writeValueAsString(ImmutableMap.of("completionTime", "invalid date", "trackingIds",
+				List.of("ABC123"), "type", HandlingEvent.Type.CUSTOMS.name(), "unLocode",
+				SampleLocations.STOCKHOLM.unlocode, "voyageNumber", "0101"));
+
+		URI uri = new UriTemplate("http://localhost:{port}/handlingReport").expand(port);
+		RequestEntity<String> request = RequestEntity.post(uri).contentType(MediaType.APPLICATION_JSON).body(body);
+		try {
+			restTemplate.exchange(request, String.class);
+			fail("Did not throw HttpClientErrorException");
+		}
+		catch (HttpClientErrorException e) {
+			Map<String, String> map = mapper.readValue(e.getResponseBodyAsString(), Map.class);
+			assertThat(map.get("message")).contains(
+					"JSON parse error: Cannot deserialize value of type `java.time.LocalDateTime` from String \"invalid date\"");
+			assertThat(map.get("message")).contains("Text 'invalid date' could not be parsed at index 0");
+		}
+	}
+
 }

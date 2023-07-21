@@ -24,52 +24,56 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 
 class ExternalRoutingServiceTest {
 
-  private ExternalRoutingService externalRoutingService;
-  private VoyageRepository voyageRepository;
+	private ExternalRoutingService externalRoutingService;
 
-  @BeforeEach
-  void setUp() {
-    LocationRepository locationRepository = new LocationRepositoryInMem();
-    voyageRepository = mock(VoyageRepository.class);
-    GraphTraversalService graphTraversalService = new GraphTraversalServiceImpl(new GraphDAOStub() {
-      public List<String> listLocations() {
-        return List.of(TOKYO.unLocode().idString(), STOCKHOLM.unLocode().idString(), GOTHENBURG.unLocode().idString());
-      }
+	private VoyageRepository voyageRepository;
 
-      public void storeCarrierMovementId(String cmId, String from, String to) {
-      }
-    });
-    externalRoutingService = new ExternalRoutingService(graphTraversalService, locationRepository, voyageRepository);
-  }
+	@BeforeEach
+	void setUp() {
+		LocationRepository locationRepository = new LocationRepositoryInMem();
+		voyageRepository = mock(VoyageRepository.class);
+		GraphTraversalService graphTraversalService = new GraphTraversalServiceImpl(new GraphDAOStub() {
+			public List<String> listLocations() {
+				return List.of(TOKYO.unLocode().idString(), STOCKHOLM.unLocode().idString(),
+						GOTHENBURG.unLocode().idString());
+			}
 
-  // TODO this test belongs in com.pathfinder
-  @Test
-  void testCalculatePossibleRoutes() {
-    TrackingId trackingId = new TrackingId("ABC");
-    RouteSpecification routeSpecification = new RouteSpecification(HONGKONG, HELSINKI, Instant.now());
-    Cargo cargo = new Cargo(trackingId, routeSpecification);
+			public void storeCarrierMovementId(String cmId, String from, String to) {
+			}
+		});
+		externalRoutingService = new ExternalRoutingService(graphTraversalService, locationRepository,
+				voyageRepository);
+	}
 
-    when(voyageRepository.find(isA(VoyageNumber.class))).thenReturn(SampleVoyages.CM002);
+	// TODO this test belongs in com.pathfinder
+	@Test
+	void testCalculatePossibleRoutes() {
+		TrackingId trackingId = new TrackingId("ABC");
+		RouteSpecification routeSpecification = new RouteSpecification(HONGKONG, HELSINKI, Instant.now());
+		Cargo cargo = new Cargo(trackingId, routeSpecification);
 
-    List<Itinerary> candidates = externalRoutingService.fetchRoutesForSpecification(routeSpecification);
-    assertThat(candidates).isNotNull();
+		when(voyageRepository.find(isA(VoyageNumber.class))).thenReturn(SampleVoyages.CM002);
 
-    for (Itinerary itinerary : candidates) {
-      List<Leg> legs = itinerary.legs();
-      assertThat(legs).isNotNull();
-      assertThat(legs.isEmpty()).isFalse();
+		List<Itinerary> candidates = externalRoutingService.fetchRoutesForSpecification(routeSpecification);
+		assertThat(candidates).isNotNull();
 
-      // Cargo origin and start of first leg should match
-      assertThat(legs.get(0).loadLocation()).isEqualTo(cargo.origin());
+		for (Itinerary itinerary : candidates) {
+			List<Leg> legs = itinerary.legs();
+			assertThat(legs).isNotNull();
+			assertThat(legs.isEmpty()).isFalse();
 
-      // Cargo final destination and last leg stop should match
-      Location lastLegStop = legs.get(legs.size() - 1).unloadLocation();
-      assertThat(lastLegStop).isEqualTo(cargo.routeSpecification().destination());
+			// Cargo origin and start of first leg should match
+			assertThat(legs.get(0).loadLocation()).isEqualTo(cargo.origin());
 
-      for (int i = 0; i < legs.size() - 1; i++) {
-        // Assert that all legs are connected
-        assertThat(legs.get(i + 1).loadLocation()).isEqualTo(legs.get(i).unloadLocation());
-      }
-    }
-  }
+			// Cargo final destination and last leg stop should match
+			Location lastLegStop = legs.get(legs.size() - 1).unloadLocation();
+			assertThat(lastLegStop).isEqualTo(cargo.routeSpecification().destination());
+
+			for (int i = 0; i < legs.size() - 1; i++) {
+				// Assert that all legs are connected
+				assertThat(legs.get(i + 1).loadLocation()).isEqualTo(legs.get(i).unloadLocation());
+			}
+		}
+	}
+
 }

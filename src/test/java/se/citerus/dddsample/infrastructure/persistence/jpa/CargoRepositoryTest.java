@@ -36,131 +36,146 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.NEW_Y
 @DataJpaTest
 @Import(TestConfig.class)
 class CargoRepositoryTest {
-    @Autowired
-    CargoRepository cargoRepository;
 
-    @Autowired
-    LocationRepository locationRepository;
+	@Autowired
+	CargoRepository cargoRepository;
 
-    @Autowired
-    VoyageRepository voyageRepository;
+	@Autowired
+	LocationRepository locationRepository;
 
-    @Autowired
-    HandlingEventRepository handlingEventRepository;
+	@Autowired
+	VoyageRepository voyageRepository;
 
-    @Autowired
-    EntityManager entityManager;
+	@Autowired
+	HandlingEventRepository handlingEventRepository;
 
-    @Test
-    void testFindByCargoId() {
-        final TrackingId trackingId = new TrackingId("ABC123");
-        final Cargo cargo = cargoRepository.find(trackingId);
-        assertThat(cargo).isNotNull();
-        assertThat(cargo.origin()).isEqualTo(HONGKONG);
-        assertThat(cargo.routeSpecification().origin()).isEqualTo(HONGKONG);
-        assertThat(cargo.routeSpecification().destination()).isEqualTo(HELSINKI);
+	@Autowired
+	EntityManager entityManager;
 
-        assertThat(cargo.delivery()).isNotNull();
+	@Test
+	void testFindByCargoId() {
+		final TrackingId trackingId = new TrackingId("ABC123");
+		final Cargo cargo = cargoRepository.find(trackingId);
+		assertThat(cargo).isNotNull();
+		assertThat(cargo.origin()).isEqualTo(HONGKONG);
+		assertThat(cargo.routeSpecification().origin()).isEqualTo(HONGKONG);
+		assertThat(cargo.routeSpecification().destination()).isEqualTo(HELSINKI);
 
-        final List<HandlingEvent> events = handlingEventRepository.lookupHandlingHistoryOfCargo(trackingId).distinctEventsByCompletionTime();
-        assertThat(events).hasSize(3);
+		assertThat(cargo.delivery()).isNotNull();
 
-        HandlingEvent firstEvent = events.get(0);
-        assertHandlingEvent(cargo, firstEvent, RECEIVE, HONGKONG, toDate("2009-03-01"), Instant.now(), Voyage.NONE.voyageNumber());
+		final List<HandlingEvent> events = handlingEventRepository.lookupHandlingHistoryOfCargo(trackingId)
+			.distinctEventsByCompletionTime();
+		assertThat(events).hasSize(3);
 
-        HandlingEvent secondEvent = events.get(1);
+		HandlingEvent firstEvent = events.get(0);
+		assertHandlingEvent(cargo, firstEvent, RECEIVE, HONGKONG, toDate("2009-03-01"), Instant.now(),
+				Voyage.NONE.voyageNumber());
 
-        assertHandlingEvent(cargo, secondEvent, LOAD, HONGKONG, toDate("2009-03-02"), Instant.now(), new VoyageNumber("0100S"));
+		HandlingEvent secondEvent = events.get(1);
 
-        List<Leg> legs = cargo.itinerary().legs();
-        assertThat(legs).hasSize(3).extracting("voyage.voyageNumber", "loadLocation", "unloadLocation").containsExactly(Tuple.tuple(null, HONGKONG, NEWYORK), Tuple.tuple("0200T", NEWYORK, DALLAS), Tuple.tuple("0300A", DALLAS, HELSINKI));
-    }
+		assertHandlingEvent(cargo, secondEvent, LOAD, HONGKONG, toDate("2009-03-02"), Instant.now(),
+				new VoyageNumber("0100S"));
 
-    private void assertHandlingEvent(Cargo cargo, HandlingEvent event, HandlingEvent.Type expectedEventType, Location expectedLocation, Instant expectedCompletionTime, Instant expectedRegistrationTime, VoyageNumber voyage) {
-        assertThat(event.type()).isEqualTo(expectedEventType);
-        assertThat(event.location()).isEqualTo(expectedLocation);
-        assertThat(event.completionTime()).isEqualTo(expectedCompletionTime);
+		List<Leg> legs = cargo.itinerary().legs();
+		assertThat(legs).hasSize(3)
+			.extracting("voyage.voyageNumber", "loadLocation", "unloadLocation")
+			.containsExactly(Tuple.tuple(null, HONGKONG, NEWYORK), Tuple.tuple("0200T", NEWYORK, DALLAS),
+					Tuple.tuple("0300A", DALLAS, HELSINKI));
+	}
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm").withZone(ZoneOffset.UTC);
-        assertThat(formatter.format(event.registrationTime())).isEqualTo(formatter.format(expectedRegistrationTime));
+	private void assertHandlingEvent(Cargo cargo, HandlingEvent event, HandlingEvent.Type expectedEventType,
+			Location expectedLocation, Instant expectedCompletionTime, Instant expectedRegistrationTime,
+			VoyageNumber voyage) {
+		assertThat(event.type()).isEqualTo(expectedEventType);
+		assertThat(event.location()).isEqualTo(expectedLocation);
+		assertThat(event.completionTime()).isEqualTo(expectedCompletionTime);
 
-        assertThat(event.voyage().voyageNumber()).isEqualTo(voyage);
-        assertThat(event.cargo()).isEqualTo(cargo);
-    }
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm").withZone(ZoneOffset.UTC);
+		assertThat(formatter.format(event.registrationTime())).isEqualTo(formatter.format(expectedRegistrationTime));
 
-    @Test
-    void testFindByCargoIdUnknownId() {
-        assertThat(cargoRepository.find(new TrackingId("UNKNOWN"))).isNull();
-    }
+		assertThat(event.voyage().voyageNumber()).isEqualTo(voyage);
+		assertThat(event.cargo()).isEqualTo(cargo);
+	}
 
-    @Test
-    void testSave() {
-        TrackingId trackingId = new TrackingId("AAA");
-        Location origin = locationRepository.find(STOCKHOLM.unLocode());
-        Location destination = locationRepository.find(MELBOURNE.unLocode());
+	@Test
+	void testFindByCargoIdUnknownId() {
+		assertThat(cargoRepository.find(new TrackingId("UNKNOWN"))).isNull();
+	}
 
-        Cargo cargo = new Cargo(trackingId, new RouteSpecification(origin, destination, Instant.now()));
-        cargoRepository.store(cargo);
+	@Test
+	void testSave() {
+		TrackingId trackingId = new TrackingId("AAA");
+		Location origin = locationRepository.find(STOCKHOLM.unLocode());
+		Location destination = locationRepository.find(MELBOURNE.unLocode());
 
-        Voyage voyage = voyageRepository.find(NEW_YORK_TO_DALLAS.voyageNumber());
-        assertThat(voyage).isNotNull();
-        cargo.assignToRoute(new Itinerary(List.of(new Leg(voyage, locationRepository.find(STOCKHOLM.unLocode()), locationRepository.find(MELBOURNE.unLocode()), Instant.now(), Instant.now()))));
+		Cargo cargo = new Cargo(trackingId, new RouteSpecification(origin, destination, Instant.now()));
+		cargoRepository.store(cargo);
 
-        flush();
+		Voyage voyage = voyageRepository.find(NEW_YORK_TO_DALLAS.voyageNumber());
+		assertThat(voyage).isNotNull();
+		cargo.assignToRoute(new Itinerary(List.of(new Leg(voyage, locationRepository.find(STOCKHOLM.unLocode()),
+				locationRepository.find(MELBOURNE.unLocode()), Instant.now(), Instant.now()))));
 
-        Cargo result = entityManager.createQuery("from Cargo c where c.trackingId = '%s'".formatted(trackingId.idString()), Cargo.class).getSingleResult();
-        assertThat(result.trackingId().idString()).isEqualTo("AAA");
-        assertThat(result.routeSpecification.origin.id).isEqualTo(origin.id);
-        assertThat(result.routeSpecification.destination.id).isEqualTo(destination.id);
+		flush();
 
-        entityManager.clear();
+		Cargo result = entityManager
+			.createQuery("from Cargo c where c.trackingId = '%s'".formatted(trackingId.idString()), Cargo.class)
+			.getSingleResult();
+		assertThat(result.trackingId().idString()).isEqualTo("AAA");
+		assertThat(result.routeSpecification.origin.id).isEqualTo(origin.id);
+		assertThat(result.routeSpecification.destination.id).isEqualTo(destination.id);
 
-        final Cargo loadedCargo = cargoRepository.find(trackingId);
-        assertThat(loadedCargo.itinerary().legs()).hasSize(1);
-    }
+		entityManager.clear();
 
-    @Test
-    void testReplaceItinerary() {
-        Cargo cargo = cargoRepository.find(new TrackingId("JKL567"));
-        assertThat(cargo).isNotNull();
-        long cargoId = cargo.id;
-        assertThat(countLegsForCargo(cargoId)).isEqualTo(3);
+		final Cargo loadedCargo = cargoRepository.find(trackingId);
+		assertThat(loadedCargo.itinerary().legs()).hasSize(1);
+	}
 
-        Location legFrom = locationRepository.find(new UnLocode("FIHEL"));
-        Location legTo = locationRepository.find(new UnLocode("CNHKG"));
-        Voyage voyage = voyageRepository.find(HELSINKI_TO_HONGKONG.voyageNumber());
-        Itinerary newItinerary = new Itinerary(List.of(new Leg(voyage, legFrom, legTo, Instant.now(), Instant.now())));
+	@Test
+	void testReplaceItinerary() {
+		Cargo cargo = cargoRepository.find(new TrackingId("JKL567"));
+		assertThat(cargo).isNotNull();
+		long cargoId = cargo.id;
+		assertThat(countLegsForCargo(cargoId)).isEqualTo(3);
 
-        cargo.assignToRoute(newItinerary);
+		Location legFrom = locationRepository.find(new UnLocode("FIHEL"));
+		Location legTo = locationRepository.find(new UnLocode("CNHKG"));
+		Voyage voyage = voyageRepository.find(HELSINKI_TO_HONGKONG.voyageNumber());
+		Itinerary newItinerary = new Itinerary(List.of(new Leg(voyage, legFrom, legTo, Instant.now(), Instant.now())));
 
-        cargoRepository.store(cargo);
-        flush();
+		cargo.assignToRoute(newItinerary);
 
-        assertThat(countLegsForCargo(cargoId)).isEqualTo(1);
-    }
+		cargoRepository.store(cargo);
+		flush();
 
-    @Test
-    void testFindAll() {
-        List<Cargo> all = cargoRepository.getAll();
-        assertThat(all).isNotNull();
-        assertThat(all).hasSize(2);
-    }
+		assertThat(countLegsForCargo(cargoId)).isEqualTo(1);
+	}
 
-    @Test
-    void testNextTrackingId() {
-        TrackingId trackingId = cargoRepository.nextTrackingId();
-        assertThat(trackingId).isNotNull();
+	@Test
+	void testFindAll() {
+		List<Cargo> all = cargoRepository.getAll();
+		assertThat(all).isNotNull();
+		assertThat(all).hasSize(2);
+	}
 
-        TrackingId trackingId2 = cargoRepository.nextTrackingId();
-        assertThat(trackingId2).isNotNull();
-        assertThat(trackingId.equals(trackingId2)).isFalse();
-    }
+	@Test
+	void testNextTrackingId() {
+		TrackingId trackingId = cargoRepository.nextTrackingId();
+		assertThat(trackingId).isNotNull();
 
-    private void flush() {
-        entityManager.flush();
-    }
+		TrackingId trackingId2 = cargoRepository.nextTrackingId();
+		assertThat(trackingId2).isNotNull();
+		assertThat(trackingId.equals(trackingId2)).isFalse();
+	}
 
-    private int countLegsForCargo(long cargoId) {
-        return ((Long) entityManager.createNativeQuery("select count(*) from Leg l where l.cargo_id = %d".formatted(cargoId)).getSingleResult()).intValue();
-    }
+	private void flush() {
+		entityManager.flush();
+	}
+
+	private int countLegsForCargo(long cargoId) {
+		return ((Long) entityManager
+			.createNativeQuery("select count(*) from Leg l where l.cargo_id = %d".formatted(cargoId))
+			.getSingleResult()).intValue();
+	}
+
 }

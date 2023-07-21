@@ -4,56 +4,56 @@ import java.io.Serializable;
 import java.time.Instant;
 
 /**
- * Represents an edge in a path through a graph,
- * describing the route of a cargo.
- *  
+ * Represents an edge in a path through a graph, describing the route of a cargo.
+ *
  */
 public final class TransitEdge implements Serializable {
 
-  private final String edge;
-  private final String fromNode;
-  private final String toNode;
-  private final Instant fromDate;
-  private final Instant toDate;
+	private final String edge;
 
-  /**
-   * Constructor.
-   *
-   * @param edge
-   * @param fromNode
-   * @param toNode
-   * @param fromDate
-   * @param toDate
-   */
-  public TransitEdge(final String edge,
-                     final String fromNode,
-                     final String toNode,
-                     final Instant fromDate,
-                     final Instant toDate) {
-    this.edge = edge;
-    this.fromNode = fromNode;
-    this.toNode = toNode;
-    this.fromDate = fromDate;
-    this.toDate = toDate;
-  }
+	private final String fromNode;
 
-  public String getEdge() {
-    return edge;
-  }
+	private final String toNode;
 
-  public String getFromNode() {
-    return fromNode;
-  }
+	private final Instant fromDate;
 
-  public String getToNode() {
-    return toNode;
-  }
+	private final Instant toDate;
 
-  public Instant getFromDate() {
-    return fromDate;
-  }
+	/**
+	 * Constructor.
+	 * @param edge
+	 * @param fromNode
+	 * @param toNode
+	 * @param fromDate
+	 * @param toDate
+	 */
+	public TransitEdge(final String edge, final String fromNode, final String toNode, final Instant fromDate,
+			final Instant toDate) {
+		this.edge = edge;
+		this.fromNode = fromNode;
+		this.toNode = toNode;
+		this.fromDate = fromDate;
+		this.toDate = toDate;
+	}
 
-  public Instant getToDate() {
-    return toDate;
-  }
+	public String getEdge() {
+		return edge;
+	}
+
+	public String getFromNode() {
+		return fromNode;
+	}
+
+	public String getToNode() {
+		return toNode;
+	}
+
+	public Instant getFromDate() {
+		return fromDate;
+	}
+
+	public Instant getToDate() {
+		return toDate;
+	}
+
 }

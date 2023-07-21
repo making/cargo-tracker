@@ -15,23 +15,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import(TestConfig.class)
 class LocationRepositoryTest {
-    @Autowired
-    private LocationRepository locationRepository;
 
-    @Test
-    void testFind() {
-        final UnLocode melbourne = new UnLocode("AUMEL");
-        Location location = locationRepository.find(melbourne);
-        assertThat(location).isNotNull();
-        assertThat(location.unLocode()).isEqualTo(melbourne);
+	@Autowired
+	private LocationRepository locationRepository;
 
-        assertThat(locationRepository.find(new UnLocode("NOLOC"))).isNull();
-    }
+	@Test
+	void testFind() {
+		final UnLocode melbourne = new UnLocode("AUMEL");
+		Location location = locationRepository.find(melbourne);
+		assertThat(location).isNotNull();
+		assertThat(location.unLocode()).isEqualTo(melbourne);
 
-    @Test
-    void testFindAll() {
-        List<Location> allLocations = locationRepository.getAll();
+		assertThat(locationRepository.find(new UnLocode("NOLOC"))).isNull();
+	}
 
-        assertThat(allLocations).isNotNull().hasSize(13);
-    }
+	@Test
+	void testFindAll() {
+		List<Location> allLocations = locationRepository.getAll();
+
+		assertThat(allLocations).isNotNull().hasSize(13);
+	}
+
 }

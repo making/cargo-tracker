@@ -11,64 +11,69 @@ import java.util.List;
  */
 public final class CargoRoutingDTO implements Serializable {
 
-  private final String trackingId;
-  private final String origin;
-  private final String finalDestination;
-  private final Instant arrivalDeadline;
-  private final boolean misrouted;
-  private final List<LegDTO> legs;
+	private final String trackingId;
 
-  /**
-   * Constructor.
-   *
-   * @param trackingId
-   * @param origin
-   * @param finalDestination
-   * @param arrivalDeadline
-   * @param misrouted
-   */
-  public CargoRoutingDTO(String trackingId, String origin, String finalDestination, Instant arrivalDeadline, boolean misrouted) {
-    this.trackingId = trackingId;
-    this.origin = origin;
-    this.finalDestination = finalDestination;
-    this.arrivalDeadline = arrivalDeadline;
-    this.misrouted = misrouted;
-    this.legs = new ArrayList<LegDTO>();
-  }
+	private final String origin;
 
-  public String getTrackingId() {
-    return trackingId;
-  }
+	private final String finalDestination;
 
-  public String getOrigin() {
-    return origin;
-  }
+	private final Instant arrivalDeadline;
 
-  public String getFinalDestination() {
-    return finalDestination;
-  }
+	private final boolean misrouted;
 
-  public void addLeg(String voyageNumber, String from, String to, Instant loadTime, Instant unloadTime) {
-    legs.add(new LegDTO(voyageNumber, from, to, loadTime, unloadTime));
-  }
+	private final List<LegDTO> legs;
 
-  /**
-   * @return An unmodifiable list DTOs.
-   */
-  public List<LegDTO> getLegs() {
-    return Collections.unmodifiableList(legs);
-  }
+	/**
+	 * Constructor.
+	 * @param trackingId
+	 * @param origin
+	 * @param finalDestination
+	 * @param arrivalDeadline
+	 * @param misrouted
+	 */
+	public CargoRoutingDTO(String trackingId, String origin, String finalDestination, Instant arrivalDeadline,
+			boolean misrouted) {
+		this.trackingId = trackingId;
+		this.origin = origin;
+		this.finalDestination = finalDestination;
+		this.arrivalDeadline = arrivalDeadline;
+		this.misrouted = misrouted;
+		this.legs = new ArrayList<LegDTO>();
+	}
 
-  public boolean isMisrouted() {
-    return misrouted;
-  }
+	public String getTrackingId() {
+		return trackingId;
+	}
 
-  public boolean isRouted() {
-    return !legs.isEmpty();
-  }
+	public String getOrigin() {
+		return origin;
+	}
 
-  public Instant getArrivalDeadline() {
-    return arrivalDeadline;
-  }
+	public String getFinalDestination() {
+		return finalDestination;
+	}
+
+	public void addLeg(String voyageNumber, String from, String to, Instant loadTime, Instant unloadTime) {
+		legs.add(new LegDTO(voyageNumber, from, to, loadTime, unloadTime));
+	}
+
+	/**
+	 * @return An unmodifiable list DTOs.
+	 */
+	public List<LegDTO> getLegs() {
+		return Collections.unmodifiableList(legs);
+	}
+
+	public boolean isMisrouted() {
+		return misrouted;
+	}
+
+	public boolean isRouted() {
+		return !legs.isEmpty();
+	}
+
+	public Instant getArrivalDeadline() {
+		return arrivalDeadline;
+	}
 
 }

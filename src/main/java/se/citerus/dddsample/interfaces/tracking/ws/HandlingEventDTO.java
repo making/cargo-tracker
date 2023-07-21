@@ -6,19 +6,26 @@ package se.citerus.dddsample.interfaces.tracking.ws;
  */
 public class HandlingEventDTO {
 
-    public final String location;
-    public final String time;
-    public final String type;
-    public final String voyageNumber;
-    public final boolean isExpected;
-    public final String description;
+	public final String location;
 
-    public HandlingEventDTO(String location, String time, String type, String voyageNumber, boolean isExpected, String description) {
-        this.location = location;
-        this.time = time;
-        this.type = type;
-        this.voyageNumber = voyageNumber;
-        this.isExpected = isExpected;
-        this.description = description;
-    }
+	public final String time;
+
+	public final String type;
+
+	public final String voyageNumber;
+
+	public final boolean isExpected;
+
+	public final String description;
+
+	public HandlingEventDTO(String location, String time, String type, String voyageNumber, boolean isExpected,
+			String description) {
+		this.location = location;
+		this.time = time;
+		this.type = type;
+		this.voyageNumber = voyageNumber;
+		this.isExpected = isExpected;
+		this.description = description;
+	}
+
 }

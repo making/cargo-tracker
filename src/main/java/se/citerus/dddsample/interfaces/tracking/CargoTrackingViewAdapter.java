@@ -19,224 +19,226 @@ import java.util.*;
  */
 public final class CargoTrackingViewAdapter {
 
-  private final Cargo cargo;
-  private final MessageSource messageSource;
-  private final Locale locale;
-  private final List<HandlingEventViewAdapter> events;
-  private final String FORMAT = "yyyy-MM-dd hh:mm";
-  private final TimeZone timeZone;
+	private final Cargo cargo;
 
-    /**
-   * Constructor.
-   *
-   * @param cargo
-   * @param messageSource
-   * @param locale
-   * @param handlingEvents
-   */
-  public CargoTrackingViewAdapter(Cargo cargo, MessageSource messageSource, Locale locale, List<HandlingEvent> handlingEvents) {
-    this(cargo, messageSource, locale, handlingEvents, TimeZone.getDefault());
-  }
+	private final MessageSource messageSource;
 
-    /**
-     * Constructor.
-     *
-     * @param cargo
-     * @param messageSource
-     * @param locale
-     * @param handlingEvents
-     */
-    public CargoTrackingViewAdapter(Cargo cargo, MessageSource messageSource, Locale locale, List<HandlingEvent> handlingEvents, TimeZone tz) {
-      this.messageSource = messageSource;
-      this.locale = locale;
-      this.cargo = cargo;
-      this.timeZone = tz;
+	private final Locale locale;
 
-      this.events = new ArrayList<>(handlingEvents.size());
-        for (HandlingEvent handlingEvent : handlingEvents) {
-          events.add(new HandlingEventViewAdapter(handlingEvent));
-        }
-    }
+	private final List<HandlingEventViewAdapter> events;
 
-  /**
-   * @param location a location
-   * @return A formatted string for displaying the location.
-   */
-  private String getDisplayText(Location location) {
-    return location.name();
-  }
+	private final String FORMAT = "yyyy-MM-dd hh:mm";
 
-  /**
-   * @return An unmodifiable list of handling event view adapters.
-   */
-  public List<HandlingEventViewAdapter> getEvents() {
-    return Collections.unmodifiableList(events);
-  }
+	private final TimeZone timeZone;
 
-  /**
-   * @return A translated string describing the cargo status. 
-   */
-  public String getStatusText() {
-    final Delivery delivery = cargo.delivery();
-    final String code = "cargo.status." + delivery.transportStatus().name();
+	/**
+	 * Constructor.
+	 * @param cargo
+	 * @param messageSource
+	 * @param locale
+	 * @param handlingEvents
+	 */
+	public CargoTrackingViewAdapter(Cargo cargo, MessageSource messageSource, Locale locale,
+			List<HandlingEvent> handlingEvents) {
+		this(cargo, messageSource, locale, handlingEvents, TimeZone.getDefault());
+	}
 
-    final Object[] args;
-    switch (delivery.transportStatus()) {
-      case IN_PORT:
-        args = new Object[] {getDisplayText(delivery.lastKnownLocation())};
-        break;
-      case ONBOARD_CARRIER:
-        args = new Object[] {delivery.currentVoyage().voyageNumber().idString()};
-        break;
-      case CLAIMED:
-      case NOT_RECEIVED:
-      case UNKNOWN:
-      default:
-        args = null;
-        break;
-    }
-    
-    return messageSource.getMessage(code, args, "[Unknown status]", locale);
-  }
+	/**
+	 * Constructor.
+	 * @param cargo
+	 * @param messageSource
+	 * @param locale
+	 * @param handlingEvents
+	 */
+	public CargoTrackingViewAdapter(Cargo cargo, MessageSource messageSource, Locale locale,
+			List<HandlingEvent> handlingEvents, TimeZone tz) {
+		this.messageSource = messageSource;
+		this.locale = locale;
+		this.cargo = cargo;
+		this.timeZone = tz;
 
-  /**
-   * @return Cargo destination location.
-   */
-  public String getDestination() {
-    return getDisplayText(cargo.routeSpecification().destination());
-  }
+		this.events = new ArrayList<>(handlingEvents.size());
+		for (HandlingEvent handlingEvent : handlingEvents) {
+			events.add(new HandlingEventViewAdapter(handlingEvent));
+		}
+	}
 
-  /**
-   * @return Cargo osigin location.
-   */
-  public String getOrigin() {
-    return getDisplayText(cargo.origin());
-  }
+	/**
+	 * @param location a location
+	 * @return A formatted string for displaying the location.
+	 */
+	private String getDisplayText(Location location) {
+		return location.name();
+	}
 
-  /**
-   * @return Cargo tracking id.
-   */
-  public String getTrackingId() {
-    return cargo.trackingId().idString();
-  }
+	/**
+	 * @return An unmodifiable list of handling event view adapters.
+	 */
+	public List<HandlingEventViewAdapter> getEvents() {
+		return Collections.unmodifiableList(events);
+	}
 
-  public String getEta() {
-    Instant eta = cargo.delivery().estimatedTimeOfArrival();
+	/**
+	 * @return A translated string describing the cargo status.
+	 */
+	public String getStatusText() {
+		final Delivery delivery = cargo.delivery();
+		final String code = "cargo.status." + delivery.transportStatus().name();
 
-    if (eta == null) return "?";
-    else return DateTimeFormatter.ofPattern(FORMAT).withZone(timeZone.toZoneId()).format(eta);
-  }
+		final Object[] args;
+		switch (delivery.transportStatus()) {
+			case IN_PORT:
+				args = new Object[] { getDisplayText(delivery.lastKnownLocation()) };
+				break;
+			case ONBOARD_CARRIER:
+				args = new Object[] { delivery.currentVoyage().voyageNumber().idString() };
+				break;
+			case CLAIMED:
+			case NOT_RECEIVED:
+			case UNKNOWN:
+			default:
+				args = null;
+				break;
+		}
 
-  public String getNextExpectedActivity() {
-      HandlingActivity activity = cargo.delivery().nextExpectedActivity();
-      if (activity == null) {
-        return "";
-      }
+		return messageSource.getMessage(code, args, "[Unknown status]", locale);
+	}
 
-    String text = "Next expected activity is to ";
-    HandlingEvent.Type type = activity.type();
-    if (type.sameValueAs(HandlingEvent.Type.LOAD)) {
-        return
-          text + type.name().toLowerCase() + " cargo onto voyage " + activity.voyage().voyageNumber() +
-          " in " + activity.location().name();
-      } else if (type.sameValueAs(HandlingEvent.Type.UNLOAD)) {
-        return
-          text + type.name().toLowerCase() + " cargo off of " + activity.voyage().voyageNumber() +
-          " in " + activity.location().name();
-      } else {
-        return text + type.name().toLowerCase() + " cargo in " + activity.location().name();
-      }
-  }
+	/**
+	 * @return Cargo destination location.
+	 */
+	public String getDestination() {
+		return getDisplayText(cargo.routeSpecification().destination());
+	}
 
-  /**
-   * @return True if cargo is misdirected.
-   */
-  public boolean isMisdirected() {
-    return cargo.delivery().isMisdirected();
-  }
+	/**
+	 * @return Cargo osigin location.
+	 */
+	public String getOrigin() {
+		return getDisplayText(cargo.origin());
+	}
 
-  /**
-   * Handling event view adapter component.
-   */
-  public final class HandlingEventViewAdapter {
+	/**
+	 * @return Cargo tracking id.
+	 */
+	public String getTrackingId() {
+		return cargo.trackingId().idString();
+	}
 
-    private final HandlingEvent handlingEvent;
+	public String getEta() {
+		Instant eta = cargo.delivery().estimatedTimeOfArrival();
 
-    /**
-     * Constructor.
-     *
-     * @param handlingEvent handling event
-     */
-    public HandlingEventViewAdapter(HandlingEvent handlingEvent) {
-      this.handlingEvent = handlingEvent;
-    }
+		if (eta == null)
+			return "?";
+		else
+			return DateTimeFormatter.ofPattern(FORMAT).withZone(timeZone.toZoneId()).format(eta);
+	}
 
-    /**
-     * @return Location where the event occurred.
-     */
-    public String getLocation() {
-      return handlingEvent.location().name();
-    }
+	public String getNextExpectedActivity() {
+		HandlingActivity activity = cargo.delivery().nextExpectedActivity();
+		if (activity == null) {
+			return "";
+		}
 
-    /**
-     * @return Time when the event was completed.
-     */
-    public String getTime() {
-      return DateTimeFormatter.ofPattern(FORMAT).withZone(timeZone.toZoneId()).format(handlingEvent.completionTime());
-    }
+		String text = "Next expected activity is to ";
+		HandlingEvent.Type type = activity.type();
+		if (type.sameValueAs(HandlingEvent.Type.LOAD)) {
+			return text + type.name().toLowerCase() + " cargo onto voyage " + activity.voyage().voyageNumber() + " in "
+					+ activity.location().name();
+		}
+		else if (type.sameValueAs(HandlingEvent.Type.UNLOAD)) {
+			return text + type.name().toLowerCase() + " cargo off of " + activity.voyage().voyageNumber() + " in "
+					+ activity.location().name();
+		}
+		else {
+			return text + type.name().toLowerCase() + " cargo in " + activity.location().name();
+		}
+	}
 
-    /**
-     * @return Type of event.
-     */
-    public String getType() {
-      return handlingEvent.type().toString();
-    }
+	/**
+	 * @return True if cargo is misdirected.
+	 */
+	public boolean isMisdirected() {
+		return cargo.delivery().isMisdirected();
+	}
 
-    /**
-     * @return Voyage number, or empty string if not applicable.
-     */
-    public String getVoyageNumber() {
-      final Voyage voyage = handlingEvent.voyage();
-      return voyage.voyageNumber().idString();
-    }
+	/**
+	 * Handling event view adapter component.
+	 */
+	public final class HandlingEventViewAdapter {
 
-    /**
-     * @return True if the event was expected, according to the cargo's itinerary.
-     */
-    public boolean isExpected() {
-      return cargo.itinerary().isExpected(handlingEvent);
-    }
+		private final HandlingEvent handlingEvent;
 
-    public String getDescription() {
-      Object[] args;
+		/**
+		 * Constructor.
+		 * @param handlingEvent handling event
+		 */
+		public HandlingEventViewAdapter(HandlingEvent handlingEvent) {
+			this.handlingEvent = handlingEvent;
+		}
 
-      switch (handlingEvent.type()) {
-        case LOAD:
-        case UNLOAD:
-          args = new Object[] {
-            handlingEvent.voyage().voyageNumber().idString(),
-            handlingEvent.location().name(),
-            handlingEvent.completionTime()
-          };
-          break;
+		/**
+		 * @return Location where the event occurred.
+		 */
+		public String getLocation() {
+			return handlingEvent.location().name();
+		}
 
-        case RECEIVE:
-        case CLAIM:
-          args = new Object[] {
-            handlingEvent.location().name(),
-            handlingEvent.completionTime()
-          };
-          break;
+		/**
+		 * @return Time when the event was completed.
+		 */
+		public String getTime() {
+			return DateTimeFormatter.ofPattern(FORMAT)
+				.withZone(timeZone.toZoneId())
+				.format(handlingEvent.completionTime());
+		}
 
-        default:
-          args = new Object[] {};
-      }
+		/**
+		 * @return Type of event.
+		 */
+		public String getType() {
+			return handlingEvent.type().toString();
+		}
 
-      String key = "deliveryHistory.eventDescription." + handlingEvent.type().name();
+		/**
+		 * @return Voyage number, or empty string if not applicable.
+		 */
+		public String getVoyageNumber() {
+			final Voyage voyage = handlingEvent.voyage();
+			return voyage.voyageNumber().idString();
+		}
 
-      return messageSource.getMessage(key,args,locale);
-    }
+		/**
+		 * @return True if the event was expected, according to the cargo's itinerary.
+		 */
+		public boolean isExpected() {
+			return cargo.itinerary().isExpected(handlingEvent);
+		}
 
-  }
-  
+		public String getDescription() {
+			Object[] args;
+
+			switch (handlingEvent.type()) {
+				case LOAD:
+				case UNLOAD:
+					args = new Object[] { handlingEvent.voyage().voyageNumber().idString(),
+							handlingEvent.location().name(), handlingEvent.completionTime() };
+					break;
+
+				case RECEIVE:
+				case CLAIM:
+					args = new Object[] { handlingEvent.location().name(), handlingEvent.completionTime() };
+					break;
+
+				default:
+					args = new Object[] {};
+			}
+
+			String key = "deliveryHistory.eventDescription." + handlingEvent.type().name();
+
+			return messageSource.getMessage(key, args, locale);
+		}
+
+	}
+
 }

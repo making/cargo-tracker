@@ -10,33 +10,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TrackCommandValidatorTest {
 
-  TrackCommandValidator validator;
+	TrackCommandValidator validator;
 
-  @BeforeEach
-  void setUp() {
-    validator = new TrackCommandValidator();
-  }
+	@BeforeEach
+	void setUp() {
+		validator = new TrackCommandValidator();
+	}
 
-  @Test
-  void testValidateIllegalId() {
-    TrackCommand command = new TrackCommand();
-    BindingResult errors = new BeanPropertyBindingResult(command, "command");
-    validator.validate(command, errors);
+	@Test
+	void testValidateIllegalId() {
+		TrackCommand command = new TrackCommand();
+		BindingResult errors = new BeanPropertyBindingResult(command, "command");
+		validator.validate(command, errors);
 
-    assertThat(errors.getErrorCount()).isEqualTo(1);
-    FieldError error = errors.getFieldError("trackingId");
-    assertThat(error).isNotNull();
-    assertThat(error.getRejectedValue()).isNull();
-    assertThat(error.getCode()).isEqualTo("error.required");
-  }
+		assertThat(errors.getErrorCount()).isEqualTo(1);
+		FieldError error = errors.getFieldError("trackingId");
+		assertThat(error).isNotNull();
+		assertThat(error.getRejectedValue()).isNull();
+		assertThat(error.getCode()).isEqualTo("error.required");
+	}
 
-  @Test
-  void testValidateSuccess() {
-    TrackCommand command = new TrackCommand();
-    command.setTrackingId("non-empty");
-    BindingResult errors = new BeanPropertyBindingResult(command, "command");
-    validator.validate(command, errors);
+	@Test
+	void testValidateSuccess() {
+		TrackCommand command = new TrackCommand();
+		command.setTrackingId("non-empty");
+		BindingResult errors = new BeanPropertyBindingResult(command, "command");
+		validator.validate(command, errors);
 
-    assertThat(errors.hasErrors()).isFalse();
-  }
+		assertThat(errors.hasErrors()).isFalse();
+	}
+
 }

@@ -16,42 +16,45 @@ import java.lang.invoke.MethodHandles;
 
 public class CargoInspectionServiceImpl implements CargoInspectionService {
 
-  private final ApplicationEvents applicationEvents;
-  private final CargoRepository cargoRepository;
-  private final HandlingEventRepository handlingEventRepository;
-  private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	private final ApplicationEvents applicationEvents;
 
-  public CargoInspectionServiceImpl(final ApplicationEvents applicationEvents,
-                                    final CargoRepository cargoRepository,
-                                    final HandlingEventRepository handlingEventRepository) {
-    this.applicationEvents = applicationEvents;
-    this.cargoRepository = cargoRepository;
-    this.handlingEventRepository = handlingEventRepository;
-  }
+	private final CargoRepository cargoRepository;
 
-  @Override
-  @Transactional
-  public void inspectCargo(final TrackingId trackingId) {
-    Validate.notNull(trackingId, "Tracking ID is required");
+	private final HandlingEventRepository handlingEventRepository;
 
-    final Cargo cargo = cargoRepository.find(trackingId);
-    if (cargo == null) {
-      logger.warn("Can't inspect non-existing cargo {}", trackingId);
-      return;
-    }
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    final HandlingHistory handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(trackingId);
+	public CargoInspectionServiceImpl(final ApplicationEvents applicationEvents, final CargoRepository cargoRepository,
+			final HandlingEventRepository handlingEventRepository) {
+		this.applicationEvents = applicationEvents;
+		this.cargoRepository = cargoRepository;
+		this.handlingEventRepository = handlingEventRepository;
+	}
 
-    cargo.deriveDeliveryProgress(handlingHistory);
+	@Override
+	@Transactional
+	public void inspectCargo(final TrackingId trackingId) {
+		Validate.notNull(trackingId, "Tracking ID is required");
 
-    if (cargo.delivery().isMisdirected()) {
-      applicationEvents.cargoWasMisdirected(cargo);
-    }
+		final Cargo cargo = cargoRepository.find(trackingId);
+		if (cargo == null) {
+			logger.warn("Can't inspect non-existing cargo {}", trackingId);
+			return;
+		}
 
-    if (cargo.delivery().isUnloadedAtDestination()) {
-      applicationEvents.cargoHasArrived(cargo);
-    }
+		final HandlingHistory handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(trackingId);
 
-    cargoRepository.store(cargo);
-  }
+		cargo.deriveDeliveryProgress(handlingHistory);
+
+		if (cargo.delivery().isMisdirected()) {
+			applicationEvents.cargoWasMisdirected(cargo);
+		}
+
+		if (cargo.delivery().isUnloadedAtDestination()) {
+			applicationEvents.cargoHasArrived(cargo);
+		}
+
+		cargoRepository.store(cargo);
+	}
+
 }

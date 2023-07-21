@@ -5,31 +5,34 @@ package se.citerus.dddsample.interfaces.booking.web;
  */
 public final class RegistrationCommand {
 
-  private String originUnlocode;
-  private String destinationUnlocode;
-  private String arrivalDeadline;
+	private String originUnlocode;
 
-  public String getOriginUnlocode() {
-    return originUnlocode;
-  }
+	private String destinationUnlocode;
 
-  public void setOriginUnlocode(final String originUnlocode) {
-    this.originUnlocode = originUnlocode;
-  }
+	private String arrivalDeadline;
 
-  public String getDestinationUnlocode() {
-    return destinationUnlocode;
-  }
+	public String getOriginUnlocode() {
+		return originUnlocode;
+	}
 
-  public void setDestinationUnlocode(final String destinationUnlocode) {
-    this.destinationUnlocode = destinationUnlocode;
-  }
+	public void setOriginUnlocode(final String originUnlocode) {
+		this.originUnlocode = originUnlocode;
+	}
 
-  public String getArrivalDeadline() {
-    return arrivalDeadline;
-  }
+	public String getDestinationUnlocode() {
+		return destinationUnlocode;
+	}
 
-  public void setArrivalDeadline(String arrivalDeadline) {
-    this.arrivalDeadline = arrivalDeadline;
-  }
+	public void setDestinationUnlocode(final String destinationUnlocode) {
+		this.destinationUnlocode = destinationUnlocode;
+	}
+
+	public String getArrivalDeadline() {
+		return arrivalDeadline;
+	}
+
+	public void setArrivalDeadline(String arrivalDeadline) {
+		this.arrivalDeadline = arrivalDeadline;
+	}
+
 }

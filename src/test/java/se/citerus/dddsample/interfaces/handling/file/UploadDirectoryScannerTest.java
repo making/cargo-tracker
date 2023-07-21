@@ -27,56 +27,58 @@ import static org.mockito.Mockito.*;
 @SuppressWarnings("resource")
 class UploadDirectoryScannerTest {
 
-    private static final Instant exampleDate = LocalDateTime.parse("2022-10-29T13:37").atZone(ZoneOffset.UTC).toInstant();
-    private File uploadDir;
-    private File parseFailureDir;
+	private static final Instant exampleDate = LocalDateTime.parse("2022-10-29T13:37")
+		.atZone(ZoneOffset.UTC)
+		.toInstant();
 
-    @BeforeEach
-    void setUp() throws IOException {
-        uploadDir = new File(Files.createTempDirectory("upload").toUri());
-        parseFailureDir = new File(Files.createTempDirectory("parseFailure").toUri());
-    }
+	private File uploadDir;
 
-  @Test
-  void shouldParseLinesAndPublishEventsForValidFile() throws Exception {
-        ArgumentCaptor<HandlingEventRegistrationAttempt> captor = ArgumentCaptor.forClass(HandlingEventRegistrationAttempt.class);
-        ApplicationEvents appEventsMock = mock(ApplicationEvents.class);
-        UploadDirectoryScanner scanner = new UploadDirectoryScanner(uploadDir, parseFailureDir, appEventsMock);
-        URL resource = this.getClass().getResource("/sampleHandlingReportFile.csv");
-        assertThat(resource).isNotNull();
-        PathUtils.copyFile(resource, uploadDir.toPath().resolve("sampleHandlingReportFile.csv"));
+	private File parseFailureDir;
 
-        scanner.run();
+	@BeforeEach
+	void setUp() throws IOException {
+		uploadDir = new File(Files.createTempDirectory("upload").toUri());
+		parseFailureDir = new File(Files.createTempDirectory("parseFailure").toUri());
+	}
 
-        verify(appEventsMock).receivedHandlingEventRegistrationAttempt(captor.capture());
-        HandlingEventRegistrationAttempt actual = captor.getValue();
-        assertThat(actual).extracting(
-                "completionTime",
-                "trackingId.id",
-                "voyageNumber.number",
-                "type",
-                "unLocode.unlocode"
-        ).contains(exampleDate, "ABC123", "0101", HandlingEvent.Type.CUSTOMS, "SESTO");
-        Stream<Path> files = Files.list(uploadDir.toPath());
-        assertThat(files.count()).isEqualTo(0);
-        files.close();
-    }
+	@Test
+	void shouldParseLinesAndPublishEventsForValidFile() throws Exception {
+		ArgumentCaptor<HandlingEventRegistrationAttempt> captor = ArgumentCaptor
+			.forClass(HandlingEventRegistrationAttempt.class);
+		ApplicationEvents appEventsMock = mock(ApplicationEvents.class);
+		UploadDirectoryScanner scanner = new UploadDirectoryScanner(uploadDir, parseFailureDir, appEventsMock);
+		URL resource = this.getClass().getResource("/sampleHandlingReportFile.csv");
+		assertThat(resource).isNotNull();
+		PathUtils.copyFile(resource, uploadDir.toPath().resolve("sampleHandlingReportFile.csv"));
 
-    @Test
-    void shouldCreateFileContainingInvalidLinesIfParsingFails() throws Exception {
-        ApplicationEvents appEventsMock = mock(ApplicationEvents.class);
-        UploadDirectoryScanner scanner = new UploadDirectoryScanner(uploadDir, parseFailureDir, appEventsMock);
-        URL resource = this.getClass().getResource("/sampleInvalidHandlingReportFile.csv");
-        assertThat(resource).isNotNull();
-        PathUtils.copyFile(resource, uploadDir.toPath().resolve("sampleInvalidHandlingReportFile.csv"));
+		scanner.run();
 
-        scanner.run();
+		verify(appEventsMock).receivedHandlingEventRegistrationAttempt(captor.capture());
+		HandlingEventRegistrationAttempt actual = captor.getValue();
+		assertThat(actual)
+			.extracting("completionTime", "trackingId.id", "voyageNumber.number", "type", "unLocode.unlocode")
+			.contains(exampleDate, "ABC123", "0101", HandlingEvent.Type.CUSTOMS, "SESTO");
+		Stream<Path> files = Files.list(uploadDir.toPath());
+		assertThat(files.count()).isEqualTo(0);
+		files.close();
+	}
 
-        verifyNoInteractions(appEventsMock);
-        Stream<Path> files = Files.list(parseFailureDir.toPath());
-        assertThat(files.count()).isEqualTo(1);
-        Path path = Files.list(parseFailureDir.toPath()).collect(Collectors.toList()).get(0);
-        String line = FileUtils.readFileToString(new File(path.toUri()), Charsets.UTF_8);
-        assertThat(line.trim()).isEqualTo("2022-10-29 13:37    ABC123  0101    XXX   CUSTOMS");
-    }
+	@Test
+	void shouldCreateFileContainingInvalidLinesIfParsingFails() throws Exception {
+		ApplicationEvents appEventsMock = mock(ApplicationEvents.class);
+		UploadDirectoryScanner scanner = new UploadDirectoryScanner(uploadDir, parseFailureDir, appEventsMock);
+		URL resource = this.getClass().getResource("/sampleInvalidHandlingReportFile.csv");
+		assertThat(resource).isNotNull();
+		PathUtils.copyFile(resource, uploadDir.toPath().resolve("sampleInvalidHandlingReportFile.csv"));
+
+		scanner.run();
+
+		verifyNoInteractions(appEventsMock);
+		Stream<Path> files = Files.list(parseFailureDir.toPath());
+		assertThat(files.count()).isEqualTo(1);
+		Path path = Files.list(parseFailureDir.toPath()).collect(Collectors.toList()).get(0);
+		String line = FileUtils.readFileToString(new File(path.toUri()), Charsets.UTF_8);
+		assertThat(line.trim()).isEqualTo("2022-10-29 13:37    ABC123  0101    XXX   CUSTOMS");
+	}
+
 }

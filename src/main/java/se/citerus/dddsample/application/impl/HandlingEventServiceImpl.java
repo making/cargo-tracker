@@ -18,44 +18,46 @@ import java.time.Instant;
 
 public class HandlingEventServiceImpl implements HandlingEventService {
 
-  private final ApplicationEvents applicationEvents;
-  private final HandlingEventRepository handlingEventRepository;
-  private final HandlingEventFactory handlingEventFactory;
-  private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	private final ApplicationEvents applicationEvents;
 
-  public HandlingEventServiceImpl(final HandlingEventRepository handlingEventRepository,
-                                  final ApplicationEvents applicationEvents,
-                                  final HandlingEventFactory handlingEventFactory) {
-    this.handlingEventRepository = handlingEventRepository;
-    this.applicationEvents = applicationEvents;
-    this.handlingEventFactory = handlingEventFactory;
-  }
+	private final HandlingEventRepository handlingEventRepository;
 
-  @Override
-  @Transactional(rollbackFor = CannotCreateHandlingEventException.class)
-  public void registerHandlingEvent(final Instant completionTime,
-                                    final TrackingId trackingId,
-                                    final VoyageNumber voyageNumber,
-                                    final UnLocode unLocode,
-                                    final HandlingEvent.Type type) throws CannotCreateHandlingEventException {
-    final Instant registrationTime = Instant.now();
-    /* Using a factory to create a HandlingEvent (aggregate). This is where
-       it is determined whether the incoming data, the attempt, actually is capable
-       of representing a real handling event. */
-    final HandlingEvent event = handlingEventFactory.createHandlingEvent(
-      registrationTime, completionTime, trackingId, voyageNumber, unLocode, type
-    );
+	private final HandlingEventFactory handlingEventFactory;
 
-    /* Store the new handling event, which updates the persistent
-       state of the handling event aggregate (but not the cargo aggregate -
-       that happens asynchronously!)
-     */
-    handlingEventRepository.store(event);
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    /* Publish an event stating that a cargo has been handled. */
-    applicationEvents.cargoWasHandled(event);
+	public HandlingEventServiceImpl(final HandlingEventRepository handlingEventRepository,
+			final ApplicationEvents applicationEvents, final HandlingEventFactory handlingEventFactory) {
+		this.handlingEventRepository = handlingEventRepository;
+		this.applicationEvents = applicationEvents;
+		this.handlingEventFactory = handlingEventFactory;
+	}
 
-    logger.info("Registered handling event: {}", event);
-  }
+	@Override
+	@Transactional(rollbackFor = CannotCreateHandlingEventException.class)
+	public void registerHandlingEvent(final Instant completionTime, final TrackingId trackingId,
+			final VoyageNumber voyageNumber, final UnLocode unLocode, final HandlingEvent.Type type)
+			throws CannotCreateHandlingEventException {
+		final Instant registrationTime = Instant.now();
+		/*
+		 * Using a factory to create a HandlingEvent (aggregate). This is where it is
+		 * determined whether the incoming data, the attempt, actually is capable of
+		 * representing a real handling event.
+		 */
+		final HandlingEvent event = handlingEventFactory.createHandlingEvent(registrationTime, completionTime,
+				trackingId, voyageNumber, unLocode, type);
+
+		/*
+		 * Store the new handling event, which updates the persistent state of the
+		 * handling event aggregate (but not the cargo aggregate - that happens
+		 * asynchronously!)
+		 */
+		handlingEventRepository.store(event);
+
+		/* Publish an event stating that a cargo has been handled. */
+		applicationEvents.cargoWasHandled(event);
+
+		logger.info("Registered handling event: {}", event);
+	}
 
 }
