@@ -8,17 +8,17 @@ import org.springframework.validation.FieldError;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TrackCommandValidatorTest {
+class TrackCommandValidatorTest {
 
   TrackCommandValidator validator;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     validator = new TrackCommandValidator();
   }
 
   @Test
-  public void testValidateIllegalId() {
+  void testValidateIllegalId() {
     TrackCommand command = new TrackCommand();
     BindingResult errors = new BeanPropertyBindingResult(command, "command");
     validator.validate(command, errors);
@@ -31,7 +31,7 @@ public class TrackCommandValidatorTest {
   }
 
   @Test
-  public void testValidateSuccess() {
+  void testValidateSuccess() {
     TrackCommand command = new TrackCommand();
     command.setTrackingId("non-empty");
     BindingResult errors = new BeanPropertyBindingResult(command, "command");

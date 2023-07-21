@@ -9,13 +9,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ItinerarySelectionCommandTest {
+class ItinerarySelectionCommandTest {
 
     RouteAssignmentCommand command;
     MockHttpServletRequest request;
 
-    @Test
-    public void testBind() {
+  @Test
+  void testBind() {
         command = new RouteAssignmentCommand();
         request = new MockHttpServletRequest();
 

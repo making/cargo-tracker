@@ -1,14 +1,18 @@
 server:
-    servlet:
-        context-path: /dddsample
+  servlet:
+    context-path: /dddsample
+  error:
+    include-message: always
 
 cxf:
-    path: /ws
+  path: /ws
 
 logging:
-    level:
-        org.hibernate.SQL: info
-        net.sf.ehcache.config.ConfigurationFactory: error
+  level:
+    net.sf.ehcache.config.ConfigurationFactory: error
+    web: info
+    sql: info
+
 
 uploadDirectory: /tmp/upload
 parseFailureDirectory: /tmp/failed
@@ -16,9 +20,11 @@ parseFailureDirectory: /tmp/failed
 brokerUrl: "vm://localhost?broker.persistent=false&broker.useJmx=false"
 
 spring:
-    dataSource:
-        db_name: dddsample
-        driver_class: org.hsqldb.jdbcDriver
-        url: jdbc:hsqldb:mem:dddsample
-        username: sa
-        password: ""
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  dataSource:
+    url: jdbc:hsqldb:mem:dddsample
+    username: sa
+    password: ""
+    driver-class-name: org.hsqldb.jdbcDriver

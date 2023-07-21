@@ -12,11 +12,11 @@ import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-public class AdminAcceptanceTest extends AbstractAcceptanceTest {
+class AdminAcceptanceTest extends AbstractAcceptanceTest {
 
-    @DirtiesContext
-    @Test
-    public void adminSiteCargoListContainsCannedCargo() {
+  @DirtiesContext
+  @Test
+  void adminSiteCargoListContainsCannedCargo() {
         AdminPage page = new AdminPage(driver, port);
         page.listAllCargo();
 
@@ -26,9 +26,9 @@ public class AdminAcceptanceTest extends AbstractAcceptanceTest {
                 .withFailMessage("Cargo list doesn't contain JKL567");
     }
 
-    @DirtiesContext
-    @Test
-    public void adminSiteCanBookNewCargo() {
+  @DirtiesContext
+  @Test
+  void adminSiteCanBookNewCargo() {
         AdminPage adminPage = new AdminPage(driver, port);
 
         CargoBookingPage cargoBookingPage = adminPage.bookNewCargo();

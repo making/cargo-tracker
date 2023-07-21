@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static se.citerus.dddsample.application.util.DateUtils.toDate;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 
-public class HandlingHistoryTest {
+class HandlingHistoryTest {
   Cargo cargo;
   Voyage voyage;
   HandlingEvent event1;
@@ -24,7 +24,7 @@ public class HandlingHistoryTest {
   HandlingHistory handlingHistory;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     cargo = new Cargo(new TrackingId("ABC"), new RouteSpecification(SHANGHAI, DALLAS, toDate("2009-04-01")));
     voyage = new Voyage.Builder(new VoyageNumber("X25"), HONGKONG).
       addMovement(SHANGHAI, Instant.now(), Instant.now()).
@@ -38,12 +38,12 @@ public class HandlingHistoryTest {
   }
 
   @Test
-  public void testDistinctEventsByCompletionTime() {
+  void testDistinctEventsByCompletionTime() {
     assertThat(handlingHistory.distinctEventsByCompletionTime()).isEqualTo(List.of(event1, event2));
   }
 
   @Test
-  public void testMostRecentlyCompletedEvent() {
+  void testMostRecentlyCompletedEvent() {
     assertThat(handlingHistory.mostRecentlyCompletedEvent()).isEqualTo(event2);
   }
   

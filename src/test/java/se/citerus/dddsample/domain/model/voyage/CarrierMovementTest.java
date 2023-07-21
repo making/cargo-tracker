@@ -9,10 +9,10 @@ import static org.assertj.core.api.Assertions.fail;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HAMBURG;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.STOCKHOLM;
 
-public class CarrierMovementTest {
+class CarrierMovementTest {
 
   @Test
-  public void testConstructor() {
+  void testConstructor() {
     try {
       new CarrierMovement(null, null, Instant.now(), Instant.now());
       fail("Should not accept null constructor arguments");
@@ -28,7 +28,7 @@ public class CarrierMovementTest {
   }
 
   @Test
-  public void testSameValueAsEqualsHashCode() {
+  void testSameValueAsEqualsHashCode() {
     long referenceTime = System.currentTimeMillis();
 
     // One could, in theory, use the same Date(referenceTime) for all of these movements

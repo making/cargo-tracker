@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("resource")
-public class UploadDirectoryScannerTest {
+class UploadDirectoryScannerTest {
 
     private static final Instant exampleDate = LocalDateTime.parse("2022-10-29T13:37").atZone(ZoneOffset.UTC).toInstant();
     private File uploadDir;
@@ -37,8 +37,8 @@ public class UploadDirectoryScannerTest {
         parseFailureDir = new File(Files.createTempDirectory("parseFailure").toUri());
     }
 
-    @Test
-    public void shouldParseLinesAndPublishEventsForValidFile() throws Exception {
+  @Test
+  void shouldParseLinesAndPublishEventsForValidFile() throws Exception {
         ArgumentCaptor<HandlingEventRegistrationAttempt> captor = ArgumentCaptor.forClass(HandlingEventRegistrationAttempt.class);
         ApplicationEvents appEventsMock = mock(ApplicationEvents.class);
         UploadDirectoryScanner scanner = new UploadDirectoryScanner(uploadDir, parseFailureDir, appEventsMock);

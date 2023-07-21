@@ -21,10 +21,10 @@ import static org.mockito.Mockito.when;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.CM001;
 
-public class ItineraryCandidateDTOAssemblerTest {
+class ItineraryCandidateDTOAssemblerTest {
 
   @Test
-  public void testToDTO() {
+  void testToDTO() {
     final ItineraryCandidateDTOAssembler assembler = new ItineraryCandidateDTOAssembler();
 
     final Location origin = STOCKHOLM;
@@ -52,7 +52,7 @@ public class ItineraryCandidateDTOAssemblerTest {
   }
 
   @Test
-  public void testFromDTO() {
+  void testFromDTO() {
     final ItineraryCandidateDTOAssembler assembler = new ItineraryCandidateDTOAssembler();
 
     final List<LegDTO> legs = new ArrayList<LegDTO>();

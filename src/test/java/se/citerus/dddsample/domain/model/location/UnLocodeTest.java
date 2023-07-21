@@ -9,11 +9,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class UnLocodeTest {
+class UnLocodeTest {
 
-  @ValueSource(strings = {"AA234","AAA9B","AAAAA"})
+  @ValueSource(strings = {"AA234", "AAA9B", "AAAAA"})
   @ParameterizedTest
-  public void shouldAllowCreationOfValidUnLoCodes(String input) {
+  void shouldAllowCreationOfValidUnLoCodes(String input) {
     assertThat(new UnLocode(input)).isNotNull();
   }
 
@@ -21,17 +21,17 @@ public class UnLocodeTest {
   @NullSource
   @EmptySource
   @ParameterizedTest
-  public void shouldPreventCreationOfInvalidUnLoCodes(String input) {
+  void shouldPreventCreationOfInvalidUnLoCodes(String input) {
     assertThatThrownBy(() -> new UnLocode(input)).isInstanceOfAny(NullPointerException.class, IllegalArgumentException.class);
   }
 
   @Test
-  public void testIdString() {
+  void testIdString() {
     assertThat(new UnLocode("AbcDe").idString()).isEqualTo("ABCDE");
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     UnLocode allCaps = new UnLocode("ABCDE");
     UnLocode mixedCase = new UnLocode("aBcDe");
 
@@ -44,7 +44,7 @@ public class UnLocodeTest {
   }
 
   @Test
-  public void testHashCode() {
+  void testHashCode() {
     UnLocode allCaps = new UnLocode("ABCDE");
     UnLocode mixedCase = new UnLocode("aBcDe");
 

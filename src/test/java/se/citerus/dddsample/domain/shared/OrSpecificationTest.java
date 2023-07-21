@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrSpecificationTest {
+class OrSpecificationTest {
 
   @Test
-  public void testAndIsSatisifedBy() {
+  void testAndIsSatisifedBy() {
     AlwaysTrueSpec trueSpec = new AlwaysTrueSpec();
     AlwaysFalseSpec falseSpec = new AlwaysFalseSpec();
 

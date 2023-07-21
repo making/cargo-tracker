@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 
-public class ItineraryTest {
+class ItineraryTest {
   private final CarrierMovement abc = new CarrierMovement(SHANGHAI, ROTTERDAM, Instant.now(), Instant.now());
   private final CarrierMovement def = new CarrierMovement(ROTTERDAM, GOTHENBURG, Instant.now(), Instant.now());
   private final CarrierMovement ghi = new CarrierMovement(ROTTERDAM, NEWYORK, Instant.now(), Instant.now());
@@ -24,7 +24,7 @@ public class ItineraryTest {
   Voyage voyage, wrongVoyage;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     voyage = new Voyage.Builder(new VoyageNumber("0123"), SHANGHAI).
       addMovement(ROTTERDAM, Instant.now(), Instant.now()).
       addMovement(GOTHENBURG, Instant.now(), Instant.now()).
@@ -37,7 +37,7 @@ public class ItineraryTest {
   }
 
   @Test
-  public void testCargoOnTrack() {
+  void testCargoOnTrack() {
 
     TrackingId trackingId = new TrackingId("CARGO1");
     RouteSpecification routeSpecification = new RouteSpecification(SHANGHAI, GOTHENBURG, Instant.now());
@@ -89,17 +89,19 @@ public class ItineraryTest {
     assertThat(itinerary.isExpected(event)).isFalse();
 
   }
+
   @Test
-  public void testNextExpectedEvent() {
+  void testNextExpectedEvent() {
 
   }
+
   @Test
-  public void shouldNotAllowItineraryWithEmptyListOfLegs() {
+  void shouldNotAllowItineraryWithEmptyListOfLegs() {
     assertThatThrownBy(() -> new Itinerary(List.of())).isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
-  public void shouldNotAllowItineraryWithNullListOfLegs() {
+  void shouldNotAllowItineraryWithNullListOfLegs() {
     assertThatThrownBy(() -> new Itinerary(null)).isInstanceOf(NullPointerException.class);
   }
 

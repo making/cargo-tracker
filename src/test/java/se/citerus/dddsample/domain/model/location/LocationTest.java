@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-public class LocationTest {
+class LocationTest {
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     // Same UN locode - equal
     assertThat(new Location(new UnLocode("ATEST"),"test-name").
         equals(new Location(new UnLocode("ATEST"),"test-name"))).isTrue();

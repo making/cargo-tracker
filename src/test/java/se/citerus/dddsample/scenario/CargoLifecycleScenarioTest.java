@@ -38,7 +38,7 @@ import static se.citerus.dddsample.domain.model.voyage.Voyage.NONE;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.*;
 
-public class CargoLifecycleScenarioTest {
+class CargoLifecycleScenarioTest {
 
   /**
    * Repository implementations are part of the infrastructure layer,
@@ -86,7 +86,7 @@ public class CargoLifecycleScenarioTest {
   RoutingService routingService;
 
   @Test
-  public void testCargoFromHongkongToStockholm() throws Exception {
+  void testCargoFromHongkongToStockholm() throws Exception {
     /* Test setup: A cargo should be shipped from Hongkong to Stockholm,
        and it should arrive in no more than two weeks. */
     Location origin = HONGKONG;
@@ -299,7 +299,7 @@ public class CargoLifecycleScenarioTest {
   }
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     routingService = new RoutingService() {
       public List<Itinerary> fetchRoutesForSpecification(RouteSpecification routeSpecification) {
         if (routeSpecification.origin().equals(HONGKONG)) {

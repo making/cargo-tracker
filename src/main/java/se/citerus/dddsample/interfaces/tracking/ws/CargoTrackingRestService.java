@@ -1,6 +1,5 @@
 package se.citerus.dddsample.interfaces.tracking.ws;
 
-import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -40,20 +39,18 @@ public class CargoTrackingRestService {
 
     @GetMapping(value = "/api/track/{trackingId}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CargoTrackingDTO> trackCargo(final HttpServletRequest request,
-                                                       @PathVariable("trackingId") String trackingId) {
+      @PathVariable String trackingId) {
         try {
             Locale locale = RequestContextUtils.getLocale(request);
             TrackingId trkId = new TrackingId(trackingId);
             Cargo cargo = cargoRepository.find(trkId);
             if (cargo == null) {
-                throw new NotFoundException("No cargo found for trackingId");
+                URI uri = new UriTemplate(request.getContextPath() + "/api/track/{trackingId}").expand(trackingId);
+                return ResponseEntity.notFound().location(uri).build();
             }
             final List<HandlingEvent> handlingEvents = handlingEventRepository.lookupHandlingHistoryOfCargo(trkId)
                     .distinctEventsByCompletionTime();
             return ResponseEntity.ok(CargoTrackingDTOConverter.convert(cargo, handlingEvents, messageSource, locale));
-        } catch (NotFoundException e) {
-            URI uri = new UriTemplate(request.getContextPath() + "/api/track/{trackingId}").expand(trackingId);
-            return ResponseEntity.notFound().location(uri).build();
         } catch (Exception e) {
             log.error("Unexpected error in trackCargo endpoint", e);
             return ResponseEntity.status(500).build();

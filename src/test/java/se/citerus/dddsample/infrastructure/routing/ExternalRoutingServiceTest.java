@@ -22,13 +22,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 
-public class ExternalRoutingServiceTest {
+class ExternalRoutingServiceTest {
 
   private ExternalRoutingService externalRoutingService;
   private VoyageRepository voyageRepository;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     LocationRepository locationRepository = new LocationRepositoryInMem();
     voyageRepository = mock(VoyageRepository.class);
     GraphTraversalService graphTraversalService = new GraphTraversalServiceImpl(new GraphDAOStub() {
@@ -44,7 +44,7 @@ public class ExternalRoutingServiceTest {
 
   // TODO this test belongs in com.pathfinder
   @Test
-  public void testCalculatePossibleRoutes() {
+  void testCalculatePossibleRoutes() {
     TrackingId trackingId = new TrackingId("ABC");
     RouteSpecification routeSpecification = new RouteSpecification(HONGKONG, HELSINKI, Instant.now());
     Cargo cargo = new Cargo(trackingId, routeSpecification);

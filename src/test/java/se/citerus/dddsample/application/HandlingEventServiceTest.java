@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.CM001;
 
-public class HandlingEventServiceTest {
+class HandlingEventServiceTest {
   private HandlingEventServiceImpl service;
   private ApplicationEvents applicationEvents;
   private CargoRepository cargoRepository;
@@ -32,7 +32,7 @@ public class HandlingEventServiceTest {
   private final Cargo cargo = new Cargo(new TrackingId("ABC"), new RouteSpecification(HAMBURG, TOKYO, Instant.now()));
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     cargoRepository = mock(CargoRepository.class);
     voyageRepository = mock(VoyageRepository.class);
     handlingEventRepository = mock(HandlingEventRepository.class);
@@ -44,7 +44,7 @@ public class HandlingEventServiceTest {
   }
 
   @Test
-  public void testRegisterEvent() throws Exception {
+  void testRegisterEvent() throws Exception {
     when(cargoRepository.find(cargo.trackingId())).thenReturn(cargo);
     when(voyageRepository.find(CM001.voyageNumber())).thenReturn(CM001);
     when(locationRepository.find(STOCKHOLM.unLocode())).thenReturn(STOCKHOLM);

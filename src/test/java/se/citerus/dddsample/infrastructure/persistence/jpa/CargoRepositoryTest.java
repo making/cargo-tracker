@@ -2,12 +2,10 @@ package se.citerus.dddsample.infrastructure.persistence.jpa;
 
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import se.citerus.dddsample.domain.model.cargo.*;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
@@ -36,12 +34,11 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.HELSINKI_TO_HONGKONG;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.NEW_YORK_TO_DALLAS;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ContextConfiguration(classes = TestRepositoryConfig.class)
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-public class CargoRepositoryTest {
+class CargoRepositoryTest {
     @Autowired
     CargoRepository cargoRepository;
 
@@ -57,8 +54,8 @@ public class CargoRepositoryTest {
     @Autowired
     EntityManager entityManager;
 
-    @Test
-    public void testFindByCargoId() {
+  @Test
+  void testFindByCargoId() {
         final TrackingId trackingId = new TrackingId("ABC123");
         final Cargo cargo = cargoRepository.find(trackingId);
         assertThat(cargo).isNotNull();
@@ -102,13 +99,13 @@ public class CargoRepositoryTest {
         assertThat(event.cargo()).isEqualTo(cargo);
     }
 
-    @Test
-    public void testFindByCargoIdUnknownId() {
+  @Test
+  void testFindByCargoIdUnknownId() {
         assertThat(cargoRepository.find(new TrackingId("UNKNOWN"))).isNull();
     }
 
-    @Test
-    public void testSave() {
+  @Test
+  void testSave() {
         TrackingId trackingId = new TrackingId("AAA");
         Location origin = locationRepository.find(STOCKHOLM.unLocode());
         Location destination = locationRepository.find(MELBOURNE.unLocode());
@@ -140,8 +137,8 @@ public class CargoRepositoryTest {
         assertThat(loadedCargo.itinerary().legs()).hasSize(1);
     }
 
-    @Test
-    public void testReplaceItinerary() {
+  @Test
+  void testReplaceItinerary() {
         Cargo cargo = cargoRepository.find(new TrackingId("JKL567"));
         assertThat(cargo).isNotNull();
         long cargoId = cargo.id;
@@ -160,15 +157,15 @@ public class CargoRepositoryTest {
         assertThat(countLegsForCargo(cargoId)).isEqualTo(1);
     }
 
-    @Test
-    public void testFindAll() {
+  @Test
+  void testFindAll() {
         List<Cargo> all = cargoRepository.getAll();
         assertThat(all).isNotNull();
         assertThat(all).hasSize(2);
     }
 
-    @Test
-    public void testNextTrackingId() {
+  @Test
+  void testNextTrackingId() {
         TrackingId trackingId = cargoRepository.nextTrackingId();
         assertThat(trackingId).isNotNull();
 

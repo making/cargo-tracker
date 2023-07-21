@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static se.citerus.dddsample.application.util.DateUtils.toDate;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 
-public class RouteSpecificationTest {
+class RouteSpecificationTest {
 
   final Voyage hongKongTokyoNewYork = new Voyage.Builder(
     new VoyageNumber("V001"), HONGKONG).
@@ -34,8 +34,9 @@ public class RouteSpecificationTest {
       new Leg(dallasNewYorkChicago, NEWYORK, CHICAGO,
               toDate("2009-02-12"), toDate("2009-02-20")))
   );
+
   @Test
-  public void testIsSatisfiedBy_Success() {
+  void testIsSatisfiedBy_Success() {
     RouteSpecification routeSpecification = new RouteSpecification(
       HONGKONG, CHICAGO, toDate("2009-03-01")
     );
@@ -44,23 +45,25 @@ public class RouteSpecificationTest {
   }
 
   @Test
-  public void testIsSatisfiedBy_WrongOrigin() {
+  void testIsSatisfiedBy_WrongOrigin() {
     RouteSpecification routeSpecification = new RouteSpecification(
             HANGZHOU, CHICAGO, toDate("2009-03-01")
     );
 
     assertThat(routeSpecification.isSatisfiedBy(itinerary)).isFalse();
   }
+
   @Test
-  public void testIsSatisfiedBy_WrongDestination() {
+  void testIsSatisfiedBy_WrongDestination() {
     RouteSpecification routeSpecification = new RouteSpecification(
       HONGKONG, DALLAS, toDate("2009-03-01")
     );
 
     assertThat(routeSpecification.isSatisfiedBy(itinerary)).isFalse();
   }
+
   @Test
-  public void testIsSatisfiedBy_MissedDeadline() {
+  void testIsSatisfiedBy_MissedDeadline() {
     RouteSpecification routeSpecification = new RouteSpecification(
       HONGKONG, CHICAGO, toDate("2009-02-15")
     );

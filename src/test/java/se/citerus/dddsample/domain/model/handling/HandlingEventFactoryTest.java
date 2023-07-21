@@ -24,7 +24,7 @@ import static se.citerus.dddsample.domain.model.handling.HandlingEvent.Type;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.CM001;
 
-public class HandlingEventFactoryTest {
+class HandlingEventFactoryTest {
 
   private HandlingEventFactory factory;
   private CargoRepository cargoRepository;
@@ -34,7 +34,7 @@ public class HandlingEventFactoryTest {
   private Cargo cargo;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
 
     cargoRepository = mock(CargoRepository.class);
     voyageRepository = new VoyageRepositoryInMem();
@@ -47,7 +47,7 @@ public class HandlingEventFactoryTest {
   }
 
   @Test
-  public void testCreateHandlingEventWithCarrierMovement() throws Exception {
+  void testCreateHandlingEventWithCarrierMovement() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
     VoyageNumber voyageNumber = CM001.voyageNumber();
@@ -65,7 +65,7 @@ public class HandlingEventFactoryTest {
   }
 
   @Test
-  public void testCreateHandlingEventWithoutCarrierMovement() throws Exception {
+  void testCreateHandlingEventWithoutCarrierMovement() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
     UnLocode unLocode = STOCKHOLM.unLocode();
@@ -82,7 +82,7 @@ public class HandlingEventFactoryTest {
   }
 
   @Test
-  public void testCreateHandlingEventUnknownLocation() throws Exception {
+  void testCreateHandlingEventUnknownLocation() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
     UnLocode invalid = new UnLocode("NOEXT");
@@ -95,7 +95,7 @@ public class HandlingEventFactoryTest {
   }
 
   @Test
-  public void testCreateHandlingEventUnknownCarrierMovement() throws Exception {
+  void testCreateHandlingEventUnknownCarrierMovement() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
     try {
@@ -108,7 +108,7 @@ public class HandlingEventFactoryTest {
   }
 
   @Test
-  public void testCreateHandlingEventUnknownTrackingId() throws Exception {
+  void testCreateHandlingEventUnknownTrackingId() throws Exception {
     when(cargoRepository.find(trackingId)).thenReturn(null);
 
     try {

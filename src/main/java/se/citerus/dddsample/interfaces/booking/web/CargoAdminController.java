@@ -3,9 +3,10 @@ package se.citerus.dddsample.interfaces.booking.web;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade;
 import se.citerus.dddsample.interfaces.booking.facade.dto.CargoRoutingDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.LegDTO;
@@ -50,7 +51,7 @@ public final class CargoAdminController {
         binder.registerCustomEditor(Instant.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm"), false));
     }
 
-    @RequestMapping("/registration")
+    @GetMapping("/registration")
     public String registration(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws Exception {
         List<LocationDTO> dtoList = bookingServiceFacade.listShippingLocations();
 
@@ -65,7 +66,7 @@ public final class CargoAdminController {
         return "admin/registrationForm";
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @PostMapping("/register")
     public void register(HttpServletRequest request, HttpServletResponse response,
                          RegistrationCommand command) throws Exception {
 
@@ -76,7 +77,7 @@ public final class CargoAdminController {
         response.sendRedirect("show?trackingId=" + trackingId);
     }
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public String list(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws Exception {
         List<CargoRoutingDTO> cargoList = bookingServiceFacade.listAllCargos();
 
@@ -84,7 +85,7 @@ public final class CargoAdminController {
         return "admin/list";
     }
 
-    @RequestMapping("/show")
+    @GetMapping("/show")
     public String show(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws Exception {
         String trackingId = request.getParameter("trackingId");
         CargoRoutingDTO dto = bookingServiceFacade.loadCargoForRouting(trackingId);
@@ -92,7 +93,7 @@ public final class CargoAdminController {
         return "admin/show";
     }
 
-    @RequestMapping("/selectItinerary")
+    @GetMapping("/selectItinerary")
     public String selectItinerary(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws Exception {
         String trackingId = request.getParameter("trackingId");
 
@@ -105,7 +106,7 @@ public final class CargoAdminController {
         return "admin/selectItinerary";
     }
 
-    @RequestMapping(value = "/assignItinerary", method = RequestMethod.POST)
+    @PostMapping("/assignItinerary")
     public void assignItinerary(HttpServletRequest request, HttpServletResponse response, RouteAssignmentCommand command) throws Exception {
         List<LegDTO> legDTOs = new ArrayList<LegDTO>(command.getLegs().size());
         for (RouteAssignmentCommand.LegCommand leg : command.getLegs()) {
@@ -125,7 +126,7 @@ public final class CargoAdminController {
         response.sendRedirect("show?trackingId=" + command.getTrackingId());
     }
 
-    @RequestMapping(value = "/pickNewDestination")
+    @GetMapping("/pickNewDestination")
     public String pickNewDestination(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws Exception {
         List<LocationDTO> locations = bookingServiceFacade.listShippingLocations();
         model.put("locations", locations);
@@ -137,7 +138,7 @@ public final class CargoAdminController {
         return "admin/pickNewDestination";
     }
 
-    @RequestMapping(value = "/changeDestination", method = RequestMethod.POST)
+    @PostMapping("/changeDestination")
     public void changeDestination(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String trackingId = request.getParameter("trackingId");
         String unLocode = request.getParameter("unlocode");

@@ -3,8 +3,9 @@ package se.citerus.dddsample.interfaces.tracking;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
@@ -45,13 +46,13 @@ public final class CargoTrackingController {
         this.messageSource = messageSource;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public String get(final Map<String, Object> model) {
         model.put("trackCommand", new TrackCommand()); // TODO why is this method adding a TrackCommand without id?
         return "track";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     protected String onSubmit(final HttpServletRequest request,
                                                              final TrackCommand command,
                                                              final Map<String, Object> model,

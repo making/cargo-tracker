@@ -1,12 +1,10 @@
 package se.citerus.dddsample.interfaces.tracking.ws;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.HttpClientErrorException;
@@ -20,9 +18,8 @@ import java.nio.charset.StandardCharsets;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CargoTrackingRestServiceIntegrationTest {
+class CargoTrackingRestServiceIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -39,7 +36,7 @@ public class CargoTrackingRestServiceIntegrationTest {
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         String expected = StreamUtils.copyToString(getClass().getResourceAsStream("/sampleCargoTrackingResponse.json"), StandardCharsets.UTF_8);
-        assertThat(response.getHeaders().get("Content-Type")).containsExactly("application/json;charset=UTF-8");
+        assertThat(response.getHeaders().get("Content-Type")).containsExactly("application/json");
         assertThat(response.getBody()).isEqualTo(expected);
     }
 

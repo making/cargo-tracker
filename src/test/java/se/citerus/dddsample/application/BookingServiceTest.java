@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.CHICAGO;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.STOCKHOLM;
 
-public class BookingServiceTest {
+class BookingServiceTest {
 
   BookingServiceImpl bookingService;
   CargoRepository cargoRepository;
@@ -30,7 +30,7 @@ public class BookingServiceTest {
   CargoFactory cargoFactory;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     cargoRepository = mock(CargoRepository.class);
     locationRepository = mock(LocationRepository.class);
     routingService = mock(RoutingService.class);
@@ -39,7 +39,7 @@ public class BookingServiceTest {
   }
 
   @Test
-  public void testRegisterNew() {
+  void testRegisterNew() {
     TrackingId expectedTrackingId = new TrackingId("TRK1");
     UnLocode fromUnlocode = new UnLocode("USCHI");
     UnLocode toUnlocode = new UnLocode("SESTO");

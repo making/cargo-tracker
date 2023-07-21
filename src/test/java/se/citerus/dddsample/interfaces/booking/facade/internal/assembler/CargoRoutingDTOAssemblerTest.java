@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.CM001;
 
-public class CargoRoutingDTOAssemblerTest {
+class CargoRoutingDTOAssemblerTest {
 
   @Test
-  public void testToDTO() {
+  void testToDTO() {
     final CargoRoutingDTOAssembler assembler = new CargoRoutingDTOAssembler();
 
     final Location origin = STOCKHOLM;
@@ -48,7 +48,7 @@ public class CargoRoutingDTOAssemblerTest {
   }
 
   @Test
-  public void testToDTO_NoItinerary() {
+  void testToDTO_NoItinerary() {
     final CargoRoutingDTOAssembler assembler = new CargoRoutingDTOAssembler();
 
     final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, Instant.now()));

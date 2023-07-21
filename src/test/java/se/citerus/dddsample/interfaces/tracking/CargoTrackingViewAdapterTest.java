@@ -16,10 +16,10 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HAN
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HELSINKI;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.CM001;
 
-public class CargoTrackingViewAdapterTest {
+class CargoTrackingViewAdapterTest {
 
   @Test
-  public void testCreate() {
+  void testCreate() {
     Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(HANGZHOU, HELSINKI, Instant.now()));
 
     List<HandlingEvent> events = new ArrayList<HandlingEvent>();

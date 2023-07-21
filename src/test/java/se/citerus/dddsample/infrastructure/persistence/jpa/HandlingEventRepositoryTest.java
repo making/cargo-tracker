@@ -1,12 +1,10 @@
 package se.citerus.dddsample.infrastructure.persistence.jpa;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
@@ -23,12 +21,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ContextConfiguration(classes = TestRepositoryConfig.class)
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-public class HandlingEventRepositoryTest {
+class HandlingEventRepositoryTest {
 
     @Autowired
     HandlingEventRepository handlingEventRepository;
@@ -42,8 +39,8 @@ public class HandlingEventRepositoryTest {
     @Autowired
     EntityManager entityManager;
 
-    @Test
-    public void testSave() {
+  @Test
+  void testSave() {
         Location location = locationRepository.find(new UnLocode("SESTO"));
 
         Cargo cargo = cargoRepository.find(new TrackingId("ABC123"));
@@ -70,8 +67,8 @@ public class HandlingEventRepositoryTest {
         entityManager.flush();
     }
 
-    @Test
-    public void testFindEventsForCargo() {
+  @Test
+  void testFindEventsForCargo() {
         TrackingId trackingId = new TrackingId("ABC123");
         List<HandlingEvent> handlingEvents = handlingEventRepository.lookupHandlingHistoryOfCargo(trackingId).distinctEventsByCompletionTime();
         assertThat(handlingEvents).hasSize(3);

@@ -10,10 +10,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.HAMBURG;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.STOCKHOLM;
 
-public class LocationDTOAssemblerTest {
+class LocationDTOAssemblerTest {
 
   @Test
-  public void testToDTOList() {
+  void testToDTOList() {
     final LocationDTOAssembler assembler = new LocationDTOAssembler();
     final List<Location> locationList = List.of(STOCKHOLM, HAMBURG);
 

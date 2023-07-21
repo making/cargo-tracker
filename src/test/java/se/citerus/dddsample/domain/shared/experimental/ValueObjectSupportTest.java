@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ValueObjectSupportTest {
+class ValueObjectSupportTest {
 
-    @Test
-    public void testEquals() {
+  @Test
+  void testEquals() {
         final AValueObject vo1 = new AValueObject("A");
         final AValueObject vo2 = new AValueObject("A");
         final BValueObject vo3 = new BValueObject("A", 1);

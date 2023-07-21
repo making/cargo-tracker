@@ -16,18 +16,18 @@ import static se.citerus.dddsample.domain.model.handling.HandlingEvent.Type.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.*;
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.*;
 
-public class HandlingEventTest {
+class HandlingEventTest {
   private Cargo cargo;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     TrackingId trackingId = new TrackingId("XYZ");
     RouteSpecification routeSpecification = new RouteSpecification(HONGKONG, NEWYORK, Instant.now());
     cargo = new Cargo(trackingId, routeSpecification);
   }
 
   @Test
-  public void testNewWithCarrierMovement() {
+  void testNewWithCarrierMovement() {
 
     HandlingEvent e1 = new HandlingEvent(cargo, Instant.now(), Instant.now(), LOAD, HONGKONG, CM003);
     assertThat(e1.location()).isEqualTo(HONGKONG);
@@ -53,13 +53,13 @@ public class HandlingEventTest {
   }
 
   @Test
-  public void testNewWithLocation() {
+  void testNewWithLocation() {
     HandlingEvent e1 = new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.CLAIM, HELSINKI);
     assertThat(e1.location()).isEqualTo(HELSINKI);
   }
 
   @Test
-  public void testCurrentLocationLoadEvent() {
+  void testCurrentLocationLoadEvent() {
 
     HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), LOAD, CHICAGO, CM004);
     
@@ -67,28 +67,28 @@ public class HandlingEventTest {
   }
 
   @Test
-  public void testCurrentLocationUnloadEvent() {
+  void testCurrentLocationUnloadEvent() {
     HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), UNLOAD, HAMBURG, CM004);
     
     assertThat(ev.location()).isEqualTo(HAMBURG);
   }
 
   @Test
-  public void testCurrentLocationReceivedEvent() {
+  void testCurrentLocationReceivedEvent() {
     HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), RECEIVE, CHICAGO);
 
     assertThat(ev.location()).isEqualTo(CHICAGO);
   }
 
   @Test
-  public void testCurrentLocationClaimedEvent() {
+  void testCurrentLocationClaimedEvent() {
     HandlingEvent ev = new HandlingEvent(cargo, Instant.now(), Instant.now(), CLAIM, CHICAGO);
 
     assertThat(ev.location()).isEqualTo(CHICAGO);
   }
 
   @Test
-  public void testParseType() {
+  void testParseType() {
     assertThat(valueOf("CLAIM")).isEqualTo(CLAIM);
     assertThat(valueOf("LOAD")).isEqualTo(LOAD);
     assertThat(valueOf("UNLOAD")).isEqualTo(UNLOAD);
@@ -96,7 +96,7 @@ public class HandlingEventTest {
   }
 
   @Test
-  public void testParseTypeIllegal() {
+  void testParseTypeIllegal() {
     try {
       valueOf("NOT_A_HANDLING_EVENT_TYPE");
       fail("Expected IllegalArgumentException to be thrown");
@@ -106,7 +106,7 @@ public class HandlingEventTest {
   }
 
   @Test
-  public void testEqualsAndSameAs() {
+  void testEqualsAndSameAs() {
     Instant timeOccured = Instant.now();
     Instant timeRegistered = Instant.now();
 

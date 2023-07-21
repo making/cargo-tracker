@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class TrackingIdTest {
+class TrackingIdTest {
 
   @Test
-  public void testConstructor() {
+  void testConstructor() {
     assertThatThrownBy(() -> new TrackingId(null)).isInstanceOf(NullPointerException.class);
   }
 
