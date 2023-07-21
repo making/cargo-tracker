@@ -1,4 +1,4 @@
-package com.pathfinder.config;
+package se.citerus.dddsample.config;
 
 import com.pathfinder.api.GraphTraversalService;
 import com.pathfinder.internal.GraphDAO;
