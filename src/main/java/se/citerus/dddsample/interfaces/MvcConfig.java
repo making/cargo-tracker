@@ -25,12 +25,13 @@ import se.citerus.dddsample.interfaces.handling.file.UploadDirectoryScanner;
 import se.citerus.dddsample.interfaces.tracking.TrackCommandValidator;
 
 import jakarta.persistence.EntityManager;
+
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.util.Locale;
 
 @Configuration
-public class InterfacesApplicationContext implements WebMvcConfigurer {
+public class MvcConfig implements WebMvcConfigurer {
 
 	private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 

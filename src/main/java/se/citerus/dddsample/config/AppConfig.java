@@ -1,7 +1,6 @@
 package se.citerus.dddsample.config;
 
 import com.pathfinder.api.GraphTraversalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -20,16 +19,16 @@ import se.citerus.dddsample.domain.model.handling.HandlingEventRepository;
 import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 import se.citerus.dddsample.domain.service.RoutingService;
-import se.citerus.dddsample.infrastructure.messaging.jms.InfrastructureMessagingJmsConfig;
+import se.citerus.dddsample.infrastructure.messaging.jms.JmsConfig;
 import se.citerus.dddsample.infrastructure.routing.ExternalRoutingService;
 import se.citerus.dddsample.infrastructure.sampledata.SampleDataGenerator;
-import se.citerus.dddsample.interfaces.InterfacesApplicationContext;
+import se.citerus.dddsample.interfaces.MvcConfig;
 
 import jakarta.persistence.EntityManager;
 
 @Configuration
-@Import({ InterfacesApplicationContext.class, InfrastructureMessagingJmsConfig.class })
-public class DDDSampleApplicationContext {
+@Import({ MvcConfig.class, JmsConfig.class })
+public class AppConfig {
 
 	@Bean
 	public CargoFactory cargoFactory(LocationRepository locationRepository, CargoRepository cargoRepository) {

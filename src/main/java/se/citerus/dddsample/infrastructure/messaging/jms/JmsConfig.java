@@ -12,7 +12,7 @@ import jakarta.jms.*;
 
 @EnableJms
 @Configuration
-public class InfrastructureMessagingJmsConfig {
+public class JmsConfig {
 
 	@Bean
 	public Queue cargoHandledQueue() {

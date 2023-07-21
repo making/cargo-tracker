@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class PathfinderApplicationContext {
+public class PathfinderConfig {
 
 	private GraphDAO graphDAO() {
 		return new GraphDAOStub();
