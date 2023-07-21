@@ -31,64 +31,38 @@ import javax.persistence.EntityManager;
 @Import({InterfacesApplicationContext.class, InfrastructureMessagingJmsConfig.class})
 public class DDDSampleApplicationContext {
 
-    @Autowired
-    CargoRepository cargoRepository;
-
-    @Autowired
-    LocationRepository locationRepository;
-
-    @Autowired
-    VoyageRepository voyageRepository;
-
-    @Autowired
-    GraphTraversalService graphTraversalService;
-
-    @Autowired
-    RoutingService routingService;
-
-    @Autowired
-    HandlingEventFactory handlingEventFactory;
-
-    @Autowired
-    HandlingEventRepository handlingEventRepository;
-
-    @Autowired
-    ApplicationEvents applicationEvents;
-
     @Bean
-    public CargoFactory cargoFactory() {
+    public CargoFactory cargoFactory(LocationRepository locationRepository, CargoRepository cargoRepository) {
         return new CargoFactory(locationRepository, cargoRepository);
     }
 
     @Bean
-    public BookingService bookingService(CargoFactory cargoFactory) {
+    public BookingService bookingService(CargoRepository cargoRepository, LocationRepository locationRepository,RoutingService routingService, CargoFactory cargoFactory) {
         return new BookingServiceImpl(cargoRepository, locationRepository, routingService, cargoFactory);
     }
 
     @Bean
-    public CargoInspectionService cargoInspectionService() {
+    public CargoInspectionService cargoInspectionService(ApplicationEvents applicationEvents, CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository) {
         return new CargoInspectionServiceImpl(applicationEvents, cargoRepository, handlingEventRepository);
     }
 
     @Bean
-    public HandlingEventService handlingEventService() {
+    public HandlingEventService handlingEventService(HandlingEventRepository handlingEventRepository, ApplicationEvents applicationEvents, HandlingEventFactory handlingEventFactory) {
         return new HandlingEventServiceImpl(handlingEventRepository, applicationEvents, handlingEventFactory);
     }
 
     @Bean
-    public HandlingEventFactory handlingEventFactory() {
+    public HandlingEventFactory handlingEventFactory(CargoRepository cargoRepository, VoyageRepository voyageRepository, LocationRepository locationRepository) {
         return new HandlingEventFactory(cargoRepository, voyageRepository, locationRepository);
     }
 
     @Bean
-    public RoutingService routingService() {
+    public RoutingService routingService(GraphTraversalService graphTraversalService, LocationRepository locationRepository, VoyageRepository voyageRepository) {
         return new ExternalRoutingService(graphTraversalService, locationRepository, voyageRepository);
     }
 
     @Bean
-    public SampleDataGenerator sampleDataGenerator(CargoRepository cargoRepository, VoyageRepository voyageRepository,
-                                                   LocationRepository locationRepository, HandlingEventRepository handlingEventRepository,
-                                                   PlatformTransactionManager platformTransactionManager, EntityManager entityManager) {
+    public SampleDataGenerator sampleDataGenerator(CargoRepository cargoRepository, VoyageRepository voyageRepository, LocationRepository locationRepository, HandlingEventRepository handlingEventRepository, PlatformTransactionManager platformTransactionManager, EntityManager entityManager) {
         SampleDataGenerator sampleDataGenerator = new SampleDataGenerator(cargoRepository, voyageRepository, locationRepository, handlingEventRepository, platformTransactionManager);
         try {
             sampleDataGenerator.generate(); // TODO investigate if this can be called with initMethod in the annotation

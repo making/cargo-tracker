@@ -20,8 +20,6 @@ parseFailureDirectory: /tmp/failed
 brokerUrl: "vm://localhost?broker.persistent=false&broker.useJmx=false"
 
 spring:
-  main:
-    allow-circular-references: true
   dataSource:
     url: jdbc:hsqldb:mem:dddsample
     username: sa
