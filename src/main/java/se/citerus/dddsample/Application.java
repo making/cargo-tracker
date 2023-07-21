@@ -1,10 +1,10 @@
 package se.citerus.dddsample;
 
-import se.citerus.dddsample.config.PathfinderConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import se.citerus.dddsample.config.AppConfig;
+import se.citerus.dddsample.config.PathfinderConfig;
 
 @Import({ AppConfig.class, PathfinderConfig.class })
 @SpringBootApplication
