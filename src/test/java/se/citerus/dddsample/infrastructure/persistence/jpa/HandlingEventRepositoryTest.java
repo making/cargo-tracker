@@ -3,6 +3,7 @@ package se.citerus.dddsample.infrastructure.persistence.jpa;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
@@ -12,13 +13,14 @@ import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.location.UnLocode;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import(TestConfig.class)
 class HandlingEventRepositoryTest {
 
     @Autowired
@@ -46,7 +48,7 @@ class HandlingEventRepositoryTest {
 
         flush();
 
-        HandlingEvent result = entityManager.createQuery(String.format("select he from HandlingEvent he where he.id = %d", event.id), HandlingEvent.class).getSingleResult();
+        HandlingEvent result = entityManager.createQuery("select he from HandlingEvent he where he.id = %d".formatted(event.id), HandlingEvent.class).getSingleResult();
 
         assertThat(result.cargo.id).isEqualTo(cargo.id);
         Instant completionDate = result.completionTime;

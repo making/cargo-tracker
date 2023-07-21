@@ -3,6 +3,7 @@ package se.citerus.dddsample.infrastructure.persistence.jpa;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.location.UnLocode;
@@ -12,6 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import(TestConfig.class)
 class LocationRepositoryTest {
     @Autowired
     private LocationRepository locationRepository;
@@ -32,5 +34,4 @@ class LocationRepositoryTest {
 
         assertThat(allLocations).isNotNull().hasSize(13);
     }
-
 }

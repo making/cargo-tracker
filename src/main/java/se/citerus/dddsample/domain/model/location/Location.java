@@ -3,7 +3,7 @@ package se.citerus.dddsample.domain.model.location;
 import org.apache.commons.lang3.Validate;
 import se.citerus.dddsample.domain.shared.Entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * A location is our model is stops on a journey, such as cargo
@@ -11,7 +11,7 @@ import javax.persistence.*;
  * It is uniquely identified by a UN Locode.
  *
  */
-@javax.persistence.Entity(name = "Location")
+@jakarta.persistence.Entity(name = "Location")
 @Table(name = "Location")
 public final class Location implements Entity<Location> {
 

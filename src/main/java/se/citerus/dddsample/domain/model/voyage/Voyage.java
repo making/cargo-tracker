@@ -4,7 +4,7 @@ import org.apache.commons.lang3.Validate;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.Entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * A Voyage.
  */
-@javax.persistence.Entity(name = "Voyage")
+@jakarta.persistence.Entity(name = "Voyage")
 @Table(name = "Voyage")
 public class Voyage implements Entity<Voyage> {
 

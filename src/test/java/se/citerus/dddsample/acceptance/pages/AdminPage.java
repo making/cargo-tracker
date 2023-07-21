@@ -16,7 +16,7 @@ public class AdminPage {
     public AdminPage(WebDriver driver, int port) {
         this.driver = driver;
         this.port = port;
-        driver.get(String.format("http://localhost:%d/dddsample/admin/list", port));
+        driver.get("http://localhost:%d/dddsample/admin/list".formatted(port));
         assertThat("Cargo Administration").isEqualTo(driver.getTitle());
     }
 

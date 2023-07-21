@@ -5,7 +5,7 @@ import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.Entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 /**
@@ -44,7 +44,7 @@ import java.util.List;
  * in port etc), are captured in this aggregate.
  *
  */
-@javax.persistence.Entity(name = "Cargo")
+@jakarta.persistence.Entity(name = "Cargo")
 @Table(name = "Cargo")
 public class Cargo implements Entity<Cargo> {
 

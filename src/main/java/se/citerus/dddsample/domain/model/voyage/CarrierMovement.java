@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Instant;
 
 

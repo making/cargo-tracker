@@ -24,7 +24,7 @@ import se.citerus.dddsample.interfaces.booking.facade.internal.BookingServiceFac
 import se.citerus.dddsample.interfaces.handling.file.UploadDirectoryScanner;
 import se.citerus.dddsample.interfaces.tracking.TrackCommandValidator;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.util.Locale;

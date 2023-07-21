@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.infrastructure.sampledata.SampleLocations;
 
 import java.net.URI;
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,7 +48,7 @@ class HandlingReportIntegrationTest {
     void shouldReturn201ResponseWhenHandlingReportIsSubmitted() throws Exception {
         String body = mapper.writeValueAsString(ImmutableMap.of(
                 "completionTime", "2022-10-30T13:37:00",
-                "trackingIds", Collections.singletonList("ABC123"),
+                "trackingIds", List.of("ABC123"),
                 "type", HandlingEvent.Type.CUSTOMS.name(),
                 "unLocode", SampleLocations.DALLAS.unlocode
         ));
@@ -76,7 +76,7 @@ class HandlingReportIntegrationTest {
     void shouldReturnValidationErrorResponseWhenInvalidHandlingReportIsSubmitted() throws Exception {
         String body = mapper.writeValueAsString(ImmutableMap.of(
                 "completionTime", "invalid date",
-                "trackingIds", Collections.singletonList("ABC123"),
+                "trackingIds", List.of("ABC123"),
                 "type", HandlingEvent.Type.CUSTOMS.name(),
                 "unLocode", SampleLocations.STOCKHOLM.unlocode,
                 "voyageNumber", "0101"

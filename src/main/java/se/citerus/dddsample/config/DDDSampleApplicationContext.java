@@ -25,7 +25,7 @@ import se.citerus.dddsample.infrastructure.routing.ExternalRoutingService;
 import se.citerus.dddsample.infrastructure.sampledata.SampleDataGenerator;
 import se.citerus.dddsample.interfaces.InterfacesApplicationContext;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 @Configuration
 @Import({InterfacesApplicationContext.class, InfrastructureMessagingJmsConfig.class})
@@ -37,7 +37,7 @@ public class DDDSampleApplicationContext {
     }
 
     @Bean
-    public BookingService bookingService(CargoRepository cargoRepository, LocationRepository locationRepository,RoutingService routingService, CargoFactory cargoFactory) {
+    public BookingService bookingService(CargoRepository cargoRepository, LocationRepository locationRepository, RoutingService routingService, CargoFactory cargoFactory) {
         return new BookingServiceImpl(cargoRepository, locationRepository, routingService, cargoFactory);
     }
 

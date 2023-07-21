@@ -98,7 +98,7 @@ public class UploadDirectoryScanner extends TimerTask implements InitializingBea
     } else if (columns.length == 4) {
       return new String[]{columns[0], columns[1], "", columns[2], columns[3]};
     } else {
-      throw new IllegalArgumentException(String.format("Wrong number of columns on line: %s, must be 4 or 5", line));
+      throw new IllegalArgumentException("Wrong number of columns on line: %s, must be 4 or 5".formatted(line));
     }
   }
 
@@ -134,7 +134,7 @@ public class UploadDirectoryScanner extends TimerTask implements InitializingBea
   @Override
   public void afterPropertiesSet() throws Exception {
     if (uploadDirectory.equals(parseFailureDirectory)) {
-      throw new Exception(String.format("Upload and parse failed directories must not be the same directory: %s", uploadDirectory));
+      throw new Exception("Upload and parse failed directories must not be the same directory: %s".formatted(uploadDirectory));
     }
     for (File dir : Arrays.asList(uploadDirectory, parseFailureDirectory)) {
       if (!(dir.exists() || dir.mkdirs())) {

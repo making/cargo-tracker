@@ -4,6 +4,7 @@ import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import se.citerus.dddsample.domain.model.cargo.*;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.handling.HandlingEventRepository;
@@ -14,7 +15,8 @@ import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
+
 import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -32,6 +34,7 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.HELSI
 import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.NEW_YORK_TO_DALLAS;
 
 @DataJpaTest
+@Import(TestConfig.class)
 class CargoRepositoryTest {
     @Autowired
     CargoRepository cargoRepository;
@@ -105,7 +108,7 @@ class CargoRepositoryTest {
 
         flush();
 
-        Cargo result = entityManager.createQuery(String.format("from Cargo c where c.trackingId = '%s'", trackingId.idString()), Cargo.class).getSingleResult();
+        Cargo result = entityManager.createQuery("from Cargo c where c.trackingId = '%s'".formatted(trackingId.idString()), Cargo.class).getSingleResult();
         assertThat(result.trackingId().idString()).isEqualTo("AAA");
         assertThat(result.routeSpecification.origin.id).isEqualTo(origin.id);
         assertThat(result.routeSpecification.destination.id).isEqualTo(destination.id);
@@ -158,6 +161,6 @@ class CargoRepositoryTest {
     }
 
     private int countLegsForCargo(long cargoId) {
-        return ((BigInteger) entityManager.createNativeQuery(String.format("select count(*) from Leg l where l.cargo_id = %d", cargoId)).getSingleResult()).intValue();
+        return ((Long) entityManager.createNativeQuery("select count(*) from Leg l where l.cargo_id = %d".formatted(cargoId)).getSingleResult()).intValue();
     }
 }

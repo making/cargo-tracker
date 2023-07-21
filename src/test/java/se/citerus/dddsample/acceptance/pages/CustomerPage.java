@@ -11,7 +11,7 @@ public class CustomerPage {
 
     public CustomerPage(WebDriver driver, int port) {
         this.driver = driver;
-        driver.get(String.format("http://localhost:%d/dddsample/track", port));
+        driver.get("http://localhost:%d/dddsample/track".formatted(port));
         assertThat("Tracking cargo").isEqualTo(driver.getTitle());
     }
 

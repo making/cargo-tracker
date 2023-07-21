@@ -30,11 +30,13 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
@@ -82,7 +84,7 @@ class CargoTrackingDTOConverterTest {
         ReflectionTestUtils.setField(cargo.delivery(), "nextExpectedActivity", handlingActivity);
         ReflectionTestUtils.setField(cargo.delivery(), "eta", Instant.ofEpochMilli(0));
 
-        Voyage voyage = new Voyage(new VoyageNumber("0101"), new Schedule(Collections.singletonList(
+        Voyage voyage = new Voyage(new VoyageNumber("0101"), new Schedule(List.of(
                 new CarrierMovement(origin, dest, Instant.now(), Instant.now()))));
         List<HandlingEvent> events = Arrays.asList(
                 new HandlingEvent(cargo, Instant.now(), Instant.now(), HandlingEvent.Type.RECEIVE, origin),
@@ -161,7 +163,7 @@ class CargoTrackingDTOConverterTest {
             Cargo cargo = exampleCargo();
             Location origin = new Location(new UnLocode("SESTO"), "Stockholm");
             HandlingEvent handlingEvent = new HandlingEvent(cargo, Instant.now(), Instant.now(), eventType, origin);
-            cargo.deriveDeliveryProgress(new HandlingHistory(singletonList(handlingEvent)));
+            cargo.deriveDeliveryProgress(new HandlingHistory(List.of(handlingEvent)));
             return cargo;
         }
 
@@ -169,7 +171,7 @@ class CargoTrackingDTOConverterTest {
             Cargo cargo = exampleCargo();
             Location origin = new Location(new UnLocode("SESTO"), "Stockholm");
             HandlingEvent handlingEvent = new HandlingEvent(cargo, Instant.now(), Instant.now(), eventType, origin, voyage);
-            cargo.deriveDeliveryProgress(new HandlingHistory(singletonList(handlingEvent)));
+            cargo.deriveDeliveryProgress(new HandlingHistory(List.of(handlingEvent)));
             return cargo;
         }
     }
@@ -191,7 +193,7 @@ class CargoTrackingDTOConverterTest {
     private static Voyage exampleVoyage() {
         Location origin = new Location(new UnLocode("SESTO"), "Stockholm");
         Location dest = new Location(new UnLocode("FIHEL"), "Helsinki");
-        return new Voyage(new VoyageNumber("0101"), new Schedule(Collections.singletonList(
+        return new Voyage(new VoyageNumber("0101"), new Schedule(List.of(
                 new CarrierMovement(origin, dest, Instant.now(), Instant.now()))));
     }
 

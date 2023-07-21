@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.interfaces.handling.HandlingEventRegistrationAttempt;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
