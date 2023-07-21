@@ -2,6 +2,7 @@ package se.citerus.dddsample.application.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.HandlingEventService;
@@ -16,6 +17,7 @@ import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
 import java.lang.invoke.MethodHandles;
 import java.time.Instant;
 
+@Service
 public class HandlingEventServiceImpl implements HandlingEventService {
 
 	private final ApplicationEvents applicationEvents;

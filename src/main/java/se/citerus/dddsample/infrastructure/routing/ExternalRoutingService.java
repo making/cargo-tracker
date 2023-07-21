@@ -5,6 +5,8 @@ import com.pathfinder.api.TransitEdge;
 import com.pathfinder.api.TransitPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import se.citerus.dddsample.domain.model.cargo.Itinerary;
 import se.citerus.dddsample.domain.model.cargo.Leg;
 import se.citerus.dddsample.domain.model.cargo.RouteSpecification;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
  * a different context from us.
  *
  */
+@Service
 public class ExternalRoutingService implements RoutingService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

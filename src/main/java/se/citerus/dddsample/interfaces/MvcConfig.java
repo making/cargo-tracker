@@ -59,17 +59,6 @@ public class MvcConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public TrackCommandValidator trackCommandValidator() {
-		return new TrackCommandValidator();
-	}
-
-	@Bean
-	public BookingServiceFacade bookingServiceFacade(BookingService bookingService,
-			LocationRepository locationRepository, CargoRepository cargoRepository, VoyageRepository voyageRepository) {
-		return new BookingServiceFacadeImpl(bookingService, locationRepository, cargoRepository, voyageRepository);
-	}
-
-	@Bean
 	public UploadDirectoryScanner uploadDirectoryScanner(ApplicationEvents applicationEvents) {
 		File uploadDirectoryFile = new File(uploadDirectory);
 		File parseFailureDirectoryFile = new File(parseFailureDirectory);

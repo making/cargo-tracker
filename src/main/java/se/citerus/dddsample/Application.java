@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Import;
 import se.citerus.dddsample.config.AppConfig;
 import se.citerus.dddsample.config.PathfinderConfig;
 
-@Import({ AppConfig.class, PathfinderConfig.class })
 @SpringBootApplication
 public class Application {
 

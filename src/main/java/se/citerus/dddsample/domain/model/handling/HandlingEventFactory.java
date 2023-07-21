@@ -1,5 +1,6 @@
 package se.citerus.dddsample.domain.model.handling;
 
+import org.springframework.stereotype.Component;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
@@ -15,6 +16,7 @@ import java.time.Instant;
 /**
  * Creates handling events.
  */
+@Component
 public class HandlingEventFactory {
 
 	private final CargoRepository cargoRepository;

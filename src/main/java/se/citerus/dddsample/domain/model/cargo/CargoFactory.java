@@ -1,11 +1,13 @@
 package se.citerus.dddsample.domain.model.cargo;
 
+import org.springframework.stereotype.Component;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.location.UnLocode;
 
 import java.time.Instant;
 
+@Component
 public class CargoFactory {
 
 	private final LocationRepository locationRepository;

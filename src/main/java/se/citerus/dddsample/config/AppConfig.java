@@ -27,43 +27,7 @@ import se.citerus.dddsample.interfaces.MvcConfig;
 import jakarta.persistence.EntityManager;
 
 @Configuration
-@Import({ MvcConfig.class, JmsConfig.class })
 public class AppConfig {
-
-	@Bean
-	public CargoFactory cargoFactory(LocationRepository locationRepository, CargoRepository cargoRepository) {
-		return new CargoFactory(locationRepository, cargoRepository);
-	}
-
-	@Bean
-	public BookingService bookingService(CargoRepository cargoRepository, LocationRepository locationRepository,
-			RoutingService routingService, CargoFactory cargoFactory) {
-		return new BookingServiceImpl(cargoRepository, locationRepository, routingService, cargoFactory);
-	}
-
-	@Bean
-	public CargoInspectionService cargoInspectionService(ApplicationEvents applicationEvents,
-			CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository) {
-		return new CargoInspectionServiceImpl(applicationEvents, cargoRepository, handlingEventRepository);
-	}
-
-	@Bean
-	public HandlingEventService handlingEventService(HandlingEventRepository handlingEventRepository,
-			ApplicationEvents applicationEvents, HandlingEventFactory handlingEventFactory) {
-		return new HandlingEventServiceImpl(handlingEventRepository, applicationEvents, handlingEventFactory);
-	}
-
-	@Bean
-	public HandlingEventFactory handlingEventFactory(CargoRepository cargoRepository, VoyageRepository voyageRepository,
-			LocationRepository locationRepository) {
-		return new HandlingEventFactory(cargoRepository, voyageRepository, locationRepository);
-	}
-
-	@Bean
-	public RoutingService routingService(GraphTraversalService graphTraversalService,
-			LocationRepository locationRepository, VoyageRepository voyageRepository) {
-		return new ExternalRoutingService(graphTraversalService, locationRepository, voyageRepository);
-	}
 
 	@Bean
 	public SampleDataGenerator sampleDataGenerator(CargoRepository cargoRepository, VoyageRepository voyageRepository,
@@ -73,7 +37,7 @@ public class AppConfig {
 				locationRepository, handlingEventRepository, platformTransactionManager);
 		try {
 			sampleDataGenerator.generate(); // TODO investigate if this can be called with
-											// initMethod in the annotation
+			// initMethod in the annotation
 		}
 		catch (Exception e) {
 			e.printStackTrace();

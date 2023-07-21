@@ -2,7 +2,9 @@ package se.citerus.dddsample.infrastructure.messaging.jms;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsOperations;
+import org.springframework.stereotype.Component;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
@@ -15,6 +17,7 @@ import java.lang.invoke.MethodHandles;
 /**
  * JMS based implementation.
  */
+@Component
 public final class JmsApplicationEventsImpl implements ApplicationEvents {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -32,9 +35,12 @@ public final class JmsApplicationEventsImpl implements ApplicationEvents {
 
 	private final Destination handlingEventQueue;
 
-	public JmsApplicationEventsImpl(JmsOperations jmsOperations, Destination cargoHandledQueue,
-			Destination misdirectedCargoQueue, Destination deliveredCargoQueue,
-			Destination rejectedRegistrationAttemptsQueue, Destination handlingEventQueue) {
+	public JmsApplicationEventsImpl(JmsOperations jmsOperations,
+			@Qualifier("cargoHandledQueue") Destination cargoHandledQueue,
+			@Qualifier("misdirectedCargoQueue") Destination misdirectedCargoQueue,
+			@Qualifier("deliveredCargoQueue") Destination deliveredCargoQueue,
+			@Qualifier("rejectedRegistrationAttemptsQueue") Destination rejectedRegistrationAttemptsQueue,
+			@Qualifier("handlingEventRegistrationAttemptQueue") Destination handlingEventQueue) {
 		this.jmsOperations = jmsOperations;
 		this.cargoHandledQueue = cargoHandledQueue;
 		this.misdirectedCargoQueue = misdirectedCargoQueue;

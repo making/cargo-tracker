@@ -1,5 +1,6 @@
 package se.citerus.dddsample.interfaces.booking.facade.internal;
 
+import org.springframework.stereotype.Service;
 import se.citerus.dddsample.application.BookingService;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
@@ -28,6 +29,7 @@ import java.util.List;
  * analogous to the view rendering for web interfaces.
  *
  */
+@Service
 public class BookingServiceFacadeImpl implements BookingServiceFacade {
 
 	private BookingService bookingService;
