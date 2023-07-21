@@ -60,7 +60,7 @@ public final class CargoAdminController {
 		List<String> unLocodeStrings = new ArrayList<String>();
 
 		for (LocationDTO dto : dtoList) {
-			unLocodeStrings.add(dto.getUnLocode());
+			unLocodeStrings.add(dto.unLocode());
 		}
 
 		model.put("unlocodes", unLocodeStrings);

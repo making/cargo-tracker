@@ -50,13 +50,13 @@ public class ItineraryCandidateDTOAssembler {
 	 */
 	public Itinerary fromDTO(final RouteCandidateDTO routeCandidateDTO, final VoyageRepository voyageRepository,
 			final LocationRepository locationRepository) {
-		final List<Leg> legs = new ArrayList<Leg>(routeCandidateDTO.getLegs().size());
-		for (LegDTO legDTO : routeCandidateDTO.getLegs()) {
-			final VoyageNumber voyageNumber = new VoyageNumber(legDTO.getVoyageNumber());
+		final List<Leg> legs = new ArrayList<Leg>(routeCandidateDTO.legs().size());
+		for (LegDTO legDTO : routeCandidateDTO.legs()) {
+			final VoyageNumber voyageNumber = new VoyageNumber(legDTO.voyageNumber());
 			final Voyage voyage = voyageRepository.find(voyageNumber);
-			final Location from = locationRepository.find(new UnLocode(legDTO.getFrom()));
-			final Location to = locationRepository.find(new UnLocode(legDTO.getTo()));
-			legs.add(new Leg(voyage, from, to, legDTO.getLoadTime(), legDTO.getUnloadTime()));
+			final Location from = locationRepository.find(new UnLocode(legDTO.from()));
+			final Location to = locationRepository.find(new UnLocode(legDTO.to()));
+			legs.add(new Leg(voyage, from, to, legDTO.loadTime(), legDTO.unloadTime()));
 		}
 		return new Itinerary(legs);
 	}

@@ -22,12 +22,12 @@ class LocationDTOAssemblerTest {
 		assertThat(dtos).hasSize(2);
 
 		LocationDTO dto = dtos.get(0);
-		assertThat(dto.getUnLocode()).isEqualTo("SESTO");
-		assertThat(dto.getName()).isEqualTo("Stockholm");
+		assertThat(dto.unLocode()).isEqualTo("SESTO");
+		assertThat(dto.name()).isEqualTo("Stockholm");
 
 		dto = dtos.get(1);
-		assertThat(dto.getUnLocode()).isEqualTo("DEHAM");
-		assertThat(dto.getName()).isEqualTo("Hamburg");
+		assertThat(dto.unLocode()).isEqualTo("DEHAM");
+		assertThat(dto.name()).isEqualTo("Hamburg");
 	}
 
 }

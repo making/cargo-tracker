@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
-import java.util.stream.Collectors;
 
 /**
  * Our end of the routing service. This is basically a data model translation layer
@@ -81,17 +80,17 @@ public class ExternalRoutingService implements RoutingService {
 	}
 
 	private Itinerary toItinerary(TransitPath transitPath) {
-		List<Leg> legs = new ArrayList<>(transitPath.getTransitEdges().size());
-		for (TransitEdge edge : transitPath.getTransitEdges()) {
+		List<Leg> legs = new ArrayList<>(transitPath.transitEdges().size());
+		for (TransitEdge edge : transitPath.transitEdges()) {
 			legs.add(toLeg(edge));
 		}
 		return new Itinerary(legs);
 	}
 
 	private Leg toLeg(TransitEdge edge) {
-		return new Leg(voyageRepository.find(new VoyageNumber(edge.getEdge())),
-				locationRepository.find(new UnLocode(edge.getFromNode())),
-				locationRepository.find(new UnLocode(edge.getToNode())), edge.getFromDate(), edge.getToDate());
+		return new Leg(voyageRepository.find(new VoyageNumber(edge.edge())),
+				locationRepository.find(new UnLocode(edge.fromNode())),
+				locationRepository.find(new UnLocode(edge.toNode())), edge.fromDate(), edge.toDate());
 	}
 
 }

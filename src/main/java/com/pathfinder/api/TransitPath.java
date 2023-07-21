@@ -7,22 +7,20 @@ import java.util.List;
 /**
  *
  */
-public final class TransitPath implements Serializable {
-
-	private final List<TransitEdge> transitEdges;
+public record TransitPath(List<TransitEdge> transitEdges) implements Serializable {
 
 	/**
 	 * Constructor.
 	 * @param transitEdges The legs for this itinerary.
 	 */
-	public TransitPath(final List<TransitEdge> transitEdges) {
-		this.transitEdges = transitEdges;
+	public TransitPath {
 	}
 
 	/**
 	 * @return An unmodifiable list DTOs.
 	 */
-	public List<TransitEdge> getTransitEdges() {
+	@Override
+	public List<TransitEdge> transitEdges() {
 		return Collections.unmodifiableList(transitEdges);
 	}
 

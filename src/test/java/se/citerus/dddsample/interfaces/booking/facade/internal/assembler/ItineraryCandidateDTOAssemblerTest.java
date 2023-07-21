@@ -36,16 +36,16 @@ class ItineraryCandidateDTOAssemblerTest {
 
 		final RouteCandidateDTO dto = assembler.toDTO(itinerary);
 
-		assertThat(dto.getLegs()).hasSize(2);
-		LegDTO legDTO = dto.getLegs().get(0);
-		assertThat(legDTO.getVoyageNumber()).isEqualTo("CM001");
-		assertThat(legDTO.getFrom()).isEqualTo("SESTO");
-		assertThat(legDTO.getTo()).isEqualTo("CNSHA");
+		assertThat(dto.legs()).hasSize(2);
+		LegDTO legDTO = dto.legs().get(0);
+		assertThat(legDTO.voyageNumber()).isEqualTo("CM001");
+		assertThat(legDTO.from()).isEqualTo("SESTO");
+		assertThat(legDTO.to()).isEqualTo("CNSHA");
 
-		legDTO = dto.getLegs().get(1);
-		assertThat(legDTO.getVoyageNumber()).isEqualTo("CM001");
-		assertThat(legDTO.getFrom()).isEqualTo("NLRTM");
-		assertThat(legDTO.getTo()).isEqualTo("AUMEL");
+		legDTO = dto.legs().get(1);
+		assertThat(legDTO.voyageNumber()).isEqualTo("CM001");
+		assertThat(legDTO.from()).isEqualTo("NLRTM");
+		assertThat(legDTO.to()).isEqualTo("AUMEL");
 	}
 
 	@Test

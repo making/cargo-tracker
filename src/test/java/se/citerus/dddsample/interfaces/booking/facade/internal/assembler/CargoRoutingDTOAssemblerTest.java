@@ -32,17 +32,17 @@ class CargoRoutingDTOAssemblerTest {
 
 		final CargoRoutingDTO dto = assembler.toDTO(cargo);
 
-		assertThat(dto.getLegs()).hasSize(2);
+		assertThat(dto.legs()).hasSize(2);
 
-		LegDTO legDTO = dto.getLegs().get(0);
-		assertThat(legDTO.getVoyageNumber()).isEqualTo("CM001");
-		assertThat(legDTO.getFrom()).isEqualTo("SESTO");
-		assertThat(legDTO.getTo()).isEqualTo("CNSHA");
+		LegDTO legDTO = dto.legs().get(0);
+		assertThat(legDTO.voyageNumber()).isEqualTo("CM001");
+		assertThat(legDTO.from()).isEqualTo("SESTO");
+		assertThat(legDTO.to()).isEqualTo("CNSHA");
 
-		legDTO = dto.getLegs().get(1);
-		assertThat(legDTO.getVoyageNumber()).isEqualTo("CM001");
-		assertThat(legDTO.getFrom()).isEqualTo("NLRTM");
-		assertThat(legDTO.getTo()).isEqualTo("AUMEL");
+		legDTO = dto.legs().get(1);
+		assertThat(legDTO.voyageNumber()).isEqualTo("CM001");
+		assertThat(legDTO.from()).isEqualTo("NLRTM");
+		assertThat(legDTO.to()).isEqualTo("AUMEL");
 	}
 
 	@Test
@@ -53,10 +53,10 @@ class CargoRoutingDTOAssemblerTest {
 				new RouteSpecification(STOCKHOLM, MELBOURNE, Instant.now()));
 		final CargoRoutingDTO dto = assembler.toDTO(cargo);
 
-		assertThat(dto.getTrackingId()).isEqualTo("XYZ");
-		assertThat(dto.getOrigin()).isEqualTo("SESTO");
-		assertThat(dto.getFinalDestination()).isEqualTo("AUMEL");
-		assertThat(dto.getLegs().isEmpty()).isTrue();
+		assertThat(dto.trackingId()).isEqualTo("XYZ");
+		assertThat(dto.origin()).isEqualTo("SESTO");
+		assertThat(dto.finalDestination()).isEqualTo("AUMEL");
+		assertThat(dto.legs().isEmpty()).isTrue();
 	}
 
 }

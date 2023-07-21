@@ -104,7 +104,7 @@ class CargoTrackingDTOConverterTest {
 					false);
 		// assertThat(result.getEta()).isEqualTo("1970-01-01 00:00"); // TODO test this
 		// once timezone handling has been added
-		assertThat(result.handlingEvents).hasSize(2)
+		assertThat(result.handlingEvents()).hasSize(2)
 			.element(0)
 			.extracting("location", "type", "voyageNumber", "isExpected", "description")
 			.containsExactly("Stockholm", "RECEIVE", "", true, "TEST-DESCR"); // TODO test
