@@ -135,6 +135,11 @@
             <version>2.11.0</version>
         </dependency>
         <dependency>
+            <groupId>lol.maki.pathfinder</groupId>
+            <artifactId>pathfinder</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
         </dependency>
