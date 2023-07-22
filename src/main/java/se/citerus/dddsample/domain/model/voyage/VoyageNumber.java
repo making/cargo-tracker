@@ -5,7 +5,6 @@ import se.citerus.dddsample.domain.shared.ValueObject;
 
 /**
  * Identifies a voyage.
- *
  */
 public class VoyageNumber implements ValueObject<VoyageNumber> {
 

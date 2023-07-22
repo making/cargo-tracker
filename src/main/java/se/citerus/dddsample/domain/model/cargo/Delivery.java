@@ -1,5 +1,6 @@
 package se.citerus.dddsample.domain.model.cargo;
 
+import jakarta.persistence.*;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -9,7 +10,6 @@ import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
-import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.Iterator;
 import java.util.Objects;
@@ -20,7 +20,6 @@ import static se.citerus.dddsample.domain.model.cargo.TransportStatus.*;
 /**
  * The actual transportation of the cargo, as opposed to the customer requirement
  * (RouteSpecification) and the plan (Itinerary).
- *
  */
 @Embeddable
 public class Delivery implements ValueObject<Delivery> {

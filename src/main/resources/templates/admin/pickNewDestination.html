@@ -17,34 +17,35 @@
 <body>
 <div th:replace="adminDecorator :: adminbody"/>
 <div id="container">
-  <form th:action="@{/admin/changeDestination}" method="post">
-  <input type="hidden" name="trackingId" th:value="${cargo.trackingId}"/>
-  <table>
-    <caption>Change destination for cargo <span th:text="${cargo.trackingId}"/></caption>
-    <tbody>
-      <tr>
-        <td>Current destination</td>
-        <td th:text="${cargo.finalDestination}"/>
-      </tr>
-      <tr>
-        <td>New destination</td>
-        <td>
-          <select name="unlocode">
-            <option th:each="location : ${locations}" th:value="${location.unLocode}" th:text="${location.unLocode}"/>
-          </select>
-        </td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td> </td>
-        <td>
-          <input type="submit" value="Change destination"/>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-  </form>
+    <form th:action="@{/admin/changeDestination}" method="post">
+        <input type="hidden" name="trackingId" th:value="${cargo.trackingId}"/>
+        <table>
+            <caption>Change destination for cargo <span th:text="${cargo.trackingId}"/></caption>
+            <tbody>
+            <tr>
+                <td>Current destination</td>
+                <td th:text="${cargo.finalDestination}"/>
+            </tr>
+            <tr>
+                <td>New destination</td>
+                <td>
+                    <select name="unlocode">
+                        <option th:each="location : ${locations}" th:value="${location.unLocode}"
+                                th:text="${location.unLocode}"/>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Change destination"/>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
 </div>
 </body>
 </html>

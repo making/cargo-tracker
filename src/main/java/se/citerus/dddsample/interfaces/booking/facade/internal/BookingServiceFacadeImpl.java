@@ -27,7 +27,6 @@ import java.util.List;
  * This implementation has additional support from the infrastructure, for exposing as an
  * RMI service and for keeping the OR-mapper unit-of-work open during DTO assembly,
  * analogous to the view rendering for web interfaces.
- *
  */
 @Service
 public class BookingServiceFacadeImpl implements BookingServiceFacade {

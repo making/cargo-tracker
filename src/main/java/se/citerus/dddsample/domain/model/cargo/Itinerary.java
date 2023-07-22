@@ -12,7 +12,6 @@ import java.util.List;
 
 /**
  * An itinerary.
- *
  */
 public class Itinerary implements ValueObject<Itinerary> {
 
@@ -38,7 +37,7 @@ public class Itinerary implements ValueObject<Itinerary> {
 	 */
 	public List<Leg> legs() {
 		return new ArrayList<>(legs); // Note: due to JPA requirements, the returned list
-										// must be modifiable.
+		// must be modifiable.
 	}
 
 	/**

@@ -1,14 +1,12 @@
 package se.citerus.dddsample.domain.model.location;
 
+import jakarta.persistence.*;
 import org.apache.commons.lang3.Validate;
 import se.citerus.dddsample.domain.shared.Entity;
-
-import jakarta.persistence.*;
 
 /**
  * A location is our model is stops on a journey, such as cargo origin or destination, or
  * carrier movement endpoints. It is uniquely identified by a UN Locode.
- *
  */
 @jakarta.persistence.Entity(name = "Location")
 @Table(name = "Location")

@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * A voyage schedule.
- *
  */
 public class Schedule implements ValueObject<Schedule> {
 

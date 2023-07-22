@@ -27,8 +27,6 @@ import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
@@ -108,18 +106,18 @@ class CargoTrackingDTOConverterTest {
 			.element(0)
 			.extracting("location", "type", "voyageNumber", "isExpected", "description")
 			.containsExactly("Stockholm", "RECEIVE", "", true, "TEST-DESCR"); // TODO test
-																				// time
-																				// field
-																				// once
-																				// timezone
-																				// handling
-																				// has
-																				// been
-																				// added
+		// time
+		// field
+		// once
+		// timezone
+		// handling
+		// has
+		// been
+		// added
 	}
 
 	@Disabled("disabled due to missing timezone handling") // TODO enable once timezone
-															// handling has been added
+	// handling has been added
 	@CsvSource(value = { "LOAD;Loaded onto voyage 0101 in Stockholm, at 11/1/22 9:37 PM.",
 			"UNLOAD;Unloaded off voyage 0101 in Stockholm, at 11/1/22 9:37 PM." }, delimiter = ';')
 	@ParameterizedTest
@@ -136,7 +134,7 @@ class CargoTrackingDTOConverterTest {
 	}
 
 	@Disabled("disabled due to missing timezone handling") // TODO enable once timezone
-															// handling has been added
+	// handling has been added
 	@CsvSource(value = { "RECEIVE;Received in Stockholm, at 11/1/22 9:37 PM.",
 			"CLAIM;Claimed in Stockholm, at 11/1/22 9:37 PM.",
 			"CUSTOMS;Cleared customs in Stockholm, at 11/1/22 9:37 PM." }, delimiter = ';')

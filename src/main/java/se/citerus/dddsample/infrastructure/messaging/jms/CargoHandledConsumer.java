@@ -1,14 +1,13 @@
 package se.citerus.dddsample.infrastructure.messaging.jms;
 
+import jakarta.jms.Message;
+import jakarta.jms.TextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import se.citerus.dddsample.application.CargoInspectionService;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
-
-import jakarta.jms.Message;
-import jakarta.jms.TextMessage;
 
 import java.lang.invoke.MethodHandles;
 

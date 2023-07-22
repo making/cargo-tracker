@@ -1,5 +1,6 @@
 package se.citerus.dddsample.domain.model.cargo;
 
+import jakarta.persistence.*;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -8,12 +9,9 @@ import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
-import jakarta.persistence.*;
-
 /**
  * A handling activity represents how and where a cargo can be handled, and can be used to
  * express predictions about what is expected to happen to a cargo in the future.
- *
  */
 @Embeddable
 public class HandlingActivity implements ValueObject<HandlingActivity> {

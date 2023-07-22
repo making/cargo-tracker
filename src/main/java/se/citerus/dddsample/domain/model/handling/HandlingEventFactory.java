@@ -39,10 +39,10 @@ public class HandlingEventFactory {
 	 * @param voyageNumber voyage number
 	 * @param unlocode United Nations Location Code for the location of the event
 	 * @param type type of event
+	 * @return A handling event.
 	 * @throws UnknownVoyageException if there's no voyage with this number
 	 * @throws UnknownCargoException if there's no cargo with this tracking id
 	 * @throws UnknownLocationException if there's no location with this UN Locode
-	 * @return A handling event.
 	 */
 	public HandlingEvent createHandlingEvent(Instant registrationTime, Instant completionTime, TrackingId trackingId,
 			VoyageNumber voyageNumber, UnLocode unlocode, HandlingEvent.Type type)

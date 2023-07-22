@@ -62,7 +62,8 @@
     </th:block>
     <th:block th:if="${!cargo.routed}">
         <p>
-            <strong>Not routed</strong> - <a th:href="@{/admin/selectItinerary(trackingId=${cargo.trackingId})}">Route this cargo</a>
+            <strong>Not routed</strong> - <a th:href="@{/admin/selectItinerary(trackingId=${cargo.trackingId})}">Route
+            this cargo</a>
         </p>
     </th:block>
 </div>

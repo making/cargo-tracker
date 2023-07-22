@@ -11,7 +11,6 @@ import java.util.Map;
 
 /**
  * Sample locations, for test purposes.
- *
  */
 public class SampleLocations {
 

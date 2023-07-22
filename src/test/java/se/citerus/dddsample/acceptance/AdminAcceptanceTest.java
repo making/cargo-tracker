@@ -8,7 +8,6 @@ import se.citerus.dddsample.acceptance.pages.CargoDestinationPage;
 import se.citerus.dddsample.acceptance.pages.CargoDetailsPage;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 

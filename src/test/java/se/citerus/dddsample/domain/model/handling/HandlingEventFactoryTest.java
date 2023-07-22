@@ -52,76 +52,79 @@ class HandlingEventFactoryTest {
 	}
 
 	@Test
-  void testCreateHandlingEventWithCarrierMovement() throws Exception {
-    when(cargoRepository.find(trackingId)).thenReturn(cargo);
+    void testCreateHandlingEventWithCarrierMovement() throws Exception {
+        when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
-    VoyageNumber voyageNumber = CM001.voyageNumber();
-    UnLocode unLocode = STOCKHOLM.unLocode();
-    HandlingEvent handlingEvent = factory.createHandlingEvent(
-            Instant.now(), Instant.ofEpochMilli(100), trackingId, voyageNumber, unLocode, Type.LOAD
-    );
+        VoyageNumber voyageNumber = CM001.voyageNumber();
+        UnLocode unLocode = STOCKHOLM.unLocode();
+        HandlingEvent handlingEvent = factory.createHandlingEvent(
+                Instant.now(), Instant.ofEpochMilli(100), trackingId, voyageNumber, unLocode, Type.LOAD
+        );
 
-    assertThat(handlingEvent).isNotNull();
-    assertThat(handlingEvent.location()).isEqualTo(STOCKHOLM);
-    assertThat(handlingEvent.voyage()).isEqualTo(CM001);
-    assertThat(handlingEvent.cargo()).isEqualTo(cargo);
-    assertThat(handlingEvent.completionTime()).isEqualTo(Instant.ofEpochMilli(100));
-    assertThat(handlingEvent.registrationTime().isBefore(Instant.ofEpochMilli(System.currentTimeMillis() + 1))).isTrue();
-  }
-
-	@Test
-  void testCreateHandlingEventWithoutCarrierMovement() throws Exception {
-    when(cargoRepository.find(trackingId)).thenReturn(cargo);
-
-    UnLocode unLocode = STOCKHOLM.unLocode();
-    HandlingEvent handlingEvent = factory.createHandlingEvent(
-      Instant.now(), Instant.ofEpochMilli(100), trackingId, null, unLocode, Type.CLAIM
-    );
-
-    assertThat(handlingEvent).isNotNull();
-    assertThat(handlingEvent.location()).isEqualTo(STOCKHOLM);
-    assertThat(handlingEvent.voyage()).isEqualTo(Voyage.NONE);
-    assertThat(handlingEvent.cargo()).isEqualTo(cargo);
-    assertThat(handlingEvent.completionTime()).isEqualTo(Instant.ofEpochMilli(100));
-    assertThat(handlingEvent.registrationTime().isBefore(Instant.ofEpochMilli(System.currentTimeMillis() + 1))).isTrue();
-  }
+        assertThat(handlingEvent).isNotNull();
+        assertThat(handlingEvent.location()).isEqualTo(STOCKHOLM);
+        assertThat(handlingEvent.voyage()).isEqualTo(CM001);
+        assertThat(handlingEvent.cargo()).isEqualTo(cargo);
+        assertThat(handlingEvent.completionTime()).isEqualTo(Instant.ofEpochMilli(100));
+        assertThat(handlingEvent.registrationTime().isBefore(Instant.ofEpochMilli(System.currentTimeMillis() + 1))).isTrue();
+    }
 
 	@Test
-  void testCreateHandlingEventUnknownLocation() throws Exception {
-    when(cargoRepository.find(trackingId)).thenReturn(cargo);
+    void testCreateHandlingEventWithoutCarrierMovement() throws Exception {
+        when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
-    UnLocode invalid = new UnLocode("NOEXT");
-    try {
-      factory.createHandlingEvent(
-              Instant.now(), Instant.ofEpochMilli(100), trackingId, CM001.voyageNumber(), invalid, Type.LOAD
-      );
-      fail("Expected UnknownLocationException");
-    } catch (UnknownLocationException expected) {}
-  }
+        UnLocode unLocode = STOCKHOLM.unLocode();
+        HandlingEvent handlingEvent = factory.createHandlingEvent(
+                Instant.now(), Instant.ofEpochMilli(100), trackingId, null, unLocode, Type.CLAIM
+        );
 
-	@Test
-  void testCreateHandlingEventUnknownCarrierMovement() throws Exception {
-    when(cargoRepository.find(trackingId)).thenReturn(cargo);
-
-    try {
-      VoyageNumber invalid = new VoyageNumber("XXX");
-      factory.createHandlingEvent(
-              Instant.now(), Instant.ofEpochMilli(100), trackingId, invalid, STOCKHOLM.unLocode(), Type.LOAD
-      );
-      fail("Expected UnknownVoyageException");
-    } catch (UnknownVoyageException expected) {}
-  }
+        assertThat(handlingEvent).isNotNull();
+        assertThat(handlingEvent.location()).isEqualTo(STOCKHOLM);
+        assertThat(handlingEvent.voyage()).isEqualTo(Voyage.NONE);
+        assertThat(handlingEvent.cargo()).isEqualTo(cargo);
+        assertThat(handlingEvent.completionTime()).isEqualTo(Instant.ofEpochMilli(100));
+        assertThat(handlingEvent.registrationTime().isBefore(Instant.ofEpochMilli(System.currentTimeMillis() + 1))).isTrue();
+    }
 
 	@Test
-  void testCreateHandlingEventUnknownTrackingId() throws Exception {
-    when(cargoRepository.find(trackingId)).thenReturn(null);
+    void testCreateHandlingEventUnknownLocation() throws Exception {
+        when(cargoRepository.find(trackingId)).thenReturn(cargo);
 
-    try {
-      factory.createHandlingEvent(
-              Instant.now(), Instant.ofEpochMilli(100), trackingId, CM001.voyageNumber(), STOCKHOLM.unLocode(), Type.LOAD
-      );
-      fail("Expected UnknownCargoException");
-    } catch (UnknownCargoException expected) {}
-  }
+        UnLocode invalid = new UnLocode("NOEXT");
+        try {
+            factory.createHandlingEvent(
+                    Instant.now(), Instant.ofEpochMilli(100), trackingId, CM001.voyageNumber(), invalid, Type.LOAD
+            );
+            fail("Expected UnknownLocationException");
+        } catch (UnknownLocationException expected) {
+        }
+    }
+
+	@Test
+    void testCreateHandlingEventUnknownCarrierMovement() throws Exception {
+        when(cargoRepository.find(trackingId)).thenReturn(cargo);
+
+        try {
+            VoyageNumber invalid = new VoyageNumber("XXX");
+            factory.createHandlingEvent(
+                    Instant.now(), Instant.ofEpochMilli(100), trackingId, invalid, STOCKHOLM.unLocode(), Type.LOAD
+            );
+            fail("Expected UnknownVoyageException");
+        } catch (UnknownVoyageException expected) {
+        }
+    }
+
+	@Test
+    void testCreateHandlingEventUnknownTrackingId() throws Exception {
+        when(cargoRepository.find(trackingId)).thenReturn(null);
+
+        try {
+            factory.createHandlingEvent(
+                    Instant.now(), Instant.ofEpochMilli(100), trackingId, CM001.voyageNumber(), STOCKHOLM.unLocode(), Type.LOAD
+            );
+            fail("Expected UnknownCargoException");
+        } catch (UnknownCargoException expected) {
+        }
+    }
 
 }

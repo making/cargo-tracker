@@ -3,13 +3,13 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-  - url: http://localhost:8080
-    description: Generated server url
+- url: http://localhost:8080
+  description: Generated server url
 paths:
   /handlingReport:
     post:
       tags:
-        - handling-report-service-impl
+      - handling-report-service-impl
       operationId: submitReport
       requestBody:
         content:
@@ -28,10 +28,10 @@ components:
   schemas:
     HandlingReport:
       required:
-        - completionTime
-        - trackingIds
-        - type
-        - unLocode
+      - completionTime
+      - trackingIds
+      - type
+      - unLocode
       type: object
       properties:
         completionTime:

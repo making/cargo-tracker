@@ -1,5 +1,6 @@
 package se.citerus.dddsample.interfaces;
 
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 import se.citerus.dddsample.application.ApplicationEvents;
-import se.citerus.dddsample.application.BookingService;
-import se.citerus.dddsample.domain.model.cargo.CargoRepository;
-import se.citerus.dddsample.domain.model.location.LocationRepository;
-import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
-import se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade;
-import se.citerus.dddsample.interfaces.booking.facade.internal.BookingServiceFacadeImpl;
 import se.citerus.dddsample.interfaces.handling.file.UploadDirectoryScanner;
-import se.citerus.dddsample.interfaces.tracking.TrackCommandValidator;
-
-import jakarta.persistence.EntityManager;
 
 import java.io.File;
 import java.lang.invoke.MethodHandles;

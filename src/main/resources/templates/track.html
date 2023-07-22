@@ -32,7 +32,8 @@
                         <tr>
                             <td></td>
                             <td>
-                                <p th:if="${#fields.hasErrors('trackingId')}" th:errors="*{trackingId}" class="error"></p>
+                                <p th:if="${#fields.hasErrors('trackingId')}" th:errors="*{trackingId}"
+                                   class="error"></p>
                             </td>
                             <td></td>
                         </tr>
@@ -58,7 +59,8 @@
 
                 <p th:text="${cargo.nextExpectedActivity}">${cargo.nextExpectedActivity}</p>
 
-                <p th:if="${cargo.isMisdirected()}" class="notify"><img th:src="@{/images/error.png}" alt=""/>Cargo is misdirected</p>
+                <p th:if="${cargo.isMisdirected()}" class="notify"><img th:src="@{/images/error.png}" alt=""/>Cargo is
+                    misdirected</p>
 
                 <th:block th:if="${!cargo.events.isEmpty()}">
                     <h3>Handling History</h3>

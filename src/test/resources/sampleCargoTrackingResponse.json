@@ -1,1 +1,34 @@
-{"trackingId":"ABC123","statusText":"In port New York","destination":"Helsinki","eta":"2009-03-12T00:00:00Z","nextExpectedActivity":"Next expected activity is to load cargo onto voyage 0200T in New York","isMisdirected":false,"handlingEvents":[{"location":"Hongkong","time":"2009-03-01T00:00:00Z","type":"RECEIVE","voyageNumber":"","isExpected":true,"description":"Received in Hongkong, at 2009-03-01T00:00:00Z."},{"location":"Hongkong","time":"2009-03-02T00:00:00Z","type":"LOAD","voyageNumber":"0100S","isExpected":true,"description":"Loaded onto voyage 0100S in Hongkong, at 2009-03-02T00:00:00Z."},{"location":"New York","time":"2009-03-05T00:00:00Z","type":"UNLOAD","voyageNumber":"0100S","isExpected":true,"description":"Unloaded off voyage 0100S in New York, at 2009-03-05T00:00:00Z."}]}
+{
+  "trackingId": "ABC123",
+  "statusText": "In port New York",
+  "destination": "Helsinki",
+  "eta": "2009-03-12T00:00:00Z",
+  "nextExpectedActivity": "Next expected activity is to load cargo onto voyage 0200T in New York",
+  "isMisdirected": false,
+  "handlingEvents": [
+    {
+      "location": "Hongkong",
+      "time": "2009-03-01T00:00:00Z",
+      "type": "RECEIVE",
+      "voyageNumber": "",
+      "isExpected": true,
+      "description": "Received in Hongkong, at 2009-03-01T00:00:00Z."
+    },
+    {
+      "location": "Hongkong",
+      "time": "2009-03-02T00:00:00Z",
+      "type": "LOAD",
+      "voyageNumber": "0100S",
+      "isExpected": true,
+      "description": "Loaded onto voyage 0100S in Hongkong, at 2009-03-02T00:00:00Z."
+    },
+    {
+      "location": "New York",
+      "time": "2009-03-05T00:00:00Z",
+      "type": "UNLOAD",
+      "voyageNumber": "0100S",
+      "isExpected": true,
+      "description": "Unloaded off voyage 0100S in New York, at 2009-03-05T00:00:00Z."
+    }
+  ]
+}

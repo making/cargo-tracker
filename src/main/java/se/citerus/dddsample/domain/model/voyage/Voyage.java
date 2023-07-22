@@ -1,10 +1,10 @@
 package se.citerus.dddsample.domain.model.voyage;
 
+import jakarta.persistence.*;
 import org.apache.commons.lang3.Validate;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.shared.Entity;
 
-import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;

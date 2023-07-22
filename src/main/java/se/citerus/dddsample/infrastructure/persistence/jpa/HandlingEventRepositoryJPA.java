@@ -11,7 +11,6 @@ import java.util.List;
 
 /**
  * Hibernate implementation of HandlingEventRepository.
- *
  */
 public interface HandlingEventRepositoryJPA extends CrudRepository<HandlingEvent, Long>, HandlingEventRepository {
 

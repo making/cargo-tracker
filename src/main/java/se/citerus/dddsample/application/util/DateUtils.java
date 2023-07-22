@@ -1,13 +1,10 @@
 package se.citerus.dddsample.application.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 
 /**
  * A few utils for working with Date in tests.
- *
  */
 public final class DateUtils {
 

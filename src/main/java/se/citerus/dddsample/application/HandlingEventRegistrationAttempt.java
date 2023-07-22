@@ -13,9 +13,8 @@ import java.time.Instant;
 /**
  * This is a simple transfer object for passing incoming handling event registration
  * attempts to proper the registration procedure.
- *
+ * <p>
  * It is used as a message queue element.
- *
  */
 public final class HandlingEventRegistrationAttempt implements Serializable {
 

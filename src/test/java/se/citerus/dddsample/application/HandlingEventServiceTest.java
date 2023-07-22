@@ -50,14 +50,14 @@ class HandlingEventServiceTest {
 	}
 
 	@Test
-  void testRegisterEvent() throws Exception {
-    when(cargoRepository.find(cargo.trackingId())).thenReturn(cargo);
-    when(voyageRepository.find(CM001.voyageNumber())).thenReturn(CM001);
-    when(locationRepository.find(STOCKHOLM.unLocode())).thenReturn(STOCKHOLM);
+    void testRegisterEvent() throws Exception {
+        when(cargoRepository.find(cargo.trackingId())).thenReturn(cargo);
+        when(voyageRepository.find(CM001.voyageNumber())).thenReturn(CM001);
+        when(locationRepository.find(STOCKHOLM.unLocode())).thenReturn(STOCKHOLM);
 
-    service.registerHandlingEvent(Instant.now(), cargo.trackingId(), CM001.voyageNumber(), STOCKHOLM.unLocode(), HandlingEvent.Type.LOAD);
-    verify(handlingEventRepository, times(1)).store(isA(HandlingEvent.class));
-    verify(applicationEvents, times(1)).cargoWasHandled(isA(HandlingEvent.class));
-  }
+        service.registerHandlingEvent(Instant.now(), cargo.trackingId(), CM001.voyageNumber(), STOCKHOLM.unLocode(), HandlingEvent.Type.LOAD);
+        verify(handlingEventRepository, times(1)).store(isA(HandlingEvent.class));
+        verify(applicationEvents, times(1)).cargoWasHandled(isA(HandlingEvent.class));
+    }
 
 }

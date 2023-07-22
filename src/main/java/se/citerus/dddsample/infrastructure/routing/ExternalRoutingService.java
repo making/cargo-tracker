@@ -5,7 +5,6 @@ import com.pathfinder.api.TransitEdge;
 import com.pathfinder.api.TransitPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import se.citerus.dddsample.domain.model.cargo.Itinerary;
 import se.citerus.dddsample.domain.model.cargo.Leg;
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
  * Our end of the routing service. This is basically a data model translation layer
  * between our domain model and the API put forward by the routing team, which operates in
  * a different context from us.
- *
  */
 @Service
 public class ExternalRoutingService implements RoutingService {

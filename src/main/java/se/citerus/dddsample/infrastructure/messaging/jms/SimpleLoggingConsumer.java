@@ -1,9 +1,8 @@
 package se.citerus.dddsample.infrastructure.messaging.jms;
 
+import jakarta.jms.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.jms.Message;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 

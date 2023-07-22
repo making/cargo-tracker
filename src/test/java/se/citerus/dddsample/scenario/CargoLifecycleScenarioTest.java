@@ -56,7 +56,7 @@ class CargoLifecycleScenarioTest {
 	 * This interface is part of the application layer, and defines a number of events
 	 * that occur during aplication execution. It is used for message-driving and is
 	 * implemented using JMS.
-	 *
+	 * <p>
 	 * In this test it is stubbed with synchronous calls.
 	 */
 	ApplicationEvents applicationEvents;
@@ -82,7 +82,7 @@ class CargoLifecycleScenarioTest {
 	/**
 	 * This is a domain service interface, whose implementation is part of the
 	 * infrastructure layer (remote call to external system).
-	 *
+	 * <p>
 	 * It is stubbed in this test.
 	 */
 	RoutingService routingService;
