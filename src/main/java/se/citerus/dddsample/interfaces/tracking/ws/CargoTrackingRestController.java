@@ -24,7 +24,7 @@ import java.util.Locale;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-public class CargoTrackingRestService {
+public class CargoTrackingRestController {
 
 	private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -34,7 +34,7 @@ public class CargoTrackingRestService {
 
 	private final MessageSource messageSource;
 
-	public CargoTrackingRestService(CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository,
+	public CargoTrackingRestController(CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository,
 			MessageSource messageSource) {
 		this.cargoRepository = cargoRepository;
 		this.handlingEventRepository = handlingEventRepository;

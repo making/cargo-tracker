@@ -25,18 +25,17 @@ import static se.citerus.dddsample.interfaces.handling.HandlingReportParser.pars
  * registration.
  */
 @RestController
-public class HandlingReportServiceImpl implements HandlingReportService {
+public class HandlingReportRestController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	private final ApplicationEvents applicationEvents;
 
-	public HandlingReportServiceImpl(ApplicationEvents applicationEvents) {
+	public HandlingReportRestController(ApplicationEvents applicationEvents) {
 		this.applicationEvents = applicationEvents;
 	}
 
 	@PostMapping(value = "/handlingReport", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-	@Override
 	public ResponseEntity<?> submitReport(@Valid @RequestBody HandlingReport handlingReport) {
 		try {
 			List<HandlingEventRegistrationAttempt> attempts = parse(handlingReport);

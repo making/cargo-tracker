@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CargoTrackingRestServiceIntegrationTest {
+class CargoTrackingRestControllerIntegrationTest {
 
 	@LocalServerPort
 	private int port;
