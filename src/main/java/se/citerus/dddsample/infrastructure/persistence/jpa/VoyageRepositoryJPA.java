@@ -1,7 +1,7 @@
 package se.citerus.dddsample.infrastructure.persistence.jpa;
 
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
@@ -9,8 +9,9 @@ import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 /**
  * Hibernate implementation of CarrierMovementRepository.
  */
-public interface VoyageRepositoryJPA extends CrudRepository<Voyage, Long>, VoyageRepository {
+public interface VoyageRepositoryJPA extends ListCrudRepository<Voyage, Long>, VoyageRepository {
 
+	@Override
 	default Voyage find(final VoyageNumber voyageNumber) {
 		return findByVoyageNumber(voyageNumber.idString());
 	}
