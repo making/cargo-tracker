@@ -46,12 +46,12 @@ The diagram was created with diagrams.net (formerly draw.io).
 
 The HandlingReport API has one endpoint that takes a JSON request body:
 
-    POST /dddsample/handlingReport
+    POST /handlingReport
 
 You can use cURL to send the request using an JSON file for the body:
 
     curl --data-binary "@/path/to/project/src/test/resources/sampleHandlingReport.json" \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    http://localhost:8080/dddsample/handlingReport
+    http://localhost:8080/handlingReport
 
 See the [api-docs.yaml](/api-docs.yaml) file for a complete API definition.

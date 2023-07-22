@@ -24,7 +24,7 @@ public abstract class AbstractAcceptanceTest {
 
 	@BeforeEach
 	public void setup() {
-		driver = MockMvcHtmlUnitDriverBuilder.webAppContextSetup(context).contextPath("/dddsample").build();
+		driver = MockMvcHtmlUnitDriverBuilder.webAppContextSetup(context).build();
 	}
 
 	@AfterEach
