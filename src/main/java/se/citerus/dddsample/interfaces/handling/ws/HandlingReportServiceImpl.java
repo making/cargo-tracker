@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import se.citerus.dddsample.application.ApplicationEvents;
-import se.citerus.dddsample.interfaces.handling.HandlingEventRegistrationAttempt;
+import se.citerus.dddsample.application.HandlingEventRegistrationAttempt;
 
 import jakarta.validation.Valid;
 import java.lang.invoke.MethodHandles;

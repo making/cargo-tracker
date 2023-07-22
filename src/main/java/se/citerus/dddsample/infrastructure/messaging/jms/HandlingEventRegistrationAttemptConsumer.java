@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import se.citerus.dddsample.application.HandlingEventService;
-import se.citerus.dddsample.interfaces.handling.HandlingEventRegistrationAttempt;
+import se.citerus.dddsample.application.HandlingEventRegistrationAttempt;
 
 import jakarta.jms.Message;
 import jakarta.jms.ObjectMessage;

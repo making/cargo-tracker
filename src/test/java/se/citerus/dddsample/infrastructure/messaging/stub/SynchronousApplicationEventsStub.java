@@ -4,7 +4,7 @@ import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.CargoInspectionService;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
-import se.citerus.dddsample.interfaces.handling.HandlingEventRegistrationAttempt;
+import se.citerus.dddsample.application.HandlingEventRegistrationAttempt;
 
 public class SynchronousApplicationEventsStub implements ApplicationEvents {
 

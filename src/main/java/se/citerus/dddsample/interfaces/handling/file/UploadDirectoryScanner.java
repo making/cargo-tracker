@@ -9,7 +9,7 @@ import se.citerus.dddsample.domain.model.cargo.TrackingId;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
-import se.citerus.dddsample.interfaces.handling.HandlingEventRegistrationAttempt;
+import se.citerus.dddsample.application.HandlingEventRegistrationAttempt;
 
 import java.io.File;
 import java.io.IOException;

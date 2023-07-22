@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.handling;
+package se.citerus.dddsample.application;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

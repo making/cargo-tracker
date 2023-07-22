@@ -2,7 +2,6 @@ package se.citerus.dddsample.application;
 
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
-import se.citerus.dddsample.interfaces.handling.HandlingEventRegistrationAttempt;
 
 /**
  * This interface provides a way to let other parts of the system know about events that
