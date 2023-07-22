@@ -91,7 +91,8 @@ public class UploadDirectoryScanner extends TimerTask implements InitializingBea
 	}
 
 	private void writeRejectedLinesToFile(final String filename, final List<String> rejectedLines) throws IOException {
-		Files.write(new File(parseFailureDirectory, filename).toPath(), rejectedLines, StandardOpenOption.APPEND);
+		Files.write(new File(parseFailureDirectory, filename).toPath(), rejectedLines, StandardOpenOption.CREATE,
+				StandardOpenOption.APPEND);
 	}
 
 	private String[] parseLine(final String line) {
