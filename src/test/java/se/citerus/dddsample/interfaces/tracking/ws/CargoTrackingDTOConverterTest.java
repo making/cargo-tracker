@@ -229,7 +229,7 @@ class CargoTrackingDTOConverterTest {
 
 	private Properties getLocalizationStrings() throws IOException {
 		Properties properties = new Properties();
-		properties.load(getClass().getResourceAsStream("/messages_en.properties"));
+		properties.load(getClass().getResourceAsStream("/messages.properties"));
 		return properties;
 	}
 

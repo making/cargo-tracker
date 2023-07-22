@@ -3,7 +3,8 @@ package se.citerus.dddsample.interfaces.handling.file;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.lang.NonNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.HandlingEventRegistrationAttempt;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
@@ -31,6 +32,7 @@ import static se.citerus.dddsample.interfaces.handling.HandlingReportParser.*;
  * Files that fail to parse are moved into a separate directory, successful files are
  * deleted.
  */
+@Component
 public class UploadDirectoryScanner extends TimerTask implements InitializingBean {
 
 	private final File uploadDirectory;
@@ -41,8 +43,8 @@ public class UploadDirectoryScanner extends TimerTask implements InitializingBea
 
 	private final ApplicationEvents applicationEvents;
 
-	public UploadDirectoryScanner(@NonNull File uploadDirectory, @NonNull File parseFailureDirectory,
-			ApplicationEvents applicationEvents) {
+	public UploadDirectoryScanner(@Value("${uploadDirectory}") File uploadDirectory,
+			@Value("${parseFailureDirectory}") File parseFailureDirectory, ApplicationEvents applicationEvents) {
 		this.uploadDirectory = uploadDirectory;
 		this.parseFailureDirectory = parseFailureDirectory;
 		this.applicationEvents = applicationEvents;
