@@ -1,14 +1,11 @@
 package se.citerus.dddsample.interfaces.booking.web;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade;
 import se.citerus.dddsample.interfaces.booking.facade.dto.CargoRoutingDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.LegDTO;
@@ -22,7 +19,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Handles cargo booking and routing. Operates against a dedicated remoting service
@@ -47,105 +44,89 @@ public final class CargoAdminController {
 	}
 
 	@InitBinder
-	private void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+	private void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Instant.class,
 				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm"), false));
 	}
 
 	@GetMapping("/registration")
-	public String registration(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model)
-			throws Exception {
+	public String registration(Model model) throws Exception {
 		List<LocationDTO> dtoList = bookingServiceFacade.listShippingLocations();
+		List<String> unLocodeStrings = dtoList.stream().map(LocationDTO::unLocode).collect(Collectors.toList());
 
-		List<String> unLocodeStrings = new ArrayList<String>();
-
-		for (LocationDTO dto : dtoList) {
-			unLocodeStrings.add(dto.unLocode());
-		}
-
-		model.put("unlocodes", unLocodeStrings);
-		model.put("locations", dtoList);
+		model.addAttribute("unlocodes", unLocodeStrings);
+		model.addAttribute("locations", dtoList);
 		return "admin/registrationForm";
 	}
 
 	@PostMapping("/register")
-	public void register(HttpServletRequest request, HttpServletResponse response, RegistrationCommand command)
-			throws Exception {
-
+	public String register(RegistrationCommand command, RedirectAttributes attributes) throws Exception {
 		LocalDate arrivalDeadline = LocalDate.parse(command.getArrivalDeadline(),
 				DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		String trackingId = bookingServiceFacade.bookNewCargo(command.getOriginUnlocode(),
 				command.getDestinationUnlocode(), arrivalDeadline.atStartOfDay().toInstant(ZoneOffset.UTC));
-		response.sendRedirect("show?trackingId=" + trackingId);
+
+		attributes.addAttribute("trackingId", trackingId);
+		return "redirect:show";
 	}
 
 	@GetMapping("/list")
-	public String list(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model)
-			throws Exception {
+	public String list(Model model) throws Exception {
 		List<CargoRoutingDTO> cargoList = bookingServiceFacade.listAllCargos();
 
-		model.put("cargoList", cargoList);
+		model.addAttribute("cargoList", cargoList);
 		return "admin/list";
 	}
 
 	@GetMapping("/show")
-	public String show(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model)
-			throws Exception {
-		String trackingId = request.getParameter("trackingId");
+	public String show(@RequestParam String trackingId, Model model) throws Exception {
 		CargoRoutingDTO dto = bookingServiceFacade.loadCargoForRouting(trackingId);
-		model.put("cargo", dto);
+
+		model.addAttribute("cargo", dto);
 		return "admin/show";
 	}
 
 	@GetMapping("/selectItinerary")
-	public String selectItinerary(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model)
-			throws Exception {
-		String trackingId = request.getParameter("trackingId");
-
+	public String selectItinerary(@RequestParam String trackingId, Model model) throws Exception {
 		List<RouteCandidateDTO> routeCandidates = bookingServiceFacade.requestPossibleRoutesForCargo(trackingId);
-		model.put("routeCandidates", routeCandidates);
-
 		CargoRoutingDTO cargoDTO = bookingServiceFacade.loadCargoForRouting(trackingId);
-		model.put("cargo", cargoDTO);
 
+		model.addAttribute("routeCandidates", routeCandidates);
+		model.addAttribute("cargo", cargoDTO);
 		return "admin/selectItinerary";
 	}
 
 	@PostMapping("/assignItinerary")
-	public void assignItinerary(HttpServletRequest request, HttpServletResponse response,
-			RouteAssignmentCommand command) throws Exception {
-		List<LegDTO> legDTOs = new ArrayList<LegDTO>(command.getLegs().size());
-		for (RouteAssignmentCommand.LegCommand leg : command.getLegs()) {
-			legDTOs.add(new LegDTO(leg.getVoyageNumber(), leg.getFromUnLocode(), leg.getToUnLocode(), leg.getFromDate(),
-					leg.getToDate()));
-		}
-
+	public String assignItinerary(RouteAssignmentCommand command, RedirectAttributes attributes) throws Exception {
+		List<LegDTO> legDTOs = command.getLegs()
+			.stream()
+			.map(leg -> new LegDTO(leg.getVoyageNumber(), leg.getFromUnLocode(), leg.getToUnLocode(), leg.getFromDate(),
+					leg.getToDate()))
+			.collect(Collectors.toCollection(() -> new ArrayList<>(command.getLegs().size())));
 		RouteCandidateDTO selectedRoute = new RouteCandidateDTO(legDTOs);
-
 		bookingServiceFacade.assignCargoToRoute(command.getTrackingId(), selectedRoute);
 
-		response.sendRedirect("show?trackingId=" + command.getTrackingId());
+		attributes.addAttribute("trackingId", command.getTrackingId());
+		return "redirect:show";
 	}
 
 	@GetMapping("/pickNewDestination")
-	public String pickNewDestination(HttpServletRequest request, HttpServletResponse response,
-			Map<String, Object> model) throws Exception {
+	public String pickNewDestination(@RequestParam String trackingId, Model model) throws Exception {
 		List<LocationDTO> locations = bookingServiceFacade.listShippingLocations();
-		model.put("locations", locations);
-
-		String trackingId = request.getParameter("trackingId");
 		CargoRoutingDTO cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
-		model.put("cargo", cargo);
 
+		model.addAttribute("locations", locations);
+		model.addAttribute("cargo", cargo);
 		return "admin/pickNewDestination";
 	}
 
 	@PostMapping("/changeDestination")
-	public void changeDestination(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String trackingId = request.getParameter("trackingId");
-		String unLocode = request.getParameter("unlocode");
-		bookingServiceFacade.changeDestination(trackingId, unLocode);
-		response.sendRedirect("show?trackingId=" + trackingId);
+	public String changeDestination(@RequestParam String trackingId, @RequestParam String unlocode,
+			RedirectAttributes attributes) throws Exception {
+		bookingServiceFacade.changeDestination(trackingId, unlocode);
+
+		attributes.addAttribute("trackingId", trackingId);
+		return "redirect:show";
 	}
 
 }
