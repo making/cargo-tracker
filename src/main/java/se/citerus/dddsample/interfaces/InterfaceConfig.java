@@ -10,22 +10,23 @@ import java.time.Duration;
 
 @Configuration
 public class InterfaceConfig {
-    @Bean
-    public AccessLogger accessLogger() {
-        return new AccessLogger(httpExchange -> {
-            final String uri = httpExchange.getRequest().getUri().getPath();
-            return uri != null && !(uri.equals("/readyz") || uri.equals("/livez") || uri.startsWith("/actuator"));
-        });
-    }
 
-    @Bean
-    public ThreadPoolTaskScheduler myScheduler(UploadDirectoryScanner scanner) {
-        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(10);
-        threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
-        threadPoolTaskScheduler.initialize();
-        threadPoolTaskScheduler.scheduleAtFixedRate(scanner, Duration.ofMillis(5000));
-        return threadPoolTaskScheduler;
-    }
+	@Bean
+	public AccessLogger accessLogger() {
+		return new AccessLogger(httpExchange -> {
+			final String uri = httpExchange.getRequest().getUri().getPath();
+			return uri != null && !(uri.equals("/readyz") || uri.equals("/livez") || uri.startsWith("/actuator"));
+		});
+	}
+
+	@Bean
+	public ThreadPoolTaskScheduler myScheduler(UploadDirectoryScanner scanner) {
+		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+		threadPoolTaskScheduler.setPoolSize(10);
+		threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
+		threadPoolTaskScheduler.initialize();
+		threadPoolTaskScheduler.scheduleAtFixedRate(scanner, Duration.ofMillis(5000));
+		return threadPoolTaskScheduler;
+	}
 
 }
