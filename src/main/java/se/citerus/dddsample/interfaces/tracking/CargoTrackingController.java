@@ -1,13 +1,12 @@
 package se.citerus.dddsample.interfaces.tracking;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.support.RequestContextUtils;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
@@ -16,7 +15,6 @@ import se.citerus.dddsample.domain.model.handling.HandlingEventRepository;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Controller for tracking cargo. This interface sits immediately on top of the domain
@@ -42,33 +40,34 @@ public final class CargoTrackingController {
 
 	private final MessageSource messageSource;
 
+	private final TrackCommandValidator trackCommandValidator;
+
 	public CargoTrackingController(CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository,
-			MessageSource messageSource) {
+			MessageSource messageSource, TrackCommandValidator trackCommandValidator) {
 		this.cargoRepository = cargoRepository;
 		this.handlingEventRepository = handlingEventRepository;
 		this.messageSource = messageSource;
+		this.trackCommandValidator = trackCommandValidator;
 	}
 
 	@GetMapping
-	public String get(final Map<String, Object> model) {
-		model.put("trackCommand", new TrackCommand()); // TODO why is this method adding a
+	public String get(Model model) {
+		model.addAttribute("trackCommand", new TrackCommand()); // TODO why is this method
+																// adding a
 		// TrackCommand without id?
 		return "track";
 	}
 
 	@PostMapping
-	private String onSubmit(final HttpServletRequest request, final TrackCommand command,
-			final Map<String, Object> model, final BindingResult bindingResult) {
-		new TrackCommandValidator().validate(command, bindingResult);
-
+	private String onSubmit(TrackCommand command, BindingResult bindingResult, Model model, Locale locale) {
+		this.trackCommandValidator.validate(command, bindingResult);
 		final TrackingId trackingId = new TrackingId(command.getTrackingId());
 		final Cargo cargo = cargoRepository.find(trackingId);
 
 		if (cargo != null) {
-			final Locale locale = RequestContextUtils.getLocale(request);
 			final List<HandlingEvent> handlingEvents = handlingEventRepository.lookupHandlingHistoryOfCargo(trackingId)
 				.distinctEventsByCompletionTime();
-			model.put("cargo", new CargoTrackingViewAdapter(cargo, messageSource, locale, handlingEvents));
+			model.addAttribute("cargo", new CargoTrackingViewAdapter(cargo, messageSource, locale, handlingEvents));
 		}
 		else {
 			bindingResult.rejectValue("trackingId", "cargo.unknown_id", new Object[] { command.getTrackingId() },
