@@ -78,7 +78,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
 		 * @param voyageRequired whether or not a voyage is associated with this event
 		 * type
 		 */
-		private Type(final boolean voyageRequired) {
+		Type(final boolean voyageRequired) {
 			this.voyageRequired = voyageRequired;
 		}
 

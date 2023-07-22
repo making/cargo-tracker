@@ -36,11 +36,11 @@ import java.util.Map;
 @RequestMapping("/track")
 public final class CargoTrackingController {
 
-	private CargoRepository cargoRepository;
+	private final CargoRepository cargoRepository;
 
-	private HandlingEventRepository handlingEventRepository;
+	private final HandlingEventRepository handlingEventRepository;
 
-	private MessageSource messageSource;
+	private final MessageSource messageSource;
 
 	public CargoTrackingController(CargoRepository cargoRepository, HandlingEventRepository handlingEventRepository,
 			MessageSource messageSource) {
@@ -57,7 +57,7 @@ public final class CargoTrackingController {
 	}
 
 	@PostMapping
-	protected String onSubmit(final HttpServletRequest request, final TrackCommand command,
+	private String onSubmit(final HttpServletRequest request, final TrackCommand command,
 			final Map<String, Object> model, final BindingResult bindingResult) {
 		new TrackCommandValidator().validate(command, bindingResult);
 

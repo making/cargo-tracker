@@ -47,7 +47,7 @@ public final class CargoAdminController {
 	}
 
 	@InitBinder
-	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+	private void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
 		binder.registerCustomEditor(Instant.class,
 				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm"), false));
 	}

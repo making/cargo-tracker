@@ -32,7 +32,7 @@ class AdminAcceptanceTest extends AbstractAcceptanceTest {
 		CargoBookingPage cargoBookingPage = adminPage.bookNewCargo();
 		cargoBookingPage.selectOrigin("NLRTM");
 		cargoBookingPage.selectDestination("USDAL");
-		LocalDate arrivalDeadline = LocalDate.now().plus(3, ChronoUnit.WEEKS);
+		LocalDate arrivalDeadline = LocalDate.now().plusWeeks(3);
 		cargoBookingPage.selectArrivalDeadline(arrivalDeadline);
 		CargoDetailsPage cargoDetailsPage = cargoBookingPage.book();
 

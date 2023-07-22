@@ -75,10 +75,9 @@ public final class Location implements Entity<Location> {
 		if (this == object) {
 			return true;
 		}
-		if (!(object instanceof Location)) {
+		if (!(object instanceof Location other)) {
 			return false;
 		}
-		Location other = (Location) object;
 		return sameIdentityAs(other);
 	}
 

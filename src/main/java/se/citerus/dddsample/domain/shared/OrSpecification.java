@@ -6,9 +6,9 @@ package se.citerus.dddsample.domain.shared;
  */
 public class OrSpecification<T> extends AbstractSpecification<T> {
 
-	private Specification<T> spec1;
+	private final Specification<T> spec1;
 
-	private Specification<T> spec2;
+	private final Specification<T> spec2;
 
 	/**
 	 * Create a new OR specification based on two other spec.

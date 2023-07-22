@@ -19,7 +19,7 @@ public class CargoDetailsPage {
 
 	private final int port;
 
-	private String trackingId;
+	private final String trackingId;
 
 	public CargoDetailsPage(WebDriver driver, int port) {
 		this.driver = driver;

@@ -63,10 +63,8 @@ public class Voyage implements Entity<Voyage> {
 			return true;
 		if (o == null)
 			return false;
-		if (!(o instanceof Voyage))
+		if (!(o instanceof Voyage that))
 			return false;
-
-		final Voyage that = (Voyage) o;
 
 		return sameIdentityAs(that);
 	}

@@ -23,10 +23,8 @@ public class VoyageNumber implements ValueObject<VoyageNumber> {
 			return true;
 		if (o == null)
 			return false;
-		if (!(o instanceof VoyageNumber))
+		if (!(o instanceof VoyageNumber other))
 			return false;
-
-		final VoyageNumber other = (VoyageNumber) o;
 
 		return sameValueAs(other);
 	}

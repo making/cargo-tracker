@@ -6,7 +6,7 @@ package se.citerus.dddsample.domain.shared;
  */
 public class NotSpecification<T> extends AbstractSpecification<T> {
 
-	private Specification<T> spec1;
+	private final Specification<T> spec1;
 
 	/**
 	 * Create a new NOT specification based on another spec.

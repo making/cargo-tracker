@@ -32,13 +32,13 @@ import java.util.List;
 @Service
 public class BookingServiceFacadeImpl implements BookingServiceFacade {
 
-	private BookingService bookingService;
+	private final BookingService bookingService;
 
-	private LocationRepository locationRepository;
+	private final LocationRepository locationRepository;
 
-	private CargoRepository cargoRepository;
+	private final CargoRepository cargoRepository;
 
-	private VoyageRepository voyageRepository;
+	private final VoyageRepository voyageRepository;
 
 	public BookingServiceFacadeImpl(BookingService bookingService, LocationRepository locationRepository,
 			CargoRepository cargoRepository, VoyageRepository voyageRepository) {
