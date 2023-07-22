@@ -12,7 +12,7 @@ the [Swedish software consulting company Citerus](https://www.citerus.se/).
 
 The application uses Spring Boot. To start it go to the root directory and type `mvn spring-boot:run` or run the `main`
 method of the `Application` class from your IDE.  
-Then open http://localhost:8080/dddsample in your browser (and make sure that no firewall is blocking the communication
+Then open http://localhost:8080 in your browser (and make sure that no firewall is blocking the communication
 and that Javascript for localhost is not blocked).
 
 Discussion group: https://groups.google.com/forum/#!forum/dddsample
