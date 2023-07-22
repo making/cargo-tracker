@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +52,7 @@ class CargoTrackingRestControllerIntegrationTest {
 			fail("Did not throw HttpClientErrorException");
 		}
 		catch (HttpClientErrorException e) {
-			assertThat(e.getResponseHeaders().getLocation()).isEqualTo(new URI("/api/track/MISSING"));
+			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		}
 	}
 
