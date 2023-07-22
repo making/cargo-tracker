@@ -1,6 +1,8 @@
 package se.citerus.dddsample.interfaces.booking.web;
 
-import java.time.Instant;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +36,9 @@ public class RouteAssignmentCommand {
 
 		private String toUnLocode;
 
-		private Instant fromDate;
+		private LocalDateTime fromDate;
 
-		private Instant toDate;
+		private LocalDateTime toDate;
 
 		public String getVoyageNumber() {
 			return voyageNumber;
@@ -62,19 +64,21 @@ public class RouteAssignmentCommand {
 			this.toUnLocode = toUnLocode;
 		}
 
-		public Instant getFromDate() {
+		public LocalDateTime getFromDate() {
 			return fromDate;
 		}
 
-		public void setFromDate(Instant fromDate) {
+		@DateTimeFormat(pattern = "uuuu-MM-dd HH:mm")
+		public void setFromDate(LocalDateTime fromDate) {
 			this.fromDate = fromDate;
 		}
 
-		public Instant getToDate() {
+		public LocalDateTime getToDate() {
 			return toDate;
 		}
 
-		public void setToDate(Instant toDate) {
+		@DateTimeFormat(pattern = "uuuu-MM-dd HH:mm")
+		public void setToDate(LocalDateTime toDate) {
 			this.toDate = toDate;
 		}
 

@@ -1,9 +1,7 @@
 package se.citerus.dddsample.interfaces.booking.web;
 
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade;
@@ -12,8 +10,6 @@ import se.citerus.dddsample.interfaces.booking.facade.dto.LegDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.LocationDTO;
 import se.citerus.dddsample.interfaces.booking.facade.dto.RouteCandidateDTO;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -43,12 +39,6 @@ public final class CargoAdminController {
 		this.bookingServiceFacade = bookingServiceFacade;
 	}
 
-	@InitBinder
-	private void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(Instant.class,
-				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm"), false));
-	}
-
 	@GetMapping("/registration")
 	public String registration(Model model) throws Exception {
 		List<LocationDTO> dtoList = bookingServiceFacade.listShippingLocations();
@@ -62,7 +52,7 @@ public final class CargoAdminController {
 	@PostMapping("/register")
 	public String register(RegistrationCommand command, RedirectAttributes attributes) throws Exception {
 		LocalDate arrivalDeadline = LocalDate.parse(command.getArrivalDeadline(),
-				DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+				DateTimeFormatter.ofPattern("dd/MM/uuuu"));
 		String trackingId = bookingServiceFacade.bookNewCargo(command.getOriginUnlocode(),
 				command.getDestinationUnlocode(), arrivalDeadline.atStartOfDay().toInstant(ZoneOffset.UTC));
 
@@ -100,8 +90,8 @@ public final class CargoAdminController {
 	public String assignItinerary(RouteAssignmentCommand command, RedirectAttributes attributes) throws Exception {
 		List<LegDTO> legDTOs = command.getLegs()
 			.stream()
-			.map(leg -> new LegDTO(leg.getVoyageNumber(), leg.getFromUnLocode(), leg.getToUnLocode(), leg.getFromDate(),
-					leg.getToDate()))
+			.map(leg -> new LegDTO(leg.getVoyageNumber(), leg.getFromUnLocode(), leg.getToUnLocode(),
+					leg.getFromDate().toInstant(ZoneOffset.UTC), leg.getToDate().toInstant(ZoneOffset.UTC)))
 			.collect(Collectors.toCollection(() -> new ArrayList<>(command.getLegs().size())));
 		RouteCandidateDTO selectedRoute = new RouteCandidateDTO(legDTOs);
 		bookingServiceFacade.assignCargoToRoute(command.getTrackingId(), selectedRoute);
