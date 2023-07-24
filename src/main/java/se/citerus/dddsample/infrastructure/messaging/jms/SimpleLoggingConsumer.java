@@ -1,9 +1,9 @@
 package se.citerus.dddsample.infrastructure.messaging.jms;
 
-import jakarta.jms.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
@@ -13,11 +13,11 @@ public class SimpleLoggingConsumer {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	@JmsListener(destination = "misdirectedCargoQueue")
-	@JmsListener(destination = "deliveredCargoConsumer")
-	@JmsListener(destination = "rejectedRegistrationAttemptsConsumer")
-	public void onMessage(Message message) {
-		logger.debug("Received JMS message: {}", message);
+	@JmsListener(destination = Destinations.MISDIRECTED_CARGO_QUEUE)
+	@JmsListener(destination = Destinations.DELIVERED_CARGO_QUEUE)
+	@JmsListener(destination = Destinations.REJECTED_REGISTRATION_ATTEMPTS_QUEUE)
+	public void onMessage(Message<?> message) {
+		logger.info("Received message: {} {}", message.getPayload(), message.getHeaders());
 	}
 
 }

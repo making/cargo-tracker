@@ -55,7 +55,7 @@ The HandlingReport API has one endpoint that takes a JSON request body:
 
 You can use cURL to send the request using an JSON file for the body:
 
-    curl --data-binary "@/path/to/project/src/test/resources/sampleHandlingReport.json" \
+    curl --data-binary "@./src/test/resources/sampleHandlingReport.json" \
     -H 'Content-Type: application/json;charset=UTF-8' \
     http://localhost:8080/handlingReport
 

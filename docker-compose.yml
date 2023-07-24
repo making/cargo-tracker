@@ -1,0 +1,11 @@
+version: "2"
+services:
+  activemq:
+    image: symptoma/activemq
+    ports:
+    - 61616:61616
+    - 8161:8161
+    environment:
+      ACTIVEMQ_DISALLOW_WEBCONSOLE: false
+      ACTIVEMQ_WEBADMIN_USERNAME: roos
+      ACTIVEMQ_WEBADMIN_PASSWORD: TestTest

@@ -12,27 +12,27 @@ public class JmsConfig {
 
 	@Bean
 	public Queue cargoHandledQueue() {
-		return new ActiveMQQueue("CargoHandledQueue");
+		return new ActiveMQQueue(Destinations.CARGO_HANDLED_QUEUE);
 	}
 
 	@Bean
 	public Queue misdirectedCargoQueue() {
-		return new ActiveMQQueue("MisdirectedCargoQueue");
+		return new ActiveMQQueue(Destinations.MISDIRECTED_CARGO_QUEUE);
 	}
 
 	@Bean
 	public Queue deliveredCargoQueue() {
-		return new ActiveMQQueue("DeliveredCargoQueue");
+		return new ActiveMQQueue(Destinations.DELIVERED_CARGO_QUEUE);
 	}
 
 	@Bean
 	public Queue handlingEventRegistrationAttemptQueue() {
-		return new ActiveMQQueue("HandlingEventRegistrationAttemptQueue");
+		return new ActiveMQQueue(Destinations.HANDLING_EVENT_REGISTRATION_ATTEMPT_QUEUE);
 	}
 
 	@Bean
 	public Queue rejectedRegistrationAttemptsQueue() throws Exception {
-		return new ActiveMQQueue("RejectedRegistrationAttemptsQueue");
+		return new ActiveMQQueue(Destinations.REJECTED_REGISTRATION_ATTEMPTS_QUEUE);
 	}
 
 }
