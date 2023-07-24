@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.HandlingEventRegistrationAttempt;
@@ -33,7 +34,7 @@ import static se.citerus.dddsample.interfaces.handling.HandlingReportParser.*;
  * deleted.
  */
 @Component
-public class UploadDirectoryScanner extends TimerTask implements InitializingBean {
+public class UploadDirectoryScanner implements InitializingBean {
 
 	private final File uploadDirectory;
 
@@ -51,7 +52,7 @@ public class UploadDirectoryScanner extends TimerTask implements InitializingBea
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	@Override
+	@Scheduled(fixedRate = 5_000)
 	public void run() {
 		for (File file : uploadDirectory.listFiles()) {
 			try {
