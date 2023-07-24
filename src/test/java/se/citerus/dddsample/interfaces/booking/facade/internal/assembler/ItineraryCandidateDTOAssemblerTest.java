@@ -8,8 +8,9 @@ import se.citerus.dddsample.domain.model.location.LocationRepository;
 import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
 import se.citerus.dddsample.infrastructure.persistence.inmemory.VoyageRepositoryInMem;
-import se.citerus.dddsample.interfaces.booking.facade.dto.LegDTO;
-import se.citerus.dddsample.interfaces.booking.facade.dto.RouteCandidateDTO;
+import se.citerus.dddsample.interfaces.booking.facade.ItineraryCandidateDTOAssembler;
+import se.citerus.dddsample.interfaces.booking.facade.LegDTO;
+import se.citerus.dddsample.interfaces.booking.facade.RouteCandidateDTO;
 
 import java.time.Instant;
 import java.util.ArrayList;

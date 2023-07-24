@@ -3,8 +3,9 @@ package se.citerus.dddsample.interfaces.booking.facade.internal.assembler;
 import org.junit.jupiter.api.Test;
 import se.citerus.dddsample.domain.model.cargo.*;
 import se.citerus.dddsample.domain.model.location.Location;
-import se.citerus.dddsample.interfaces.booking.facade.dto.CargoRoutingDTO;
-import se.citerus.dddsample.interfaces.booking.facade.dto.LegDTO;
+import se.citerus.dddsample.interfaces.booking.facade.CargoRoutingDTO;
+import se.citerus.dddsample.interfaces.booking.facade.CargoRoutingDTOAssembler;
+import se.citerus.dddsample.interfaces.booking.facade.LegDTO;
 
 import java.time.Instant;
 import java.util.List;

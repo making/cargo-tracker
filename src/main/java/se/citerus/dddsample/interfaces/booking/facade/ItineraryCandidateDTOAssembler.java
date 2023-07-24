@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.booking.facade.internal.assembler;
+package se.citerus.dddsample.interfaces.booking.facade;
 
 import se.citerus.dddsample.domain.model.cargo.Itinerary;
 import se.citerus.dddsample.domain.model.cargo.Leg;
@@ -8,8 +8,8 @@ import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
-import se.citerus.dddsample.interfaces.booking.facade.dto.LegDTO;
-import se.citerus.dddsample.interfaces.booking.facade.dto.RouteCandidateDTO;
+import se.citerus.dddsample.interfaces.booking.facade.LegDTO;
+import se.citerus.dddsample.interfaces.booking.facade.RouteCandidateDTO;
 
 import java.util.ArrayList;
 import java.util.List;

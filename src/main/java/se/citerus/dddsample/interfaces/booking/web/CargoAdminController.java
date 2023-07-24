@@ -5,10 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade;
-import se.citerus.dddsample.interfaces.booking.facade.dto.CargoRoutingDTO;
-import se.citerus.dddsample.interfaces.booking.facade.dto.LegDTO;
-import se.citerus.dddsample.interfaces.booking.facade.dto.LocationDTO;
-import se.citerus.dddsample.interfaces.booking.facade.dto.RouteCandidateDTO;
+import se.citerus.dddsample.interfaces.booking.facade.CargoRoutingDTO;
+import se.citerus.dddsample.interfaces.booking.facade.LegDTO;
+import se.citerus.dddsample.interfaces.booking.facade.LocationDTO;
+import se.citerus.dddsample.interfaces.booking.facade.RouteCandidateDTO;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;

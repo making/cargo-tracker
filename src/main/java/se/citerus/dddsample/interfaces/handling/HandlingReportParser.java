@@ -6,7 +6,6 @@ import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent.Type;
 import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
-import se.citerus.dddsample.interfaces.handling.ws.HandlingReport;
 
 import java.text.SimpleDateFormat;
 import java.time.*;

@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.handling.ws;
+package se.citerus.dddsample.interfaces.handling;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

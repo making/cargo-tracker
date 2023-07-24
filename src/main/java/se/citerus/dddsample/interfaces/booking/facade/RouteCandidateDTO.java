@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.booking.facade.dto;
+package se.citerus.dddsample.interfaces.booking.facade;
 
 import java.io.Serializable;
 import java.util.Collections;

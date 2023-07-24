@@ -1,9 +1,9 @@
-package se.citerus.dddsample.interfaces.booking.facade.internal.assembler;
+package se.citerus.dddsample.interfaces.booking.facade;
 
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.Leg;
 import se.citerus.dddsample.domain.model.cargo.RoutingStatus;
-import se.citerus.dddsample.interfaces.booking.facade.dto.CargoRoutingDTO;
+import se.citerus.dddsample.interfaces.booking.facade.CargoRoutingDTO;
 
 /**
  * Assembler class for the CargoRoutingDTO.
