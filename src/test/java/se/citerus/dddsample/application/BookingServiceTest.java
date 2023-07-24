@@ -2,7 +2,6 @@ package se.citerus.dddsample.application;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.citerus.dddsample.application.impl.BookingServiceImpl;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoFactory;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
@@ -22,7 +21,7 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleLocations.STO
 
 class BookingServiceTest {
 
-	BookingServiceImpl bookingService;
+	BookingService bookingService;
 
 	CargoRepository cargoRepository;
 
@@ -38,7 +37,7 @@ class BookingServiceTest {
 		locationRepository = mock(LocationRepository.class);
 		routingService = mock(RoutingService.class);
 		cargoFactory = new CargoFactory(locationRepository, cargoRepository);
-		bookingService = new BookingServiceImpl(cargoRepository, locationRepository, routingService, cargoFactory);
+		bookingService = new BookingService(cargoRepository, locationRepository, routingService, cargoFactory);
 	}
 
 	@Test

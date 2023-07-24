@@ -6,9 +6,6 @@ import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.BookingService;
 import se.citerus.dddsample.application.CargoInspectionService;
 import se.citerus.dddsample.application.HandlingEventService;
-import se.citerus.dddsample.application.impl.BookingServiceImpl;
-import se.citerus.dddsample.application.impl.CargoInspectionServiceImpl;
-import se.citerus.dddsample.application.impl.HandlingEventServiceImpl;
 import se.citerus.dddsample.domain.model.cargo.*;
 import se.citerus.dddsample.domain.model.handling.CannotCreateHandlingEventException;
 import se.citerus.dddsample.domain.model.handling.HandlingEventFactory;
@@ -328,12 +325,12 @@ class CargoLifecycleScenarioTest {
 		// infrastructure
 		handlingEventFactory = new HandlingEventFactory(cargoRepository, voyageRepository, locationRepository);
 
-		cargoInspectionService = new CargoInspectionServiceImpl(applicationEvents, cargoRepository,
+		cargoInspectionService = new CargoInspectionService(applicationEvents, cargoRepository,
 				handlingEventRepository);
-		handlingEventService = new HandlingEventServiceImpl(handlingEventRepository, applicationEvents,
+		handlingEventService = new HandlingEventService(handlingEventRepository, applicationEvents,
 				handlingEventFactory);
 		CargoFactory cargoFactory = new CargoFactory(locationRepository, cargoRepository);
-		bookingService = new BookingServiceImpl(cargoRepository, locationRepository, routingService, cargoFactory);
+		bookingService = new BookingService(cargoRepository, locationRepository, routingService, cargoFactory);
 
 		// Circular dependency when doing synchrounous calls
 		((SynchronousApplicationEventsStub) applicationEvents).setCargoInspectionService(cargoInspectionService);

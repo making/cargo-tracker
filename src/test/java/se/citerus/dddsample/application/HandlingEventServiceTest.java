@@ -2,7 +2,6 @@ package se.citerus.dddsample.application;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.citerus.dddsample.application.impl.HandlingEventServiceImpl;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
 import se.citerus.dddsample.domain.model.cargo.RouteSpecification;
@@ -22,7 +21,7 @@ import static se.citerus.dddsample.infrastructure.sampledata.SampleVoyages.CM001
 
 class HandlingEventServiceTest {
 
-	private HandlingEventServiceImpl service;
+	private HandlingEventService service;
 
 	private ApplicationEvents applicationEvents;
 
@@ -46,7 +45,7 @@ class HandlingEventServiceTest {
 
 		HandlingEventFactory handlingEventFactory = new HandlingEventFactory(cargoRepository, voyageRepository,
 				locationRepository);
-		service = new HandlingEventServiceImpl(handlingEventRepository, applicationEvents, handlingEventFactory);
+		service = new HandlingEventService(handlingEventRepository, applicationEvents, handlingEventFactory);
 	}
 
 	@Test
