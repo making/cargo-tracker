@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.tracking;
+package se.citerus.dddsample.interfaces.tracking.web;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

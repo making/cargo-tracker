@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.tracking.ws;
+package se.citerus.dddsample.interfaces.tracking.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

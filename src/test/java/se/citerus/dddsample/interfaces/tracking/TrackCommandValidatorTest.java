@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import se.citerus.dddsample.interfaces.tracking.web.TrackCommand;
+import se.citerus.dddsample.interfaces.tracking.web.TrackCommandValidator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

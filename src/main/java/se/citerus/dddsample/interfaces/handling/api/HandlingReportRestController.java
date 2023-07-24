@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.handling.ws;
+package se.citerus.dddsample.interfaces.handling.api;
 
 import jakarta.validation.Valid;
 import org.slf4j.Logger;

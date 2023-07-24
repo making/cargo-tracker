@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.tracking.ws;
+package se.citerus.dddsample.interfaces.tracking.api;
 
 import org.springframework.context.MessageSource;
 import se.citerus.dddsample.domain.model.cargo.Cargo;

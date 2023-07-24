@@ -7,6 +7,7 @@ import se.citerus.dddsample.domain.model.cargo.RouteSpecification;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
+import se.citerus.dddsample.interfaces.tracking.web.CargoTrackingViewAdapter;
 
 import java.time.Instant;
 import java.util.*;

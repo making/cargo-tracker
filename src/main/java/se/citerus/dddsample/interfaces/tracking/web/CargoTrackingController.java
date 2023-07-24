@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.tracking;
+package se.citerus.dddsample.interfaces.tracking.web;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;

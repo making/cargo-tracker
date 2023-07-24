@@ -15,6 +15,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import se.citerus.dddsample.infrastructure.persistence.inmemory.CargoRepositoryInMem;
 import se.citerus.dddsample.infrastructure.persistence.inmemory.HandlingEventRepositoryInMem;
+import se.citerus.dddsample.interfaces.tracking.web.CargoTrackingController;
+import se.citerus.dddsample.interfaces.tracking.web.CargoTrackingViewAdapter;
+import se.citerus.dddsample.interfaces.tracking.web.TrackCommandValidator;
 
 import java.util.Locale;
 import java.util.Map;

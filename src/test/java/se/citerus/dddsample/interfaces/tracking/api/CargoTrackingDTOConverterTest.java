@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.tracking.ws;
+package se.citerus.dddsample.interfaces.tracking.api;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

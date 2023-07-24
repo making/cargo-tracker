@@ -2,13 +2,12 @@ package se.citerus.dddsample.interfaces.booking.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade;
-import se.citerus.dddsample.interfaces.booking.facade.CargoRoutingDTO;
-import se.citerus.dddsample.interfaces.booking.facade.LegDTO;
-import se.citerus.dddsample.interfaces.booking.facade.LocationDTO;
-import se.citerus.dddsample.interfaces.booking.facade.RouteCandidateDTO;
+import se.citerus.dddsample.interfaces.booking.facade.*;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -27,7 +26,7 @@ import java.util.stream.Collectors;
  * controller. However, there is never any one perfect solution for all situations, so
  * we've chosen to demonstrate two polarized ways to build user interfaces.
  *
- * @see se.citerus.dddsample.interfaces.tracking.CargoTrackingController
+ * @see se.citerus.dddsample.interfaces.tracking.web.CargoTrackingController
  */
 @Controller
 @RequestMapping("/admin")

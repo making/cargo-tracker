@@ -1,4 +1,4 @@
-package se.citerus.dddsample.interfaces.tracking.ws;
+package se.citerus.dddsample.interfaces.tracking.api;
 
 /**
  * A data-transport object class represnting a view of a HandlingEvent owned by a Cargo.
