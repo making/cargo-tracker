@@ -6,10 +6,12 @@
 <head>
     <title>Cargo Administration</title>
     <link rel="stylesheet" type="text/css" th:href="@{/admin.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-datepicker.css}"/>
 </head>
 
 <body>
-<div id="outer">
+<div id="container">
     <div th:replace="~{adminDecorator :: adminbody}"/>
     <div id="body">
         <table border="1" width="600">
